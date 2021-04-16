@@ -25,27 +25,12 @@ rootProject.allprojects {
         maven { url "https://jitpack.io" }
     }
 }
-
-//bintray.user=larpoux
-//ossrhPassword=ecFZmH1IP4mD*eUi
-//signing.secretKeyRingFile=/Volumes/Macos-Ext/Users/larpoux/.gnupg/secring.gpg
-signing.password='dfer8e2'
-signing.keyId='670A8411'
-//bintray.gpg.password=C4@ou$3&*hnE
-//bintray.apikey=ba2d9c39d8ca0749046033d2e772c6779831cd3a
-sdk.dir='/Volumes/Macos-Ext/Users/larpoux/android-sdk-macosx'
-//ossrhUsername: 'Larpoux'
-
-//def properties = new Properties()
-//properties.load(new FileInputStream("local.properties"))
-//user = properties.getProperty("bintray.user")
-//key = properties.getProperty("bintray.apikey")
+def properties = new Properties()
+properties.load(new FileInputStream("/Volumes/home/larpoux/projmac/tau/tau_core/android/local.properties"))
 
 apply plugin: 'com.android.library'
 //apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.canardoux'
 
 android {
     compileSdkVersion 30
@@ -56,7 +41,6 @@ android {
         targetSdkVersion 30
         versionCode 18021
         versionName '8.0.2+1'
-        //versionName project.getProperty(“libraryVersion”)
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
