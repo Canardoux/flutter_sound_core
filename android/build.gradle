@@ -26,7 +26,7 @@ rootProject.allprojects {
     }
 }
 def properties = new Properties()
-properties.load(new FileInputStream("/Volumes/home/larpoux/projmac/tau/tau_core/android/local.properties"))
+properties.load(new FileInputStream("local2.properties"))
 
 apply plugin: 'com.android.library'
 //apply plugin: 'com.jfrog.bintray'
