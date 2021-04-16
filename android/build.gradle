@@ -25,8 +25,17 @@ rootProject.allprojects {
         maven { url "https://jitpack.io" }
     }
 }
+
 def properties = new Properties()
-properties.load(new FileInputStream("local2.properties"))
+properties.load(new FileInputStream("/Volumes/home/larpoux/projmac/tau/tau_core/android/local2.properties"))
+
+//signing {
+//    def signingKey =  properties.getProperty("signing.keyId")
+//    def signingPassword = properties.getProperty("signing.password")
+//    def secretKeyRingFile = properties.getProperty("signing.secretKeyRingFile")
+//    //useInMemoryPgpKeys(signingKey, signingPassword)
+//    //sign stuffZip
+//}
 
 apply plugin: 'com.android.library'
 //apply plugin: 'com.jfrog.bintray'
