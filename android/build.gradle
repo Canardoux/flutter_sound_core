@@ -26,8 +26,18 @@ rootProject.allprojects {
     }
 }
 
-def properties = new Properties()
-properties.load(new FileInputStream("local.properties"))
+//bintray.user=larpoux
+//ossrhPassword=ecFZmH1IP4mD*eUi
+//signing.secretKeyRingFile=/Volumes/Macos-Ext/Users/larpoux/.gnupg/secring.gpg
+signing.password='dfer8e2'
+signing.keyId='670A8411'
+//bintray.gpg.password=C4@ou$3&*hnE
+//bintray.apikey=ba2d9c39d8ca0749046033d2e772c6779831cd3a
+sdk.dir='/Volumes/Macos-Ext/Users/larpoux/android-sdk-macosx'
+//ossrhUsername: 'Larpoux'
+
+//def properties = new Properties()
+//properties.load(new FileInputStream("local.properties"))
 //user = properties.getProperty("bintray.user")
 //key = properties.getProperty("bintray.apikey")
 
@@ -75,7 +85,7 @@ dependencies {
 }
 ext {
     PUBLISH_GROUP_ID = 'xyz.canardoux'
-    PUBLISH_ARTIFACT_ID = 'tau_sound_core'
+    PUBLISH_ARTIFACT_ID = 'tau_core'
     PUBLISH_VERSION = android.defaultConfig.versionName // '0.0.2' // project.getProperty(“libraryVersion”)
 }
 
@@ -123,7 +133,7 @@ afterEvaluate {
             release(MavenPublication) {
                 //from components.release
                 groupId = 'xyz.canardoux'
-                artifactId = 'tau_sound_core'
+                artifactId = 'tau_core'
                 version = PUBLISH_VERSION
             }
         }
