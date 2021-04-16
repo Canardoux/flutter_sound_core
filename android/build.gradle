@@ -34,6 +34,11 @@ properties.load(new FileInputStream("local2.properties"))
         sign configurations.archives
     }
 
+signing {
+    required { false }
+    //sign publishing.publications.main
+}
+
 
 //signing {
 //    def signingKey =  properties.getProperty("signing.keyId")
