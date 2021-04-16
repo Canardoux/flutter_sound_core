@@ -29,6 +29,12 @@ rootProject.allprojects {
 def properties = new Properties()
 properties.load(new FileInputStream("local2.properties"))
 
+  apply plugin: 'signing'
+    signing {
+        sign configurations.archives
+    }
+
+
 //signing {
 //    def signingKey =  properties.getProperty("signing.keyId")
 //    def signingPassword = properties.getProperty("signing.password")
