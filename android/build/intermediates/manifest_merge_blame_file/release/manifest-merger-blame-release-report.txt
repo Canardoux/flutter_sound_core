@@ -1,0 +1,57 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.dooboolab.TauEngine"
+4    android:versionCode="1810"
+5    android:versionName="8.1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="18"
+8-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="30" />
+9-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.BLUETOOTH" />
+11-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:4:5-68
+11-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:4:22-65
+12    <uses-permission android:name="android.permission.WAKE_LOCK" />
+12-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:5:5-68
+12-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:5:22-65
+13    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+13-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:6:5-80
+13-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:6:22-77
+14
+15    <application>
+15-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:8:5-23:19
+16        <receiver android:name="androidx.media.session.MediaButtonReceiver" >
+16-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:9:9-14:20
+16-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:9:19-76
+17            <intent-filter>
+17-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:10:13-13:29
+18                <action android:name="android.intent.action.MEDIA_BUTTON" />
+18-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:11:17-77
+18-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:11:25-74
+19                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+19-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:12:17-77
+19-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:12:25-74
+20            </intent-filter>
+21        </receiver>
+22
+23        <service android:name="com.dooboolab.TauEngine.FlautoBackgroundAudioService" >
+23-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:16:9-22:19
+23-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:16:18-62
+24            <intent-filter>
+24-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:17:13-21:29
+25                <action android:name="android.intent.action.MEDIA_BUTTON" />
+25-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:11:17-77
+25-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:11:25-74
+26                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+26-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:12:17-77
+26-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:12:25-74
+27                <action android:name="android.media.browse.FlautoMediaBrowserService" />
+27-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:20:17-89
+27-->/Volumes/home/larpoux/projmac/tau/tau_core/android/src/main/AndroidManifest.xml:20:25-86
+28            </intent-filter>
+29        </service>
+30    </application>
+31
+32</manifest>

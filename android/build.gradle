@@ -23,8 +23,8 @@ rootProject.allprojects {
     }
 }
 
-def properties = new Properties()
-properties.load(new FileInputStream("local2.properties"))
+//def properties = new Properties()
+//properties.load(new FileInputStream("local2.properties"))
 
   apply plugin: 'signing'
     signing {
@@ -50,6 +50,8 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 //group = 'com.github.canardoux'
 
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.Canardoux'
 
 android {
     compileSdkVersion 30
@@ -58,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 1810
-        versionName '8.1.0'
+        versionCode 1811
+        versionName '8.1.1'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -85,7 +87,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 }
 ext {
-    PUBLISH_GROUP_ID = 'xyz.canardoux'
+    PUBLISH_GROUP_ID = 'com.github.Canardoux'
     PUBLISH_ARTIFACT_ID = 'tau_core'
     PUBLISH_VERSION = android.defaultConfig.versionName // '0.0.2' // project.getProperty(“libraryVersion”)
 }
@@ -132,17 +134,28 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                //from components.release
-                groupId = 'xyz.canardoux'
+                from components.release
+                groupId = PUBLISH_GROUP_ID
                 artifactId = 'tau_core'
                 version = PUBLISH_VERSION
             }
+
+                        // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                groupId = PUBLISH_GROUP_ID
+                artifactId = 'tau_core'
+                version = PUBLISH_VERSION
+            }
+
         }
     }
 }
 
 
 
-signing {
-    sign publishing.publications
-}
+//signing {
+//    sign publishing.publications
+//}
