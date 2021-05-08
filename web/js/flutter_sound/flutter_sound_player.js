@@ -65,14 +65,14 @@ class FlutterSoundPlayer
         {
                 //this.callback.openAudioSessionCompleted(true);
                 this.status = IS_PLAYER_STOPPED;
-                this.callbackTable[CB_openPlayerCompleted](this.callback,  this.getPlayerState(), true);
+                this.callbackTable[CB_openPlayerCompleted](this.callback,  IS_PLAYER_STOPPED, true);
                 return this.getPlayerState();
         }
 
         releaseMediaPlayer()
         {
                 this.status = IS_PLAYER_STOPPED;
-                this.callbackTable[CB_closePlayerCompleted](this.callback,  this.getPlayerState(), true);
+                this.callbackTable[CB_closePlayerCompleted](this.callback,  IS_PLAYER_STOPPED, true);
                 return this.getPlayerState();
         }
 
@@ -102,11 +102,11 @@ class FlutterSoundPlayer
                                 me.status = IS_PLAYER_PLAYING;
                                 if (me.pauseResume != IS_PLAYER_PAUSED) // And not IS_PLAYER_PAUSED
                                 {
-                                        me.callbackTable[CB_startPlayerCompleted](me.callback, me.getPlayerState(), true, me.duration); // Duration is unknown
+                                        me.callbackTable[CB_startPlayerCompleted](me.callback, IS_PLAYER_PLAYING, true, me.duration); // Duration is unknown
 
                                 } else
                                 {
-                                        me.callbackTable[CB_resumePlayerCompleted](me.callback, me.getPlayerState(), true);
+                                        me.callbackTable[CB_resumePlayerCompleted](me.callback, IS_PLAYER_PLAYING, true);
 
                                 }
                                 //me.deltaTime = 0;
@@ -139,7 +139,7 @@ class FlutterSoundPlayer
                         {
                                console.log('onpause');
                                me.status = IS_PLAYER_PAUSED;
-                               me.callbackTable[CB_pausePlayerCompleted](me.callback,  me.getPlayerState(), true);
+                               me.callbackTable[CB_pausePlayerCompleted](me.callback,  IS_PLAYER_PAUSED, true);
 
                         },
 
@@ -148,7 +148,7 @@ class FlutterSoundPlayer
                                console.log('onstop');
                                me.status = IS_PLAYER_STOPPED;
                                me.howl = null;
-                               me.callbackTable[CB_stopPlayerCompleted](me.callback,  me.getPlayerState(), true);
+                               me.callbackTable[CB_stopPlayerCompleted](me.callback,  IS_PLAYER_STOPPED, true);
                        },
 
                         onseek: function()
@@ -204,7 +204,7 @@ class FlutterSoundPlayer
 
         isDecoderSupported( codec,)
         {
-                return true; // TODO
+                return true;
         }
 
         setSubscriptionDuration( duration)
@@ -326,7 +326,7 @@ class FlutterSoundPlayer
                 //if (this.howl == null)
                         //this.callbackTable[CB_stopPlayerCompleted](this.callback,  IS_PLAYER_STOPPED, true);
                 if (!this.stop())
-                        this.callbackTable[CB_stopPlayerCompleted](this.callback,  this.getPlayerState(), true);
+                        this.callbackTable[CB_stopPlayerCompleted](this.callback,  IS_PLAYER_STOPPED, true);
                 console.log( 'JS: <--- stopPlayer');
                 return this.getPlayerState();
         }
