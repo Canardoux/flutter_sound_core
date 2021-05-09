@@ -50,7 +50,7 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 //group = 'com.github.canardoux'
 
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.Canardoux'
 
 android {
