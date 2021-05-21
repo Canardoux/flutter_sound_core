@@ -50,7 +50,7 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 //group = 'com.github.canardoux'
 
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.Canardoux'
 
 android {
@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 1811
-        versionName '8.1.1'
+        versionCode 1812
+        versionName '8.1.2'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
