@@ -170,10 +170,12 @@ AudioRecInterface* audioRec;
 
 - (void)releaseFlautoRecorder
 {
-        NSLog(@"IOS:--> releaseFlautoRecorder");
+        [self logDebug:  @"IOS:--> releaseFlautoRecorder"];
+
         [ self stop];
         [m_callBack closeRecorderCompleted: true];
-        NSLog(@"IOS:<-- releaseFlautoRecorder");
+        [self logDebug:  @"IOS:<-- releaseFlautoRecorder"];
+
 }
 
 - (NSString*) getpath:  (NSString*)path
@@ -256,7 +258,8 @@ AudioRecInterface* audioRec;
 
 - (void)stop
 {
-          NSLog(@"iOS: ---> stop (flautoRecorder)");
+          [self logDebug:  @"iOS: ---> stop (flautoRecorder)"];
+
           [self stopRecorderTimer];
           if (audioRec != nil)
           {
@@ -267,18 +270,23 @@ AudioRecInterface* audioRec;
                 delete audioRec;
                 audioRec = nil;
           }
-          NSLog(@"iOS: <--- stop (flautoRecorder)");
+          [self logDebug:  @"iOS: <--- stop (flautoRecorder)"];
 
 }
 
 - (void)stopRecorder
 {
-          NSLog(@"iOS: ---> stopRecorder (FlautoRecorder)");
+          [self logDebug:  @"iOS: ---> stopRecorder (FlautoRecorder)"];
           [self stop];
           NSString* url = [self getUrl: m_path];
           [m_callBack stopRecorderCompleted: url success: YES];
           m_path = nil;
-          NSLog(@"iOS: <--- stopRecorder (FlautoRecorder)");
+          [self logDebug:  @"iOS: <--- stopRecorder (FlautoRecorder)"];
+}
+
+- (void)logDebug: (NSString*)msg
+{
+        [m_callBack log: DBG msg: msg];
 }
 
 - (bool)deleteRecord: (NSString*)path
@@ -370,7 +378,6 @@ AudioRecInterface* audioRec;
         int r = 0;
         if (audioRec != nil)
             r = audioRec ->getStatus();
-        NSLog(@"@Recorder status : %i", r);
         return r;
 }
 

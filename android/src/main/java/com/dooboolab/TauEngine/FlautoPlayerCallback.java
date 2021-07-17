@@ -17,7 +17,7 @@ package com.dooboolab.TauEngine;
  * along with the Tau project.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import com.dooboolab.TauEngine.Flauto.t_PLAYER_STATE;
+import com.dooboolab.TauEngine.Flauto.*;
 
 public interface FlautoPlayerCallback
 {
@@ -35,4 +35,5 @@ public interface FlautoPlayerCallback
 	abstract public void skipForward();
 	abstract public void skipBackward();
 	abstract public void updatePlaybackState(t_PLAYER_STATE newState);
+	abstract public void log(t_LOG_LEVEL level, String msg);
 }

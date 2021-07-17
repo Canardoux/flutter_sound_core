@@ -18,15 +18,9 @@ package com.dooboolab.TauEngine;
  */
 
 
-import android.app.Activity;
-import android.app.Activity;
 import android.content.ComponentName;
-import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaControllerCompat;
-//import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
-import com.dooboolab.TauEngine.FlautoTrack;
 
 
 import androidx.arch.core.util.Function;
@@ -35,6 +29,7 @@ import java.util.concurrent.Callable;
 
 public class FlautoMediaBrowserHelper
 {
+	FlautoPlayerCallback m_callback;
 	MediaControllerCompat mediaControllerCompat;
 	private MediaBrowserCompat mMediaBrowserCompat;
 	// The function to call when the media browser successfully connects
@@ -70,7 +65,7 @@ public class FlautoMediaBrowserHelper
 			}
 			catch ( Exception e )
 			{
-				Log.e( "MediaBrowserHelper", "The following error occurred while" + " initializing the media controller.", e );
+				m_callback.log(Flauto.t_LOG_LEVEL.ERROR,  "The following error occurred while" + " initializing the media controller.");
 			}
 
 			// Call the successful connection callback if it was provided
@@ -120,9 +115,10 @@ public class FlautoMediaBrowserHelper
 	 *                                        connection is unsuccessful.
 	 */
 	/* ctor */ FlautoMediaBrowserHelper(
-		 Callable<Void> serviceSuccessConnectionCallback, Callable<Void> serviceUnsuccConnectionCallback
-	                  )
+		 Callable<Void> serviceSuccessConnectionCallback, Callable<Void> serviceUnsuccConnectionCallback,
+		 FlautoPlayerCallback cb)
 	{
+		m_callback = cb;
 		mServiceConnectionSuccessCallback      = serviceSuccessConnectionCallback;
 		mServiceConnectionUnsuccessfulCallback = serviceUnsuccConnectionCallback;
 		initMediaBrowser();

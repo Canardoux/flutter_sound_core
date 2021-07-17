@@ -17,6 +17,7 @@ package com.dooboolab.TauEngine;
  * along with the Tau project.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.dooboolab.TauEngine.Flauto.*;
 
 public interface FlautoRecorderCallback
 {
@@ -28,4 +29,6 @@ public interface FlautoRecorderCallback
         public abstract void resumeRecorderCompleted(boolean success);
         public abstract void updateRecorderProgressDbPeakLevel(double normalizedPeakLevel, long duration);
         public abstract void recordingData ( byte[] data);
+        abstract public void log(t_LOG_LEVEL level, String msg);
+
 }

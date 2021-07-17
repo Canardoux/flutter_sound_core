@@ -21,7 +21,6 @@ package com.dooboolab.TauEngine;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.util.Log;
 import androidx.core.content.ContextCompat;
 import java.io.IOException;
 import com.dooboolab.TauEngine.Flauto.t_CODEC;
@@ -31,6 +30,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 public class FlautoRecorderMedia
 	implements FlautoRecorderInterface
 {
+	FlautoRecorderCallback m_callback;
 	final static String             TAG                = "SoundMediaRecorder";
 
 	static int codecArray[] =
@@ -108,6 +108,11 @@ public class FlautoRecorderMedia
 
 	MediaRecorder mediaRecorder;
 
+	public /* ctor */ FlautoRecorderMedia(FlautoRecorderCallback cb)
+	{
+		m_callback = cb;
+	}
+
 	public boolean CheckPermissions()
 	{
 		//int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
@@ -184,7 +189,7 @@ public class FlautoRecorderMedia
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "Exception: ", e );
+			m_callback.log(Flauto.t_LOG_LEVEL.ERROR,  "Exception: " );
 			//
 			try
 			{
@@ -204,7 +209,7 @@ public class FlautoRecorderMedia
 
 		if ( mediaRecorder == null )
 		{
-			Log.d ( TAG, "mediaRecorder is null" );
+			m_callback.log(Flauto.t_LOG_LEVEL.DBG,  "mediaRecorder is null" );
 			return ;
 		}
 		try
@@ -226,7 +231,7 @@ public class FlautoRecorderMedia
 			mediaRecorder = null;
 		} catch  ( Exception e )
 		{
-			Log.d ( TAG, "Error Stop Recorder" );
+			m_callback.log(Flauto.t_LOG_LEVEL.ERROR,  "Error Stop Recorder" );
 
 		}
 	}
@@ -236,13 +241,13 @@ public class FlautoRecorderMedia
 	{
 		if ( mediaRecorder == null )
 		{
-			Log.d ( TAG, "mediaRecorder is null" );
+			m_callback.log(Flauto.t_LOG_LEVEL.DBG,   "mediaRecorder is null" );
 
 			return false;
 		}
 		if ( Build.VERSION.SDK_INT < 24 )
 		{
-			Log.d ( TAG, "\"Pause/Resume needs at least Android API 24\"");
+			m_callback.log(Flauto.t_LOG_LEVEL.DBG,  "Pause/Resume needs at least Android API 24");
 			return false;
 		} else
 		{
@@ -256,13 +261,13 @@ public class FlautoRecorderMedia
 	{
 		if ( mediaRecorder == null )
 		{
-			Log.d ( TAG, "mediaRecorder is null" );
+			m_callback.log(Flauto.t_LOG_LEVEL.DBG,  "mediaRecorder is null" );
 			//result.error ( TAG, "Recorder is closed", "\"Recorder is closed\"" );
 			return false;
 		}
 		if ( Build.VERSION.SDK_INT < 24 )
 		{
-			Log.d ( TAG, "\"Pause/Resume needs at least Android API 24\"");
+			m_callback.log(Flauto.t_LOG_LEVEL.DBG,  "Pause/Resume needs at least Android API 24");
 			//result.error ( TAG, "Bad Android API level", "\"Pause/Resume needs at least Android API 24\"" );
 			return false;
 		} else

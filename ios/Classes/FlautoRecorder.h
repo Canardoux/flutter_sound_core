@@ -40,6 +40,7 @@
 - (void)pauseRecorderCompleted: (bool)success;
 - (void)updateRecorderProgressDbPeakLevel: normalizedPeakLevel duration: duration;
 - (void)recordingData: (NSData*)data;
+- (void)log: (t_LOG_LEVEL)level msg: (NSString*)msg;
 @end
 
 @interface FlautoRecorder  : FlautoSession <  AVAudioRecorderDelegate>
@@ -72,6 +73,7 @@
 - (NSString*)getRecordURL: (NSString*)path;
 - (void)recordingData: (NSData*)data;
 - (int)getStatus;
+- (void)logDebug: (NSString*)msg;
 
 
 @end

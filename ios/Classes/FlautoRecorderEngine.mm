@@ -81,10 +81,9 @@
                 if (!r)
                 {
                         NSString* s =  error.localizedDescription;
-                        NSString* f = @"convertToBuffer: error %s";
-                        NSLog(f, s);
+                        
                         s = error.localizedFailureReason;
-                        NSLog(f, s);
+                        [flautoRecorder logDebug: s];
                         return;
                 }
                 int n = [convertedBuffer frameLength];

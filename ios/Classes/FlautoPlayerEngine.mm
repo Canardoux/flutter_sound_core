@@ -165,7 +165,7 @@
                 bool b = [engine startAndReturnError: nil];
                 if (!b)
                 {
-                        NSLog(@"Cannot start the audio engine");
+                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
                 }
 
                 mPauseTime = 0.0; // Total number of seconds in pause mode
@@ -391,7 +391,7 @@
                 bool b = [engine startAndReturnError: nil];
                 if (!b)
                 {
-                        NSLog(@"Cannot start the audio engine");
+                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
                 }
 
                 mPauseTime = 0.0; // Total number of seconds in pause mode

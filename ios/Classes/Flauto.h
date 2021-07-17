@@ -187,6 +187,17 @@ typedef enum
           lineIn
 } t_AUDIO_SOURCE;
 
+typedef enum
+{
+     VERBOSE,
+     DBG,
+     INFO,
+     WARNING,
+     ERROR,
+     WTF,
+     NOTHING,
+} t_LOG_LEVEL;
+
 // Audio Flags
 // -----------
 #define outputToSpeaker  1

@@ -155,6 +155,20 @@ public class Flauto
 
 
 
+	public enum t_LOG_LEVEL
+	{
+				VERBOSE,
+				DBG,
+				INFO,
+				WARNING,
+				ERROR,
+				WTF,
+				NOTHING,
+	}
+
+
+
+
 	public static Activity androidActivity;
 	public static Context androidContext;
 

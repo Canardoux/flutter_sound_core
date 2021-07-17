@@ -18,31 +18,7 @@ package com.dooboolab.TauEngine;
  */
 
 
-
-import android.content.Context;
-import android.media.AudioAttributes;
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.media.MediaPlayer;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
-import android.util.Log;
-
-import android.media.AudioFocusRequest;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.lang.Thread;
-
-import static androidx.core.content.ContextCompat.getSystemService;
-
 
 //-------------------------------------------------------------------------------------------------------------
 

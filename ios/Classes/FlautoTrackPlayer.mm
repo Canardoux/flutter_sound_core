@@ -49,13 +49,15 @@
 
 - (void)releaseFlautoPlayer;
 {
-        NSLog(@"IOS:--> releaseFlautoPlayer");
+        [self logDebug:  @"IOS:--> releaseFlautoPlayer"];
+
         [self stopPlayer];
         [self cleanNowPlaying];
         m_removeUIWhenStopped = true;
         [self cleanTarget];
         [super releaseFlautoPlayer];
-        NSLog(@"IOS:<-- releaseFlautoPlayer");
+        [self logDebug:  @"IOS:<-- releaseFlautoPlayer"];
+
 }
 
 - (AVAudioPlayer*)getPlayer
@@ -97,7 +99,8 @@
 - (bool)startPlayerFromTrack: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
         progress: (NSNumber*)progress duration: (NSNumber*)duration removeUIWhenStopped: (bool)removeUIWhenStopped defaultPauseResume: (bool)defaultPauseResume;
 {
-         NSLog(@"IOS:--> startPlayerFromTrack");
+        [self logDebug:  @"IOS:--> startPlayerFromTrack"];
+
          bool r = FALSE;
 
         if(!track)
@@ -159,14 +162,14 @@
                                         [self setPlayer: [[AVAudioPlayer alloc] initWithData: data error: &err] ];
                                         if (err != nil)
                                         {
-                                                //NSLog([err localizedDescription]);
                                                 return;
                                         }
                                         [self getPlayer].delegate = self;
 
                                         dispatch_async(dispatch_get_main_queue(),
                                         ^{
-                                                NSLog(@"IOS: ^beginReceivingRemoteControlEvents");
+                                                [self logDebug:  @"IOS: ^beginReceivingRemoteControlEvents"];
+
                                                 [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
                                                 [self setupRemoteCommandCenter: canPause canSkipForward: canSkipForward   canSkipBackward: canSkipBackward ];
 
@@ -207,16 +210,16 @@
                         // Able to play in silent mode
                         dispatch_async(dispatch_get_main_queue(),
                         ^{
-                                NSLog(@"^beginReceivingRemoteControlEvents");
+                                [self logDebug:  @"^beginReceivingRemoteControlEvents"];
+
                                 [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
                         });
 
                         r = [[self getPlayer] play];
                         if (![[self getPlayer] isPlaying])
-                                NSLog(@"IOS: AudioPlayerFlauto failed to play");
+                                [self logDebug:  @"IOS: AudioPlayerFlauto failed to play"];
                         else
-                                NSLog(@"IOS: !Play");
-                        //[self startTimer];
+                                [self logDebug:  @"IOS: !Play"];
                 }
         } else
         {
@@ -228,7 +231,6 @@
                 {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
-                        //NSLog([error localizedDescription]);
 #pragma clang diagnostic pop
                         return false;
                 }
@@ -236,14 +238,16 @@
                 [self getPlayer].delegate = self;
                 dispatch_async(dispatch_get_main_queue(),
                 ^{
-                        NSLog(@"^beginReceivingRemoteControlEvents");
+                        [self logDebug:  @"^beginReceivingRemoteControlEvents"];
+
                         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
                 });
                 r = [[self getPlayer] play];
                 if (![[self getPlayer] isPlaying])
-                        NSLog(@"IOS: AudioPlayerFlauto failed to play");
+                        [self logDebug:  @"IOS: AudioPlayerFlauto failed to play"];
                 else
-                        NSLog(@"IOS: !Play");
+                        [self logDebug:  @"IOS: !Play"];
+
         }
         if (r)
         {
@@ -276,7 +280,8 @@
 - (void)setupNowPlaying: (NSNumber*) progress duration: (NSNumber*)duration
 {
 // Progress and duration are in seconds
-        NSLog(@"IOS:--> setupNowPlaying");
+        [self logDebug:  @"IOS:--> setupNowPlaying"];
+
 
         // Initialize the MPNowPlayingInfoCenter
 
@@ -323,14 +328,16 @@
         }
 #pragma clang diagnostic pop
         [ self setUIProgressBar: progress duration: duration ];
-        NSLog(@"IOS:<-- setupNowPlaying");
+        [self logDebug:  @"IOS:<-- setupNowPlaying"];
+
 
 }
 
 
 - (void)cleanTarget
 {
-          NSLog(@"IOS:--> cleanTarget");
+          [self logDebug:  @"IOS:--> cleanTarget"];
+
           MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
 
           if (togglePlayPauseTarget != nil)
@@ -371,17 +378,19 @@
 
 
           //albumArt = nil;
-          NSLog(@"IOS:<-- cleanTarget");
+          [self logDebug:  @"IOS:<-- cleanTarget"];
  }
  
  
 - (void)stop
 {
-          NSLog(@"IOS:--> stop");
+         [self logDebug:  @"IOS:--> stop"];
+
          [self stopTimer];
           if ([self getPlayer] != nil)
           {
-                NSLog(@"IOS: !stopPlayer");
+                [self logDebug:  @"IOS: !stopPlayer"];
+
                 [[self getPlayer] stop];
                 [self setPlayer: nil];
           }
@@ -392,18 +401,20 @@
                 [playingInfoCenter setNowPlayingInfo: nil];
                 playingInfoCenter.nowPlayingInfo = nil;
           }
-          NSLog(@"IOS:<-- stop");
+          [self logDebug:  @"IOS:<-- stop"];
+
 }
  
 
 - (void)stopPlayer
 {
 
-          NSLog(@"IOS:--> stopPlayer");
+          [self logDebug:  @"IOS:--> stopPlayer"];
+
           [self stop];
           [m_callBack stopPlayerCompleted: YES];
 
-          NSLog(@"IOS:<-- stopPlayer");
+          [self logDebug:  @"IOS:<-- stopPlayer"];
 }
 
 
@@ -412,7 +423,8 @@
 // control buttons are pressed.
 - (void)setupRemoteCommandCenter:(BOOL)canPause canSkipForward:(BOOL)canSkipForward canSkipBackward:(BOOL)canSkipBackward
 {
-        NSLog(@"IOS:--> setupRemoteCommandCenter");
+        [self logDebug:  @"IOS:--> setupRemoteCommandCenter"];
+
         [self cleanTarget];
         MPRemoteCommandCenter* commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
         if (canPause)
@@ -421,7 +433,7 @@
                 togglePlayPauseTarget = [commandCenter.togglePlayPauseCommand addTargetWithHandler:
                 ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event)
                 {
-                        NSLog(@"IOS: toggleTarget\n");
+                        [self logDebug:  @"IOS: toggleTarget"];
                         dispatch_async(dispatch_get_main_queue(),
                         ^{
 
@@ -446,7 +458,8 @@
                 pauseTarget = [commandCenter.pauseCommand addTargetWithHandler:
                 ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event)
                 {
-                        NSLog(@"IOS: pauseTarget\n");
+                        [self logDebug:  @"IOS: pauseTarget"];
+
                         dispatch_async(dispatch_get_main_queue(),
                                 ^{
                                         bool b = [[self getPlayer] isPlaying];
@@ -465,7 +478,8 @@
                 stopTarget = [commandCenter.stopCommand addTargetWithHandler:
                 ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event)
                 {
-                        NSLog(@"IOS: stopTarget\n");
+                        [self logDebug:  @"IOS: stopTarget"];
+
                         return MPRemoteCommandHandlerStatusSuccess;
                 }];
 
@@ -473,7 +487,8 @@
                 playTarget = [commandCenter.playCommand addTargetWithHandler:
                 ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event)
                 {
-                        NSLog(@"IOS: playTarget\n");
+                        [self logDebug:  @"IOS: playTarget"];
+
                         dispatch_async(dispatch_get_main_queue(),
                                 ^{
                                         bool b = [[self getPlayer] isPlaying];
@@ -528,13 +543,15 @@
         [commandCenter.nextTrackCommand setEnabled:canSkipForward];
         [commandCenter.previousTrackCommand setEnabled:canSkipBackward];
 
-       NSLog(@"IOS:<-- setupRemoteCommandCenter");
+        [self logDebug:  @"IOS:<-- setupRemoteCommandCenter"];
+
  }
 
 - (void)setUIProgressBar: (NSNumber*)progress duration: (NSNumber*)duration
 {
 // Progress and duration are in seconds
-        NSLog(@"IOS:--> setUIProgressBar");
+        [self logDebug:  @"IOS:--> setUIProgressBar"];
+
         NSMutableDictionary* songInfo = [[NSMutableDictionary alloc] init];
         /*
         if ( (progress == nil) || (progress.class == NSNull.class) )
@@ -549,8 +566,8 @@
 
         if ( (progress != nil) && ([progress class] != [NSNull class]) && (duration != nil) && ([duration class] != [NSNull class]))
         {
-                NSLog(@"IOS: setUIProgressBar Progress: %@ s.", progress);
-                NSLog(@"IOS: setUIProgressBar Duration: %@ s.", duration);
+                NSString* string1 = [NSString stringWithFormat:@"setUIProgressBar Progress: %@ s. Duration: %@ s.", progress, duration];
+                [self logDebug:  string1];
                 [songInfo setObject: progress forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime];
                 [songInfo setObject: duration forKey: MPMediaItemPropertyPlaybackDuration];
         }
@@ -571,17 +588,18 @@
 
         MPNowPlayingInfoCenter* playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
         [playingInfoCenter setNowPlayingInfo: songInfo];
-        NSLog(@"IOS:<-- setUIProgressBar");
+        [self logDebug:  @"IOS:<-- setUIProgressBar"];
 
 }
 
 - (void)updateLockScreenProgression
 {
-        NSLog(@"IOS:--> updateLockScreenProgression");
+        [self logDebug:  @"IOS:--> updateLockScreenProgression"];
+
         NSNumber* progress = [NSNumber numberWithDouble: [self getPosition]] ;
         NSNumber* duration = [NSNumber numberWithDouble: [self getDuration]];
         [self setUIProgressBar: progress duration: duration];
-        NSLog(@"IOS:<-- updateLockScreenProgression");
+        [self logDebug:  @"IOS:<-- updateLockScreenProgression"];
 }
 
 
@@ -598,8 +616,7 @@
 - (void)nowPlaying: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
                 defaultPauseResume: (bool)defaultPauseResume progress: (NSNumber*)progress duration: (NSNumber*)duration
 {
-         NSLog(@"IOS:--> nowPlaying");
-
+        [self logDebug:  @"IOS:--> nowPlaying"];
 
         [self setupRemoteCommandCenter: canPause canSkipForward: canSkipForward   canSkipBackward: canSkipBackward ];
         if ( !track  )
@@ -621,7 +638,7 @@
 
 
         [self setupNowPlaying: progress duration: duration];
-        NSLog(@"IOS:<-- nowPlaying");
+        [self logDebug:  @"IOS:<-- nowPlaying"];
 
 }
 
@@ -630,16 +647,18 @@
 - (void)seekToPlayer: (long)time;
 {
 
-        NSLog(@"IOS:--> seekToPlayer");
+        [self logDebug:  @"IOS:--> seekToPlayer"];
+
         [super seekToPlayer: time];
         [self updateLockScreenProgression];
-        NSLog(@"IOS:<-- seekToPlayer");
+        [self logDebug:  @"IOS:<-- seekToPlayer"];
   }
 
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-        NSLog(@"IOS:--> audioPlayerDidFinishPlaying");
+        [self logDebug:  @"IOS:--> audioPlayerDidFinishPlaying"];
+
         if (m_removeUIWhenStopped)
         {
                 [self cleanTarget];
@@ -649,7 +668,8 @@
         }
 
         [super audioPlayerDidFinishPlaying: player successfully: flag];
-        NSLog(@"IOS:<-- audioPlayerDidFinishPlaying");
+        [self logDebug:  @"IOS:<-- audioPlayerDidFinishPlaying"];
+
 }
 
 @end

@@ -19,17 +19,10 @@ package com.dooboolab.TauEngine;
 
 
 
-import android.content.Context;
-import android.media.AudioAttributes;
-import android.media.AudioFormat;
-import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
-import android.util.Log;
 
 import android.media.AudioFocusRequest;
 
@@ -91,6 +84,8 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		, ".opus" // opusWebM
 		, ".vorbis" // vorbisWebM
 	};
+
+
 
 
 	final static  String           TAG         = "FlautoPlayer";
@@ -156,12 +151,12 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 		try
 		{
-			player = new FlautoPlayerEngineFromMic();
+			player = new FlautoPlayerEngineFromMic(this);
 			player._startPlayer(null,  sampleRate, numChannels, blockSize, this);
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "startPlayer() exception" );
+			logError ("startPlayer() exception" );
 			return false;
 		}
 		return true;
@@ -199,7 +194,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 				player = new FlautoPlayerEngine();
 			} else
 			{
-				player = new FlautoPlayerMedia();
+				player = new FlautoPlayerMedia(this);
 			}
 			String path = Flauto.getPath(fromURI);
 
@@ -208,7 +203,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "startPlayer() exception" );
+			logError (  "startPlayer() exception" );
 			return false;
 		}
 		return true;
@@ -228,7 +223,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			return ln;
 		} catch (Exception e)
 		{
-			Log.e ( TAG, "feed() exception" );
+			logError (  "feed() exception" );
 			throw e;
 		}
 	}
@@ -259,7 +254,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		boolean defaultPauseResume
 	)
 	{
-		Log.e (TAG,  "Must be initialized With UI" );
+		logError ( "Must be initialized With UI" );
 		return false;
 	}
 
@@ -277,7 +272,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			/*
 			 * Reset player.
 			 */
-			Log.d(TAG, "Playback completed.");
+			logDebug("Playback completed.");
 			stop();
 			playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 			m_callBack.audioPlayerDidFinishPlaying(true);
@@ -286,7 +281,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	// Listener called when media player has completed preparation.
 	public void onPrepared( )
 	{
-		Log.d(TAG, "mediaPlayer prepared and started");
+		logDebug ("mediaPlayer prepared and started");
 
 		mainHandler.post(new Runnable()
 		{
@@ -341,7 +336,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 								}
 							} catch (Exception e)
 							{
-								Log.d(TAG, "Exception: " + e.toString());
+								logDebug( "Exception: " + e.toString());
 								stopPlayer();
 							}
 						}
@@ -396,7 +391,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "pausePlay exception: " + e.getMessage () );
+			logError( "pausePlay exception: " + e.getMessage () );
 			return false;
 		}
 
@@ -420,7 +415,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "mediaPlayer resume: " + e.getMessage () );
+			logError( "mediaPlayer resume: " + e.getMessage () );
 			return false;
 		}
 	}
@@ -430,12 +425,12 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 		if ( player == null )
 		{
-			Log.e ( TAG, "seekToPlayer() error: "  );
+			logError("seekToPlayer() error: "  );
 			return false;
 		}
 
 
-		Log.d ( TAG, "seekTo: " + millis );
+		logDebug("seekTo: " + millis );
 
 		player._seekTo ( millis );
 		return true;
@@ -447,7 +442,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		{
 
 			if (player == null) {
-				Log.e ( TAG,  "setVolume(): player is null" );
+				logError( "setVolume(): player is null" );
 				return false;
 			}
 
@@ -456,7 +451,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			return true;
 		} catch(Exception e)
 		{
-			Log.e ( TAG, "setVolume: " + e.getMessage () );
+			logError ("setVolume: " + e.getMessage () );
 			return false;
 		}
 	}
@@ -546,6 +541,18 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	public void setUIProgressBar (int progress, int duration)
 	{
 		throw new RuntimeException(); // TODO
+	}
+
+
+	void logDebug (String msg)
+	{
+		m_callBack.log ( t_LOG_LEVEL.DBG , msg);
+	}
+
+
+	void logError (String msg)
+	{
+		m_callBack.log ( t_LOG_LEVEL.ERROR , msg);
 	}
 
 }

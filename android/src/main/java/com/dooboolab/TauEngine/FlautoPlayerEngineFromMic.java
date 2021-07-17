@@ -26,17 +26,10 @@ import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 import android.media.MediaRecorder;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.lang.Thread;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.dooboolab.TauEngine.Flauto.*;
 
@@ -77,7 +70,6 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 	FlautoPlayer mSession = null;
 
 	AudioRecord recorder;
-	FlautoRecorderCallback m_callBack ;
 	public              int     subsDurationMillis    = 10;
 
 	private boolean isRecording = false;
@@ -100,7 +92,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			}
 			if (lnr != ln)
 			{
-				Log.e( TAG, "feed error: some audio data are lost");
+				mSession.logError("feed error: some audio data are lost");
 			}
 		}
 
@@ -132,11 +124,11 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 							_feed(byteBuffer, ln);
 						} catch (Exception err)
 						{
-							Log.e(TAG, "feed error" + err.getMessage());
+							mSession.logError("feed error" + err.getMessage());
 						}
 					} else
 					{
-						Log.e(TAG, "feed error: ln = 0" );
+						mSession.logError("feed error: ln = 0" );
 						//break;
 					}
 				} catch (Exception e)
@@ -153,8 +145,9 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 
 
-	/* ctor */ FlautoPlayerEngineFromMic() throws Exception
+	/* ctor */ FlautoPlayerEngineFromMic(FlautoPlayer theSession) throws Exception
 	{
+		mSession = theSession;
 		if ( Build.VERSION.SDK_INT >= 21 )
 		{
 
@@ -246,12 +239,13 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			int sampleRate,
 			int numChannels,
 			int blockSize,
-			FlautoPlayer theSession
+			FlautoPlayer aPlayer
 		) throws Exception
 	{
-		mSession = theSession;
 		startPlayerSide(sampleRate, numChannels, blockSize);
 		startRecorderSide(Flauto.t_CODEC.pcm16, sampleRate, numChannels, blockSize);
+		mSession = aPlayer;
+
 	}
 
 
@@ -311,13 +305,13 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 	void _setVolume(float volume)  throws Exception
 	{
-		Log.e( TAG, "setVolume: not implemented" );
+		mSession.logError("setVolume: not implemented" );
 	}
 
 
 	void _seekTo(long millisec)
 	{
-		Log.e( TAG, "seekTo: not implemented" );
+		mSession.logError("seekTo: not implemented" );
 	}
 
 
@@ -340,7 +334,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 	int feed(byte[] data) throws Exception
 	{
-		Log.e( TAG, "feed error: not implemented");
+		mSession.logError("feed error: not implemented");
 		return -1;
 	}
 

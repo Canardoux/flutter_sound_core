@@ -28,6 +28,7 @@
 @interface FlautoSession : NSObject
 {
         bool hasFocus;
+
 }
 
 - (bool) initializeFlautoPlayerFocus:

@@ -94,26 +94,28 @@ static bool _isIosDecoderSupported [] =
                 audioFlags: (int)audioFlags
                 audioDevice: (t_AUDIO_DEVICE)audioDevice
 {
-        NSLog(@"IOS:--> initializeFlautoPlayer");
+        [self logDebug:  @"IOS:--> initializeFlautoPlayer"];
         BOOL r = [self setAudioFocus: focus category: category mode: mode audioFlags: audioFlags audioDevice: audioDevice ];
         [m_callBack openPlayerCompleted: r];
-        NSLog(@"IOS:<-- initializeFlautoPlayer");
+        [self logDebug:  @"IOS:<-- initializeFlautoPlayer"];
         return r;
 }
 
 
 - (void)releaseFlautoPlayer
 {
-        NSLog(@"IOS:--> releaseFlautoPlayer");
+        [self logDebug: @"IOS:--> releaseFlautoPlayer"];
+
         [ self stop];
         [m_callBack closePlayerCompleted: YES];
-        NSLog(@"IOS:<-- releaseFlautoPlayer");
+        [self logDebug:  @"IOS:<-- releaseFlautoPlayer"];
 }
 
 
 - (bool)setCategory: (NSString*)categ mode:(NSString*)mode options:(int)options
 {
-        NSLog(@"IOS:--> setCategory");
+        [self logDebug: @"IOS:--> setCategory"];
+
         BOOL b = [[AVAudioSession sharedInstance]
                 setCategory:  categ // AVAudioSessionCategoryPlayback
                 mode: mode
@@ -121,7 +123,8 @@ static bool _isIosDecoderSupported [] =
                 error: nil];
         if (b){}
 
-      NSLog(@"IOS:<-- setCategory");
+        [self logDebug:  @"IOS:<-- setCategory"];
+
       return b;
 }
 
@@ -139,7 +142,7 @@ static bool _isIosDecoderSupported [] =
         [self stopTimer];
         if ( ([self getStatus] == PLAYER_IS_PLAYING) || ([self getStatus] == PLAYER_IS_PAUSED) )
         {
-                NSLog(@"IOS: ![audioPlayer stop]");
+                [self logDebug:  @"IOS: ![audioPlayer stop]"];
                 [m_playerEngine stop];
         }
         m_playerEngine = nil;
@@ -149,15 +152,16 @@ static bool _isIosDecoderSupported [] =
 
 - (void)stopPlayer
 {
-        NSLog(@"IOS:--> stopPlayer");
+        [self logDebug:  @"IOS:--> stopPlayer"];
         [self stop];
         [m_callBack stopPlayerCompleted: YES];
-        NSLog(@"IOS:<-- stopPlayer");
+        [self logDebug:  @"IOS:<-- stopPlayer"];
+
 }
 
 - (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels
 {
-        NSLog(@"IOS:--> startPlayerFromMicSampleRate");
+        [self logDebug:  @"IOS:--> startPlayerFromMicSampleRate"];
         bool b = FALSE;
         if (!hasFocus) //  (It could have been released by another session)
         {
@@ -172,7 +176,7 @@ static bool _isIosDecoderSupported [] =
         {
                         [ m_callBack startPlayerCompleted: true duration: 0];
         }
-        NSLog(@"IOS:<-- startPlayerFromMicSampleRate");
+        [self logDebug:  @"IOS:<-- startPlayerFromMicSampleRate"];
         return b; // TODO
 }
 
@@ -205,7 +209,7 @@ static bool _isIosDecoderSupported [] =
         channels: (int)numChannels
         sampleRate: (long)sampleRate
 {
-        NSLog(@"IOS:--> startPlayer");
+        [self logDebug:  @"IOS:--> startPlayer"];
         bool b = FALSE;
         if (!hasFocus) //  (It could have been released by another session)
         {
@@ -231,7 +235,8 @@ static bool _isIosDecoderSupported [] =
                         long duration = [m_playerEngine getDuration];
                         [ m_callBack startPlayerCompleted: true duration: duration];
                 }
-                NSLog(@"IOS:<-- startPlayer");
+                [self logDebug:  @"IOS:<-- startPlayer]"];
+
                 return b;
         }
         path = [self getpath: path];
@@ -272,7 +277,8 @@ static bool _isIosDecoderSupported [] =
                         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
                         [downloadTask resume];
                         //[self startTimer];
-                        NSLog(@"IOS:<-- startPlayer");
+                        [self logDebug:  @"IOS:<-- startPlayer"];
+
                         return true;
 
                 } else
@@ -289,7 +295,7 @@ static bool _isIosDecoderSupported [] =
                 long duration = [m_playerEngine getDuration];
                 [ m_callBack startPlayerCompleted: true duration: duration];
         }
-        NSLog(@"IOS:<-- startPlayer");
+        [self logDebug: @"IOS:<-- startPlayer"];
         return b;
 }
 
@@ -315,7 +321,8 @@ static bool _isIosDecoderSupported [] =
 
 - (void)startTimer
 {
-        NSLog(@"IOS:--> startTimer");
+        [self logDebug:  @"IOS:--> startTimer"];
+
         [self stopTimer];
         if (subscriptionDuration > 0)
         {
@@ -328,19 +335,20 @@ static bool _isIosDecoderSupported [] =
                                                    repeats:YES];
                 });
         }
-        NSLog(@"IOS:<-- startTimer");
+        [self logDebug:  @"IOS:<-- startTimer"];
+
 }
 
 
 - (void) stopTimer
 {
-        NSLog(@"IOS:--> stopTimer");
+        [self logDebug:  @"IOS:--> stopTimer"];
+
         if (timer != nil) {
                 [timer invalidate];
                 timer = nil;
         }
-        NSLog(@"IOS:<-- stopTimer");
-
+        [self logDebug:  @"IOS:<-- stopTimer"];
 }
 
 
@@ -353,7 +361,7 @@ static bool _isIosDecoderSupported [] =
 
 - (bool)pausePlayer
 {
-        NSLog(@"IOS:--> pausePlayer");
+        [self logDebug:  @"IOS:--> pausePlayer"];
 
  
         if (timer != nil)
@@ -368,13 +376,14 @@ static bool _isIosDecoderSupported [] =
                   long duration =   [m_playerEngine getDuration];
                   if (duration - position < 200) // PATCH [LARPOUX]
                   {
-                        NSLog (@"IOS: !patch [LARPOUX]");
+                        [self logDebug:  @"IOS: !patch [LARPOUX]"];
                         dispatch_async(dispatch_get_main_queue(),
                         ^{
                                 [self stop];
-                                NSLog(@"IOS:--> ^audioPlayerFinishedPlaying");
+                                [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
+
                                 [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                                NSLog(@"IOS:<-- ^audioPlayerFinishedPlaying");
+                                [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
                          });
                         //return false;
                   } else
@@ -383,14 +392,14 @@ static bool _isIosDecoderSupported [] =
                         [m_playerEngine pause];
         }
         else
-                NSLog(@"IOS: audioPlayer is not Playing");
-
+                [self logDebug:  @"IOS: audioPlayer is not Playing"];
 
 
           //bool b =  ( [self getStatus] == PLAYER_IS_PAUSED);
           //if (!b)
           {
-                //NSLog(@"IOS: AudioPlayerFlauto : cannot pause!!!");
+                  //[self logDebug:  @"IOS: AudioPlayerFlauto : cannot pause!!!"];
+
           }
 
           [m_callBack pausePlayerCompleted: YES];
@@ -400,18 +409,22 @@ static bool _isIosDecoderSupported [] =
           long duration =   [m_playerEngine getDuration];
           if (duration - position < 500) // PATCH [LARPOUX]
           {
-                NSLog (@"IOS: !patch [LARPOUX]");
+                [self logDebug:  @"IOS: !patch [LARPOUX]"];
+
                 [self stop];
                 dispatch_async(dispatch_get_main_queue(),
                 ^{
-                        NSLog(@"IOS:--> ^audioPlayerFinishedPlaying");
+                        [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
+
                         [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                        NSLog(@"IOS:<-- ^audioPlayerFinishedPlaying");
+                        [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
+
                  });
 
           }
 */
-          NSLog(@"IOS:<-- pause");
+          [self logDebug:  @"IOS:<-- pause"];
+
           return true;
 
 }
@@ -423,8 +436,7 @@ static bool _isIosDecoderSupported [] =
 
 - (bool)resumePlayer
 {
-        NSLog(@"IOS:--> resume");
-        NSLog(@"IOS: play!");
+        [self logDebug:  @"IOS:--> resumePlayer"];
         bool b = [m_playerEngine resume];
         if (!b){}
         
@@ -433,18 +445,21 @@ static bool _isIosDecoderSupported [] =
         //bool b2 = ([self getStatus] == PLAYER_IS_PLAYING);
         //if (!b2)
         {
-                 //NSLog(@"IOS: AudioPlayerFlauto : cannot resume!!!");
+                //[self logDebug:  @"IOS: AudioPlayerFlauto : cannot resume!!!"];
         }
-        NSLog(@"IOS:<-- resume");
+        [self logDebug:  @"IOS:<-- resumePlayer"];
+
         [m_callBack resumePlayerCompleted: b];
         /*
-                NSLog (@"IOS: !patch [LARPOUX]");
+                [self logDebug:  @"IOS: !patch [LARPOUX]"];
                 [self stop];
                 dispatch_async(dispatch_get_main_queue(),
                 ^{
-                        NSLog(@"IOS:--> ^audioPlayerFinishedPlaying");
+                        [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
+
                         [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                        NSLog(@"IOS:<-- ^audioPlayerFinishedPlaying");
+                        [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
+
                  });
                  */
         return b;
@@ -486,7 +501,7 @@ static bool _isIosDecoderSupported [] =
 
 - (void)seekToPlayer: (long)t
 {
-        NSLog(@"IOS:--> seekToPlayer");
+        [self logDebug: @"IOS:--> seekToPlayer"];
         if (m_playerEngine != nil)
         {
                 [m_playerEngine seek: t];
@@ -494,21 +509,21 @@ static bool _isIosDecoderSupported [] =
         } else
         {
         }
-         NSLog(@"IOS:<-- seekToPlayer");
+        [self logDebug:  @"IOS:<-- seekToPlayer"];
 }
 
 
 
 - (void)setVolume:(double) volume
 {
-        NSLog(@"IOS:--> setVolume");
+        [self logDebug:  @"IOS:--> setVolume"];
         if (m_playerEngine)
         {
                 [m_playerEngine setVolume: volume ];
         } else
         {
         }
-        NSLog(@"IOS:<-- setVolume");
+        [self logDebug: @"IOS:<-- setVolume"];
 }
 
 
@@ -526,11 +541,12 @@ static bool _isIosDecoderSupported [] =
 
 - (NSDictionary*)getProgress
 {
-        NSLog(@"IOS:--> getProgress");
+        [self logDebug:  @"IOS:--> getProgress"];
+
         NSNumber *position = [NSNumber numberWithLong: [m_playerEngine getPosition]];
         NSNumber *duration = [NSNumber numberWithLong: [m_playerEngine getDuration]];
         NSDictionary* dico = @{ @"position": position, @"duration": duration, @"playerStatus": [self getPlayerStatus] };
-        NSLog(@"IOS:--> getProgress");
+        [self logDebug:  @"IOS:<-- getProgress"];
         return dico;
 
 }
@@ -538,9 +554,11 @@ static bool _isIosDecoderSupported [] =
 
 - (void)setSubscriptionDuration: (long)d
 {
-        NSLog(@"IOS:--> setSubscriptionDuration");
+        [self logDebug:  @"IOS:--> setSubscriptionDuration"];
+
         subscriptionDuration = ((double)d)/1000;
-        NSLog(@"IOS:<-- setSubscriptionDuration");
+        [self logDebug:  @"IOS:<-- setSubscriptionDuration"];
+
 }
 
 
@@ -554,18 +572,19 @@ static bool _isIosDecoderSupported [] =
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)thePlayer successfully:(BOOL)flag
 {
-        NSLog(@"IOS:--> @audioPlayerDidFinishPlaying");
+        [self logDebug:  @"IOS:--> @audioPlayerDidFinishPlaying"];
+
         dispatch_async(dispatch_get_main_queue(), ^{
                 [self stopTimer];
                 [ self ->m_playerEngine stop];
                 self ->m_playerEngine = nil;
-                NSLog(@"IOS:--> ^audioPlayerFinishedPlaying");
-                [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                NSLog(@"IOS:<-- ^audioPlayerFinishedPlaying");
-         });
+                [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
 
-       NSLog(@"IOS:<-- @audioPlayerDidFinishPlaying");
-}
+                [self ->m_callBack  audioPlayerDidFinishPlaying: true];
+                [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
+         });
+ 
+         [self logDebug:  @"IOS:<-- @audioPlayerDidFinishPlaying"];}
 
 - (t_PLAYER_STATE)getStatus
 {
@@ -578,6 +597,14 @@ static bool _isIosDecoderSupported [] =
 {
         return [NSNumber numberWithInt: [self getStatus]];
 }
+
+
+- (void)logDebug: (NSString*)msg
+{
+        [m_callBack log: DBG msg: msg];
+}
+
+
 @end
 //---------------------------------------------------------------------------------------------
 

@@ -45,6 +45,7 @@
 - (void)resume;
 - (void)skipForward;
 - (void)skipBackward;
+- (void)log: (t_LOG_LEVEL)level msg: (NSString*)msg;
 @end
 
 
@@ -97,6 +98,7 @@
 - (long)getDuration;
 - (void)nowPlaying: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
                 defaultPauseResume: (bool)defaultPauseResume progress: (NSNumber*)progress duration: (NSNumber*)duration;
+- (void)logDebug: (NSString*)msg;
 
 
 

@@ -51,15 +51,11 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.app.NotificationCompat.MediaStyle;
 import androidx.media.session.MediaButtonReceiver;
-//import com.dooboolab.TauEngine.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,6 +72,7 @@ public class FlautoBackgroundAudioService
 	implements MediaPlayer.OnCompletionListener,
 	           AudioManager.OnAudioFocusChangeListener
 {
+	//FlautoPlayerCallback m_callback;
 
 	final static String TAG                   = "BackgroundAudioService";
 	static final String notificationChannelId = "tau_channel_01";
@@ -119,6 +116,12 @@ public class FlautoBackgroundAudioService
 	};
 
 
+	//public /* ctor */ FlautoBackgroundAudioService(FlautoPlayerCallback cb)
+	//{
+		//m_callback = cb;
+	//}
+
+
 	private MediaSessionCompat.Callback mMediaSessionCallback = new MediaSessionCompat.Callback()
 	{
 
@@ -136,7 +139,7 @@ public class FlautoBackgroundAudioService
 			/*
 			 * if (!successfullyRetrievedAudioFocus()) { // The audio focus was not granted,
 			 * then don't start the playback // TODO: handle failed audio focus request more
-			 * gracefully Log.e(TAG,
+			 * gracefully
 			 * "The audio focus has not been granted, then it's impossible to play audio.");
 			 * return; }
 			 *

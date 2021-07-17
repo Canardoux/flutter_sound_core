@@ -19,23 +19,17 @@ package com.dooboolab.TauEngine;
 
 
 
-import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.io.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.dooboolab.TauEngine.Flauto.*;
-import com.dooboolab.TauEngine.Flauto;
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
@@ -223,7 +217,7 @@ public class FlautoRecorder extends FlautoSession
 			//assert(path == null);
 			if (numChannels != 1)
 			{
-				Log.e( TAG, "The number of channels supported is actually only 1" );
+				logError (  "The number of channels supported is actually only 1" );
 				return false;
 			}
 			recorder = new FlautoRecorderEngine();
@@ -232,14 +226,14 @@ public class FlautoRecorder extends FlautoSession
 			//assert(!toStream);
 			path = Flauto.getPath(path);
 			m_path = path;
-			recorder = new FlautoRecorderMedia();
+			recorder = new FlautoRecorderMedia(m_callBack);
 		}
 		try
 		{
 			recorder._startRecorder( numChannels, sampleRate, bitRate, codec, path, audioSource, this );
 		} catch ( Exception e )
 		{
-			Log.e( TAG, "Error starting recorder" + e.getMessage() );
+			logError (  "Error starting recorder" + e.getMessage() );
 			return false;
 		}
 		// Remove all pending runnables, this is just for safety (should never happen)
@@ -255,8 +249,8 @@ public class FlautoRecorder extends FlautoSession
 					public void run() {
 
 						long time = SystemClock.elapsedRealtime() - systemTime - mPauseTime;
-						// Log.d(TAG, "elapsedTime: " + SystemClock.elapsedRealtime());
-						// Log.d(TAG, "time: " + time);
+						// logDebug (  "elapsedTime: " + SystemClock.elapsedRealtime());
+						// logDebug( "time: " + time);
 
 						// DateFormat format = new SimpleDateFormat("mm:ss:SS", Locale.US);
 						// String displayTime = format.format(time);
@@ -288,7 +282,7 @@ public class FlautoRecorder extends FlautoSession
 							if (recordHandler != null)
 								recordHandler.postDelayed(recorderTicker, subsDurationMillis);
 						} catch (Exception e) {
-							Log.d(TAG, " Exception: " + e.toString());
+							logDebug (  " Exception: " + e.toString());
 						}
 					}
 				});
@@ -360,4 +354,18 @@ public class FlautoRecorder extends FlautoSession
 	{
 		return Flauto.temporayFile(radical);
 	}
+
+
+
+	void logDebug (String msg)
+	{
+		m_callBack.log ( t_LOG_LEVEL.DBG , msg);
+	}
+
+
+	void logError (String msg)
+	{
+		m_callBack.log ( t_LOG_LEVEL.ERROR , msg);
+	}
+
 }

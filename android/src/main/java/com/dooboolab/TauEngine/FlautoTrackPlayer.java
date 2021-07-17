@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import androidx.arch.core.util.Function;
 
 import java.io.File;
@@ -35,7 +34,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
-import java.lang.System;
 import com.dooboolab.TauEngine.Flauto.*;
 
 
@@ -77,7 +75,8 @@ public class FlautoTrackPlayer extends FlautoPlayer
 			mMediaBrowserHelper = new FlautoMediaBrowserHelper
 			(
 				new MediaPlayerConnectionListener(  true ),
-				new MediaPlayerConnectionListener(  false )
+				new MediaPlayerConnectionListener(  false ),
+				m_callBack
 			);
 			// Pass the playback state updater to the media browser
 			mMediaBrowserHelper.setPlaybackStateUpdater( new PlaybackStateUpdater() );
@@ -92,7 +91,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		// Throw an error if the media player is not initialized
 		if ( mMediaBrowserHelper == null )
 		{
-			Log.e( TAG, "The player cannot be released because it is not initialized."  );
+			logError (  "The player cannot be released because it is not initialized."  );
 			return;
 		}
 
@@ -108,7 +107,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 	}
 
 	public boolean startPlayer (t_CODEC codec, String fromURI, byte[] dataBuffer, int numChannels, int sampleRate, int blockSize ) {
-		//Log.e (TAG,  "Must use startPlayerFromTrack()" );
+		//logError (    "Must use startPlayerFromTrack()" );
 		//return false;
 		final HashMap<String, Object> dic = new HashMap<String, Object>();
 		dic.put("trackPath", fromURI);
@@ -139,7 +138,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		// Exit the method if a media browser helper was not initialized
 		if ( !wasMediaPlayerInitialized( ) )
 		{
-			Log.e (TAG,  "Track player not initialized" );
+			logError (   "Track player not initialized" );
 			return false;
 		}
 
@@ -165,7 +164,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 			}
 			catch ( Exception e )
 			{
-				Log.e(TAG, e.getMessage() );
+				logError (   e.getMessage() );
 				return false;
 			}
 		}
@@ -241,7 +240,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		}
 		catch ( Exception e )
 		{
-			Log.e(TAG, "stopPlayer() error" + e.getMessage());
+			logError (  "stopPlayer() error" + e.getMessage());
 		}
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 
@@ -270,7 +269,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		}
 		catch ( Exception e )
 		{
-			Log.e( TAG, "pausePlayer exception: " + e.getMessage() );
+			logError (  "pausePlayer exception: " + e.getMessage() );
 			return false;
 		}
 	}
@@ -289,7 +288,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		PlaybackStateCompat playbackState = mMediaBrowserHelper.mediaControllerCompat.getPlaybackState();
 		if ( playbackState != null && playbackState.getState() == PlaybackStateCompat.STATE_PLAYING )
 		{
-			Log.e( TAG, "resumePlayer exception: "  );
+			logError (  "resumePlayer exception: "  );
 			return false;
 		}
 		pauseMode = false;
@@ -307,7 +306,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		}
 		catch ( Exception e )
 		{
-			Log.e( TAG, "mediaPlayer resume: " + e.getMessage() );
+			logError (  "mediaPlayer resume: " + e.getMessage() );
 			return false;
 		}
 	}
@@ -319,7 +318,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 		// Exit the method if a media browser helper was not initialized
 		if ( !wasMediaPlayerInitialized( ) )
 		{
-			Log.d(TAG, "seekToPlayer ended with no initialization");
+			logDebug (  "seekToPlayer ended with no initialization");
 			return false;
 		}
 
@@ -355,7 +354,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 	{
 		if ( mMediaBrowserHelper == null )
 		{
-			Log.e( TAG, "initializePlayer() must be called before this method." );
+			logError (  "initializePlayer() must be called before this method." );
 			return false;
 		}
 		return true;
@@ -483,7 +482,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 
 				if ((mMediaBrowserHelper == null) || (mMediaBrowserHelper.mediaControllerCompat == null))
 				{
-					Log.e( TAG, "MediaPlayerOnPreparedListener timer: mMediaBrowserHelper.mediaControllerCompat is NULL. This is BAD !!!"  );
+					logError (  "MediaPlayerOnPreparedListener timer: mMediaBrowserHelper.mediaControllerCompat is NULL. This is BAD !!!"  );
 					stopPlayer( );
 					if (mMediaBrowserHelper != null)
 						mMediaBrowserHelper.releaseMediaBrowser();
@@ -599,7 +598,7 @@ public class FlautoTrackPlayer extends FlautoPlayer
 			// Reset the timer
 			mTimer.cancel();
 
-			Log.d( TAG, "Play completed." );
+			logDebug (  "Play completed." );
 			playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 			pauseMode = false;
 			m_callBack.audioPlayerDidFinishPlaying(true); // What is "true" for ?

@@ -33,7 +33,6 @@
                 audioDevice: (t_AUDIO_DEVICE)audioDevice
 
 {
-        NSLog(@"IOS:--> initializeFlautoPlayer");
   
         NSString* tabCategory[] =
         {
