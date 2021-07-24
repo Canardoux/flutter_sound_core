@@ -98,6 +98,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	boolean pauseMode;
 	FlautoPlayerCallback m_callBack;
 	public		t_PLAYER_STATE 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
+	private double latentVolume = -1.0;
 
 
 	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
@@ -152,7 +153,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		try
 		{
 			player = new FlautoPlayerEngineFromMic(this);
-			player._startPlayer(null,  sampleRate, numChannels, blockSize, this);
+			player._startPlayer(null,  sampleRate, numChannels, blockSize, this, latentVolume);
 		}
 		catch ( Exception e )
 		{
@@ -199,7 +200,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			String path = Flauto.getPath(fromURI);
 
 			mTimer = new Timer();
-			player._startPlayer(path,  sampleRate, numChannels, blockSize, this);
+			player._startPlayer(path,  sampleRate, numChannels, blockSize, this, latentVolume);
 		}
 		catch ( Exception e )
 		{
@@ -441,13 +442,14 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		try
 		{
 
+			latentVolume = volume;
 			if (player == null) {
-				logError( "setVolume(): player is null" );
+				//logError( "setVolume(): player is null" );
 				return false;
 			}
 
-			float mVolume = (float) volume;
-			player._setVolume(mVolume);
+			//float mVolume = (float) volume;
+			player._setVolume(volume);
 			return true;
 		} catch(Exception e)
 		{

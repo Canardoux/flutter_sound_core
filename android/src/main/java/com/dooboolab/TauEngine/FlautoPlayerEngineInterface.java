@@ -20,11 +20,11 @@ package com.dooboolab.TauEngine;
 
 abstract class FlautoPlayerEngineInterface
 {
-	abstract void _startPlayer(String path, int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession) throws Exception;
+	abstract void _startPlayer(String path, int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession, double volume) throws Exception;
 	abstract void _stop();
 	abstract void _pausePlayer() throws Exception;
 	abstract void _resumePlayer() throws Exception;
-	abstract void _setVolume(float volume) throws Exception;
+	abstract void _setVolume(double volume) throws Exception;
 	abstract void _seekTo(long millisec);
 	abstract boolean _isPlaying();
 	abstract long _getDuration();

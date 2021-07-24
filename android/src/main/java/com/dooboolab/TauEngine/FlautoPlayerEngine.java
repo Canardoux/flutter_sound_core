@@ -103,7 +103,8 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 			int sampleRate,
 			int numChannels,
 			int blockSize,
-			FlautoPlayer theSession
+			FlautoPlayer theSession,
+			double volume
 		) throws Exception
 	{
 		if ( Build.VERSION.SDK_INT >= 21 )
@@ -169,12 +170,13 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 	}
 
 
-	void _setVolume(float volume)  throws Exception
+	void _setVolume(double volume)  throws Exception
 	{
 
 		if ( Build.VERSION.SDK_INT >= 21 )
 		{
-			audioTrack.setVolume(volume);
+			float v = (float)volume;
+			audioTrack.setVolume(v);
 		} else
 		{
 			throw new Exception("Need SDK 21");

@@ -239,7 +239,8 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			int sampleRate,
 			int numChannels,
 			int blockSize,
-			FlautoPlayer aPlayer
+			FlautoPlayer aPlayer,
+			double volume
 		) throws Exception
 	{
 		startPlayerSide(sampleRate, numChannels, blockSize);
@@ -303,7 +304,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 	}
 
 
-	void _setVolume(float volume)  throws Exception
+	void _setVolume(double volume)  throws Exception
 	{
 		mSession.logError("setVolume: not implemented" );
 	}
