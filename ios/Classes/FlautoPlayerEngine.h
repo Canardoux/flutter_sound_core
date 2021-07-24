@@ -50,10 +50,10 @@
 @interface AudioPlayerFlauto : NSObject  <FlautoPlayerEngineInterface>
 {
 }
-       - (AudioPlayerFlauto*) init: (NSObject*)owner; // FlutterSoundPlayer*
+- (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate;
+       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
+       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
@@ -73,8 +73,8 @@
 }
        - (AudioEngine*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate;
+       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
+       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
@@ -92,8 +92,8 @@
 }
        - (AudioEngineFromMic*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate;
+       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
+       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
        - (void) stop;
        - (bool) resume;
        - (bool) pause;

@@ -269,7 +269,7 @@ static bool _isIosDecoderSupported [] =
 
                                         // We must create a new Audio Player instance to be able to play a different Url
                                         //int toto = data.length;
-                                        bool b = [self ->m_playerEngine startPlayerFromBuffer: data volume: latentVolume];
+                                        bool b = [self ->m_playerEngine startPlayerFromBuffer: data volume: self ->latentVolume];
                                         if (!b)
                                         {
                                                 [self stop];
