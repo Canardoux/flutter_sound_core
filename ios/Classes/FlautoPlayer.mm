@@ -60,6 +60,7 @@ static bool _isIosDecoderSupported [] =
 {
         NSTimer* timer;
         double subscriptionDuration;
+        double latentVolume;
 
 
 }
@@ -67,6 +68,9 @@ static bool _isIosDecoderSupported [] =
 - (FlautoPlayer*)init: (NSObject<FlautoPlayerCallback>*) callback
 {
         m_callBack = callback;
+        latentVolume = -1.0;
+        subscriptionDuration = 0;
+        timer = nil;
         return [super init];
 }
 
@@ -166,12 +170,12 @@ static bool _isIosDecoderSupported [] =
         if (!hasFocus) //  (It could have been released by another session)
         {
                 hasFocus = TRUE;
-                b = [[AVAudioSession sharedInstance]  setActive: hasFocus error:nil] ;
+                b = [[AVAudioSession sharedInstance]  setActive: hasFocus error: nil] ;
         }
 
         [self stop]; // To start a fresh new playback
         m_playerEngine = [[AudioEngineFromMic alloc] init: self ];
-        b = [m_playerEngine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate];
+        b = [m_playerEngine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate volume: latentVolume];
         if (b)
         {
                         [ m_callBack startPlayerCompleted: true duration: 0];
@@ -223,9 +227,12 @@ static bool _isIosDecoderSupported [] =
                 m_playerEngine = [[AudioEngine alloc] init: self ];
         else
                 m_playerEngine = [[AudioPlayerFlauto alloc]init: self];
+        
+        if (latentVolume >= 0)
+                [m_playerEngine setVolume: latentVolume fadeDuration: 0];
         if (dataBuffer != nil)
         {
-                b = [m_playerEngine startPlayerFromBuffer: dataBuffer ];
+                b = [m_playerEngine startPlayerFromBuffer: dataBuffer volume: latentVolume ];
                 if (!b)
                 {
                         [self stop];
@@ -262,7 +269,7 @@ static bool _isIosDecoderSupported [] =
 
                                         // We must create a new Audio Player instance to be able to play a different Url
                                         //int toto = data.length;
-                                        bool b = [self ->m_playerEngine startPlayerFromBuffer: data];
+                                        bool b = [self ->m_playerEngine startPlayerFromBuffer: data volume: latentVolume];
                                         if (!b)
                                         {
                                                 [self stop];
@@ -283,11 +290,11 @@ static bool _isIosDecoderSupported [] =
 
                 } else
                 {
-                        b = [m_playerEngine startPlayerFromURL: audioFileURL codec: codec channels: numChannels sampleRate: sampleRate];
+                        b = [m_playerEngine startPlayerFromURL: audioFileURL codec: codec channels: numChannels sampleRate: sampleRate volume: latentVolume];
                 }
         } else
         {
-                b = [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate];
+                b = [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate volume: latentVolume];
         }
         if (b)
         {
@@ -514,12 +521,13 @@ static bool _isIosDecoderSupported [] =
 
 
 
-- (void)setVolume:(double) volume
+- (void)setVolume:(double) volume fadeDuration:(NSTimeInterval)duration // volume is between 0.0 and 1.0
 {
         [self logDebug:  @"IOS:--> setVolume"];
+        latentVolume = volume;
         if (m_playerEngine)
         {
-                [m_playerEngine setVolume: volume ];
+                [m_playerEngine setVolume: volume fadeDuration: duration];
         } else
         {
         }

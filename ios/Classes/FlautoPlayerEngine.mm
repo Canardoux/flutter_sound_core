@@ -50,20 +50,24 @@
                 return [super init];
        }
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer
+       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
        {
                 NSError* error = [[NSError alloc] init];
                 [self setAudioPlayer:  [[AVAudioPlayer alloc] initWithData: dataBuffer error: &error]];
                 [self getAudioPlayer].delegate = flautoPlayer;
+                if (volume >= 0)
+                        [self setVolume: volume fadeDuration: 0];
                 bool b = [[self getAudioPlayer] play];
                 return b;
        }
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
 
        {
                 [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
                 [self getAudioPlayer].delegate = flautoPlayer;
+                if (volume >= 0)
+                    [[self getAudioPlayer] setVolume: volume] ;
                 bool b = [ [self getAudioPlayer] play];
                 return b;
         }
@@ -100,9 +104,12 @@
        }
 
 
-       -(bool)  setVolume: (long) volume
+       -(bool)  setVolume: (double) volume fadeDuration:(NSTimeInterval)fadeDuration // volume is between 0.0 and 1.0
        {
-                [ [self getAudioPlayer] setVolume: ((double)volume)/1000];
+               if (fadeDuration == 0)
+                     [ [self getAudioPlayer] setVolume: volume ];
+               else
+                       [ [self getAudioPlayer] setVolume: volume fadeDuration: fadeDuration];
                 return true;
        }
 
@@ -174,18 +181,20 @@
                 return [super init];
        }
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer
+       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
        {
                  return [self feed: dataBuffer] > 0;
        }
         static int ready = 0;
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
                 ready = 0;
+                if (volume >= 0)
+                        [self setVolume:volume fadeDuration: 0];
                 [playerNode play];
                 return true;
        }
@@ -318,7 +327,7 @@
                 }
          }
 
--(bool)  setVolume: (long) volume // TODO
+-(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration// TODO
 {
         return true; // TODO
 }
@@ -362,7 +371,7 @@
        }
        
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer
+       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
        {
                  return false;
        }
@@ -383,9 +392,11 @@
 		return (long)(time * 1000);
        }
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
+                if (volume >= 0)
+                        [self setVolume:volume fadeDuration: 0];
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
                 bool b = [engine startAndReturnError: nil];
@@ -468,7 +479,7 @@
        }
 
 
-        -(bool)  setVolume: (long) volume // TODO
+        -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval) fadeDuration // TODO
         {
                 return true; // TODO
         }

@@ -32,15 +32,15 @@
 
 @protocol FlautoPlayerEngineInterface <NSObject>
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate;
+       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
+       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
 
        - (long) getDuration;
        - (long) getPosition;
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
-       - (bool) setVolume: (long) volume;
+       - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration; // Volume is between 0.0 and 1.0
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
        - (int) feed: (NSData*)data;
@@ -57,7 +57,7 @@
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
-       - (bool) setVolume: (long) volume;
+       - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)duration ;// Volume is between 0.0 and 1.0
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
        - (AVAudioPlayer*) getAudioPlayer;
@@ -78,7 +78,7 @@
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
-       - (bool) setVolume: (long) volume;
+       - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
        - (bool) seek: (double) pos;
        - (int) getStatus;
        - (int) feed: (NSData*)data;
@@ -97,7 +97,7 @@
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
-       - (bool) setVolume: (long) volume;
+       - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
        - (bool) seek: (double) pos;
        - (int) getStatus;
        - (int) feed: (NSData*)data;
