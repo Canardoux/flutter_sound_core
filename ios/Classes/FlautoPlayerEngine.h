@@ -32,8 +32,8 @@
 
 @protocol FlautoPlayerEngineInterface <NSObject>
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data ;
-       - (bool) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromBuffer:  (NSData*)data ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
        - (long) getDuration;
        - (long) getPosition;
        - (void) stop;
@@ -53,8 +53,8 @@
 }
 - (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data ;
-       - (bool) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromBuffer:  (NSData*)data ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
        - (void) stop;
        - (bool) play;
        - (bool) resume;
