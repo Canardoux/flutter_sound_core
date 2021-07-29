@@ -103,8 +103,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 			int sampleRate,
 			int numChannels,
 			int blockSize,
-			FlautoPlayer theSession,
-			double volume
+			FlautoPlayer theSession
 		) throws Exception
 	{
 		if ( Build.VERSION.SDK_INT >= 21 )
@@ -126,12 +125,17 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 			mStartPauseTime = -1;
 			systemTime = SystemClock.elapsedRealtime();
 
-			audioTrack.play();
-			theSession.onPrepared();
+			theSession.onPrepared(); // Maybe too early ??? Should be after _play()
 		} else
 		{
 			throw new Exception("Need SDK 21");
 		}
+	}
+
+	void _play()
+	{
+		audioTrack.play();
+
 	}
 
 
@@ -183,6 +187,14 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 		}
 
 	}
+
+	void _setSpeed(double volume)  throws Exception
+	{
+
+			throw new Exception("Not implemented"); //!!!!!!!!!!!!!!!!
+
+	}
+
 
 
 	void _seekTo(long millisec)

@@ -85,6 +85,7 @@
 - (void)seekToPlayer: (long)time;
 - (void)setSubscriptionDuration: (long)call ;
 - (void)setVolume: (double)volume fadeDuration: (NSTimeInterval) fadeDuration;
+- (void)setSpeed: (double)speed ;
 - (bool)setCategory: (NSString*)categ mode:(NSString*)mode options:(int)options ;
 - (bool)setActive:(BOOL)enabled ;
 - (void)setUIProgressBar: (NSNumber*)pos duration: (NSNumber*)duration;

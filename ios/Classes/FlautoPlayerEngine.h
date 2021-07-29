@@ -32,15 +32,16 @@
 
 @protocol FlautoPlayerEngineInterface <NSObject>
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
-
+       - (bool) startPlayerFromBuffer:  (NSData*)data ;
+       - (bool) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
        - (long) getDuration;
        - (long) getPosition;
        - (void) stop;
+       - (bool) play;
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration; // Volume is between 0.0 and 1.0
+       - (bool) setSpeed: (double) speed ; // Speed is between 0.0 and 1.0 to go slower
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
        - (int) feed: (NSData*)data;
@@ -52,12 +53,14 @@
 }
 - (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
+       - (bool) startPlayerFromBuffer:  (NSData*)data ;
+       - (bool) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
        - (void) stop;
+       - (bool) play;
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)duration ;// Volume is between 0.0 and 1.0
+       - (bool) setSpeed: (double) speed ;// Volume is between 0.0 and 1.0
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
        - (AVAudioPlayer*) getAudioPlayer;
@@ -73,14 +76,16 @@
 }
        - (AudioEngine*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
+       - (void) startPlayerFromBuffer:  (NSData*)data ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (bool) play;
        - (void) stop;
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
+       - (bool) setSpeed: (double) speed ;
        - (bool) seek: (double) pos;
-       - (int) getStatus;
+       - (int)  getStatus;
        - (int) feed: (NSData*)data;
 
 @end
@@ -92,12 +97,14 @@
 }
        - (AudioEngineFromMic*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
-       - (bool) startPlayerFromBuffer:  (NSData*)data volume: (double)volume;
-       - (bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume;
+       - (void) startPlayerFromBuffer:  (NSData*)data ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
        - (void) stop;
+       - (bool) play;
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
+       - (bool) setSpeed: (double) speed;
        - (bool) seek: (double) pos;
        - (int) getStatus;
        - (int) feed: (NSData*)data;

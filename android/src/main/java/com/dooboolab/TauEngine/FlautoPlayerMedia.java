@@ -18,6 +18,9 @@ package com.dooboolab.TauEngine;
  */
 
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
+import android.os.Build;
+import android.util.Log;
 
 //-------------------------------------------------------------------------------------------------------------
 
@@ -32,22 +35,25 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		this.flautoPlayer = theSession;
 	}
 
-	void _startPlayer(String path,  int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession, double volume) throws Exception
+	void _startPlayer(String path,  int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession) throws Exception
  	{
 		this.flautoPlayer = theSession;
  		mediaPlayer = new MediaPlayer();
-		if (volume >= 0)
-			_setVolume(volume);
 		if (path == null)
 		{
 			throw new Exception("path is NULL");
 		}
 		mediaPlayer.setDataSource(path);
 		final String pathFile = path;
-		mediaPlayer.setOnPreparedListener(mp -> {mp.start(); flautoPlayer.onPrepared();});
+		mediaPlayer.setOnPreparedListener(mp -> {flautoPlayer.play(); flautoPlayer.onPrepared();});
 		mediaPlayer.setOnCompletionListener(mp -> flautoPlayer.onCompletion());
 		mediaPlayer.setOnErrorListener(flautoPlayer);
 		mediaPlayer.prepare();
+	}
+
+	void _play()
+	{
+		mediaPlayer.start();
 	}
 
 	int feed(byte[] data) throws Exception
@@ -60,6 +66,22 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		float v = (float)volume;
 		mediaPlayer.setVolume ( v, v );
 	}
+
+	void _setSpeed(double speed)
+	{
+		float v = (float)speed;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			try {
+				PlaybackParams params = mediaPlayer.getPlaybackParams();
+				params.setSpeed(v);
+				mediaPlayer.setPlaybackParams(params);
+			} catch (Exception e) {
+				Log.e("_setSpeed", "_setSpeed: ", e);
+			}
+		}
+
+	}
+
 
 	void _stop() {
 		if (mediaPlayer == null)

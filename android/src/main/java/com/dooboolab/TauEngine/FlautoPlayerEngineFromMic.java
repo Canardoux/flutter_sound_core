@@ -92,7 +92,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			}
 			if (lnr != ln)
 			{
-				mSession.logError("feed error: some audio data are lost");
+				System.out.println("feed error: some audio data are lost");
 			}
 		}
 
@@ -179,8 +179,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			mStartPauseTime = -1;
 			systemTime = SystemClock.elapsedRealtime();
 
-			audioTrack.play();
-			mSession.onPrepared();
+			mSession.onPrepared(); // Maybe too early. Should be after _play()
 		} else
 		{
 			throw new Exception("Need SDK 21");
@@ -188,6 +187,10 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 	}
 
+	void _play()
+	{
+		audioTrack.play();
+	}
 
 	public void startRecorderSide
 		(
@@ -239,8 +242,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			int sampleRate,
 			int numChannels,
 			int blockSize,
-			FlautoPlayer aPlayer,
-			double volume
+			FlautoPlayer aPlayer
 		) throws Exception
 	{
 		startPlayerSide(sampleRate, numChannels, blockSize);
@@ -307,6 +309,12 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 	void _setVolume(double volume)  throws Exception
 	{
 		mSession.logError("setVolume: not implemented" );
+	}
+
+
+	void _setSpeed(double speed)  throws Exception
+	{
+		mSession.logError("setSpeed: not implemented" );
 	}
 
 

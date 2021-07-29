@@ -99,6 +99,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	FlautoPlayerCallback m_callBack;
 	public		t_PLAYER_STATE 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	private double latentVolume = -1.0;
+	private double latentSpeed = -1.0;
 
 
 	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
@@ -113,6 +114,8 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	public boolean openPlayer (t_AUDIO_FOCUS focus, t_SESSION_CATEGORY category, t_SESSION_MODE sessionMode, int audioFlags, t_AUDIO_DEVICE audioDevice)
 	{
+		latentVolume = -1.0;
+		latentSpeed = -1.0;
 		boolean r = setAudioFocus(focus, category, sessionMode, audioFlags, audioDevice);
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 		m_callBack.openPlayerCompleted(r);
@@ -153,7 +156,8 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		try
 		{
 			player = new FlautoPlayerEngineFromMic(this);
-			player._startPlayer(null,  sampleRate, numChannels, blockSize, this, latentVolume);
+			player._startPlayer(null,  sampleRate, numChannels, blockSize, this);
+			play();
 		}
 		catch ( Exception e )
 		{
@@ -200,7 +204,8 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			String path = Flauto.getPath(fromURI);
 
 			mTimer = new Timer();
-			player._startPlayer(path,  sampleRate, numChannels, blockSize, this, latentVolume);
+			player._startPlayer(path,  sampleRate, numChannels, blockSize, this);
+			play();
 		}
 		catch ( Exception e )
 		{
@@ -369,6 +374,31 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	}
 
+	public boolean play()
+	{
+			if (player == null)
+			{
+					return false;
+			}
+			try
+			{
+				if (latentVolume >= 0)
+				{
+					player._setVolume(latentVolume);
+				}
+				if (latentSpeed >= 0)
+				{
+					player._setSpeed(latentSpeed);
+				}
+
+			}catch (Exception e)
+			{
+
+			}
+			player._play();
+			return true;
+	}
+
 	public boolean isDecoderSupported (t_CODEC codec )
 	{
 		return _isAndroidDecoderSupported[ codec.ordinal() ];
@@ -454,6 +484,26 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		} catch(Exception e)
 		{
 			logError ("setVolume: " + e.getMessage () );
+			return false;
+		}
+	}
+
+
+	public boolean setSpeed ( double speed )
+	{
+		try
+		{
+
+			latentSpeed = speed;
+			if (player == null) {
+				return false;
+			}
+
+			player._setSpeed(speed);
+			return true;
+		} catch(Exception e)
+		{
+			logError ("setSpeed: " + e.getMessage () );
 			return false;
 		}
 	}

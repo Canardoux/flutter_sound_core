@@ -50,26 +50,27 @@
                 return [super init];
        }
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
+       -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
                 NSError* error = [[NSError alloc] init];
                 [self setAudioPlayer:  [[AVAudioPlayer alloc] initWithData: dataBuffer error: &error]];
                 [self getAudioPlayer].delegate = flautoPlayer;
-                if (volume >= 0)
-                        [self setVolume: volume fadeDuration: 0];
-                bool b = [[self getAudioPlayer] play];
-                return b;
+               
+                //[self getAudioPlayer].enableRate = true ; // Probably not always !!!!
+                
+                 //bool b = [[self getAudioPlayer] play];
+                //return b;
        }
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
 
        {
                 [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
                 [self getAudioPlayer].delegate = flautoPlayer;
-                if (volume >= 0)
-                    [[self getAudioPlayer] setVolume: volume] ;
-                bool b = [ [self getAudioPlayer] play];
-                return b;
+                //[self getAudioPlayer].enableRate = true ; // Probably not always !!!!
+
+                //bool b = [ [self getAudioPlayer] play];
+                //return b;
         }
 
 
@@ -91,6 +92,13 @@
                 [self setAudioPlayer: nil];
        }
 
+        -(bool)  play
+        {
+                bool b = [ [self getAudioPlayer] play];
+                return b;
+        }
+
+
        -(bool)  resume
        {
                 bool b = [ [self getAudioPlayer] play];
@@ -110,9 +118,16 @@
                      [ [self getAudioPlayer] setVolume: volume ];
                else
                        [ [self getAudioPlayer] setVolume: volume fadeDuration: fadeDuration];
-                return true;
+               return true;
        }
 
+
+        -(bool)  setSpeed: (double) speed // speed is between 0.0 and 1.0 to go slower
+        {
+                [self getAudioPlayer].enableRate = true ; // Probably not always !!!!
+                [self getAudioPlayer].rate = speed ;
+                return true;
+        }
 
        -(bool)  seek: (double) pos
        {
@@ -181,22 +196,18 @@
                 return [super init];
        }
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
+       -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
-                 return [self feed: dataBuffer] > 0;
+                 [self feed: dataBuffer] > 0;
        }
         static int ready = 0;
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
                 ready = 0;
-                if (volume >= 0)
-                        [self setVolume:volume fadeDuration: 0];
-                [playerNode play];
-                return true;
        }
 
 
@@ -231,6 +242,12 @@
                 }
        }
 
+        -(bool) play
+        {
+                [playerNode play];
+                return true;
+
+        }
        -(bool)  resume
        {
 		if (mStartPauseTime >= 0)
@@ -332,6 +349,12 @@
         return true; // TODO
 }
 
+- (bool) setSpeed: (double) speed
+{
+        return true; // TODO
+}
+
+
 @end
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -371,7 +394,7 @@
        }
        
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer volume: (double)volume
+       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer
        {
                  return false;
        }
@@ -392,26 +415,18 @@
 		return (long)(time * 1000);
        }
 
-       -(bool)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate volume: (double)volume
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
-                if (volume >= 0)
-                        [self setVolume:volume fadeDuration: 0];
+
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
-                bool b = [engine startAndReturnError: nil];
-                if (!b)
-                {
-                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
-                }
 
                 mPauseTime = 0.0; // Total number of seconds in pause mode
 		mStartPauseTime = -1; // Not in paused mode
 		systemTime = CACurrentMediaTime(); // The time when started
                 //previousTS = CACurrentMediaTime() * 1000;
                 ready2 = 0;
-                //[playerNode play];
-                return true;
        }
 
 
@@ -435,6 +450,16 @@
                         //previousTS = 0;
                 }
        }
+
+        -(bool) play
+        {
+                bool b = [engine startAndReturnError: nil];
+                if (!b)
+                {
+                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
+                }
+                return b;
+        }
 
        -(bool)  resume
        {
@@ -484,7 +509,12 @@
                 return true; // TODO
         }
 
-       - (int) feed: (NSData*)data
+        -(bool)  setSpeed: (double) speed // TODO
+        {
+                return true; // TODO
+        }
+
+      - (int) feed: (NSData*)data
        {
         return 0;
        }
