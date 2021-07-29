@@ -198,7 +198,7 @@
 
        -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
-                 [self feed: dataBuffer] > 0;
+                 [self feed: dataBuffer] ;
        }
         static int ready = 0;
 
@@ -394,7 +394,7 @@
        }
        
 
-       -(bool) startPlayerFromBuffer: (NSData*) dataBuffer
+       -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
                  return false;
        }
