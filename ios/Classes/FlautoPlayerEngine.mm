@@ -396,7 +396,6 @@
 
        -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
-                 return false;
        }
         static int ready2 = 0;
 
