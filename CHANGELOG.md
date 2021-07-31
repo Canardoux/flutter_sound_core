@@ -1,3 +1,3 @@
-## 8.3.6
+## 8.3.8
 
 - Please [look to this]((https://dooboolab.github.io/flutter_sound/doc/book/CHANGELOG.html))
