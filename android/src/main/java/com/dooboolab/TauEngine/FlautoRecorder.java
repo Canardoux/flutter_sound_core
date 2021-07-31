@@ -123,7 +123,7 @@ public class FlautoRecorder extends FlautoSession
 	final private Handler          mainHandler = new Handler (Looper.getMainLooper ());
 	String m_path = null;
 
-	public              int     subsDurationMillis    = 10;
+	long subsDurationMillis = 0;
 
 	private      Runnable      recorderTicker;
 	t_RECORDER_STATE status = t_RECORDER_STATE.RECORDER_IS_STOPPED;
@@ -193,6 +193,73 @@ public class FlautoRecorder extends FlautoSession
 			return false;
 
 	}
+	void cancelTimer()
+	{
+		if (recordHandler != null)
+			recordHandler.removeCallbacksAndMessages(null);
+		recordHandler = null;
+
+	}
+
+	void setTimer(long duration)
+	{
+		cancelTimer();
+		subsDurationMillis = duration;
+		if (recorder == null || duration == 0)
+			return;
+		final long systemTime = SystemClock.elapsedRealtime();
+		recordHandler      = new Handler ();
+		recorderTicker = ( () ->
+		{
+			mainHandler.post(new Runnable()
+			{
+				@Override
+				public void run() {
+
+					long time = SystemClock.elapsedRealtime() - systemTime - mPauseTime;
+					// logDebug (  "elapsedTime: " + SystemClock.elapsedRealtime());
+					// logDebug( "time: " + time);
+
+					// DateFormat format = new SimpleDateFormat("mm:ss:SS", Locale.US);
+					// String displayTime = format.format(time);
+					// model.setRecordTime(time);
+					try {
+						double db = 0.0;
+						if (recorder != null) {
+							double maxAmplitude = recorder.getMaxAmplitude();
+
+							// Calculate db based on the following article.
+							// https://stackoverflow.com/questions/10655703/what-does-androids-getmaxamplitude-function-for-the-mediarecorder-actually-gi
+							//
+							double ref_pressure = 51805.5336;
+							double p = maxAmplitude / ref_pressure;
+							double p0 = 0.0002;
+
+							db = 20.0 * Math.log10(p / p0);
+
+							// if the microphone is off we get 0 for the amplitude which causes
+							// db to be infinite.
+							if (Double.isInfinite(db)) {
+								db = 0.0;
+							}
+
+						}
+
+
+						m_callBack.updateRecorderProgressDbPeakLevel(db, time);
+						if (recordHandler != null)
+							recordHandler.postDelayed(recorderTicker, subsDurationMillis);
+					} catch (Exception e) {
+						logDebug (  " Exception: " + e.toString());
+					}
+				}
+			});
+
+
+		} );
+		recordHandler.post ( recorderTicker );
+
+	}
 
 	public boolean startRecorder
 	(
@@ -231,6 +298,9 @@ public class FlautoRecorder extends FlautoSession
 		try
 		{
 			recorder._startRecorder( numChannels, sampleRate, bitRate, codec, path, audioSource, this );
+			if (subsDurationMillis > 0)
+				setTimer(subsDurationMillis);
+
 		} catch ( Exception e )
 		{
 			logError (  "Error starting recorder" + e.getMessage() );
@@ -238,58 +308,6 @@ public class FlautoRecorder extends FlautoSession
 		}
 		// Remove all pending runnables, this is just for safety (should never happen)
 		//recordHandler.removeCallbacksAndMessages ( null );
-
-		final long systemTime = SystemClock.elapsedRealtime();
-		recordHandler      = new Handler ();
-		recorderTicker = ( () ->
-		       {
-				mainHandler.post(new Runnable()
-				{
-					@Override
-					public void run() {
-
-						long time = SystemClock.elapsedRealtime() - systemTime - mPauseTime;
-						// logDebug (  "elapsedTime: " + SystemClock.elapsedRealtime());
-						// logDebug( "time: " + time);
-
-						// DateFormat format = new SimpleDateFormat("mm:ss:SS", Locale.US);
-						// String displayTime = format.format(time);
-						// model.setRecordTime(time);
-						try {
-							double db = 0.0;
-							if (recorder != null) {
-								double maxAmplitude = recorder.getMaxAmplitude();
-
-								// Calculate db based on the following article.
-								// https://stackoverflow.com/questions/10655703/what-does-androids-getmaxamplitude-function-for-the-mediarecorder-actually-gi
-								//
-								double ref_pressure = 51805.5336;
-								double p = maxAmplitude / ref_pressure;
-								double p0 = 0.0002;
-
-								db = 20.0 * Math.log10(p / p0);
-
-								// if the microphone is off we get 0 for the amplitude which causes
-								// db to be infinite.
-								if (Double.isInfinite(db)) {
-									db = 0.0;
-								}
-
-							}
-
-
-							m_callBack.updateRecorderProgressDbPeakLevel(db, time);
-							if (recordHandler != null)
-								recordHandler.postDelayed(recorderTicker, subsDurationMillis);
-						} catch (Exception e) {
-							logDebug (  " Exception: " + e.toString());
-						}
-					}
-				});
-
-
-				} );
-		recordHandler.post ( recorderTicker );
 		status = t_RECORDER_STATE.RECORDER_IS_RECORDING;
 		m_callBack.startRecorderCompleted(true);
 		return true;
@@ -303,10 +321,8 @@ public class FlautoRecorder extends FlautoSession
 	void stop()
 	{
 		try {
-			if (recordHandler != null)
-				recordHandler.removeCallbacksAndMessages(null);
-			recordHandler = null;
-			if (recorder != null)
+				cancelTimer();
+				if (recorder != null)
 				recorder._stopRecorder();
 		} catch (Exception e)
 		{
@@ -325,8 +341,7 @@ public class FlautoRecorder extends FlautoSession
 
 	public void pauseRecorder()
 	{
-		recordHandler.removeCallbacksAndMessages ( null );
-		recordHandler      = null;
+		cancelTimer();
 		recorder.pauseRecorder( );
 		mStartPauseTime = SystemClock.elapsedRealtime ();
 		status = t_RECORDER_STATE.RECORDER_IS_PAUSED;
@@ -335,8 +350,7 @@ public class FlautoRecorder extends FlautoSession
 
 	public void resumeRecorder( )
 	{
-		recordHandler      = new Handler ();
-		recordHandler.post (recorderTicker );
+		setTimer(subsDurationMillis);
 		recorder.resumeRecorder();
 		if (mStartPauseTime >= 0)
 			mPauseTime += SystemClock.elapsedRealtime () - mStartPauseTime;
@@ -348,6 +362,8 @@ public class FlautoRecorder extends FlautoSession
 	public void setSubscriptionDuration (int duration)
 	{
 		this.subsDurationMillis = duration;
+		if (recorder != null)
+			setTimer(subsDurationMillis);
 	}
 
 	public String temporayFile(String radical)

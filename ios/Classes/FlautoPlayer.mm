@@ -347,12 +347,12 @@ static bool _isIosDecoderSupported [] =
 
 - (void)updateProgress: (NSTimer*)atimer
 {
-         dispatch_async(dispatch_get_main_queue(),
-         ^{
+         //!!!!!!!!!!dispatch_async(dispatch_get_main_queue(),
+         //!!!!!!!!!!!!!^{
                 long position = [self ->m_playerEngine getPosition];
                 long duration = [self ->m_playerEngine getDuration];
-                [self ->m_callBack updateProgressPositon: position duration: duration];
-         });
+                [self ->m_callBack updateProgressPosition: position duration: duration];
+         //!!!!!!!!!!!!});
 }
 
 
@@ -569,7 +569,7 @@ static bool _isIosDecoderSupported [] =
 {
         [self logDebug:  @"IOS:--> setSpeed"];
         latentSpeed = speed;
-        if (m_playerEngine)
+        if (m_playerEngine )
         {
                 [m_playerEngine setSpeed: speed ];
         } else
@@ -609,6 +609,10 @@ static bool _isIosDecoderSupported [] =
         [self logDebug:  @"IOS:--> setSubscriptionDuration"];
 
         subscriptionDuration = ((double)d)/1000;
+        if (m_playerEngine != nil)
+        {
+                [self startTimer];
+        }
         [self logDebug:  @"IOS:<-- setSubscriptionDuration"];
 
 }

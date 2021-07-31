@@ -93,7 +93,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	long subsDurationMillis = 0;
 	//MediaPlayer mediaPlayer                    = null;
 	FlautoPlayerEngineInterface player;
-	private       Timer            mTimer      = new Timer ();
+	private       Timer            mTimer   ;
 	final private Handler          mainHandler = new Handler (Looper.getMainLooper ());
 	boolean pauseMode;
 	FlautoPlayerCallback m_callBack;
@@ -203,7 +203,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			}
 			String path = Flauto.getPath(fromURI);
 
-			mTimer = new Timer();
 			player._startPlayer(path,  sampleRate, numChannels, blockSize, this);
 			play();
 		}
@@ -313,9 +312,34 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		/*
 		 * Set timer task to send event to RN.
 		 */
-		TimerTask mTask = new TimerTask() {
-			@Override
-			public void run() {
+	}
+
+
+	public void stopPlayer ( )
+	{
+		stop();
+		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
+		m_callBack.stopPlayerCompleted(true);
+	}
+
+	void cancelTimer()
+	{
+		if (mTimer != null)
+			mTimer.cancel ();
+		mTimer = null;
+	}
+	void setTimer(long duration)
+	{
+		cancelTimer();
+		subsDurationMillis = duration;
+		if (player == null || duration == 0)
+			return;
+
+		if (subsDurationMillis > 0)
+		{
+			TimerTask task = new TimerTask() {
+				@Override
+				public void run() {
 					mainHandler.post(new Runnable()
 					{
 						@Override
@@ -332,12 +356,12 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 									{
 										position = duration;
 									}
-/*
-									Map<String, Object> dic = new HashMap<String, Object>();
-									dic.put("position", position);
-									dic.put("duration", duration);
-									dic.put("playerStatus", getPlayerState());
-*/
+	/*
+										Map<String, Object> dic = new HashMap<String, Object>();
+										dic.put("position", position);
+										dic.put("duration", duration);
+										dic.put("playerStatus", getPlayerState());
+	*/
 									m_callBack.updateProgress(position, duration);
 								}
 							} catch (Exception e)
@@ -349,25 +373,20 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 					});
 
 
-			}
-		};
+				}
+			};
 
-		if (subsDurationMillis > 0)
-			mTimer.schedule(mTask, 0, subsDurationMillis);
-	}
+			mTimer = new Timer();
 
+			mTimer.schedule(task, 0, duration);
+		}
 
-	public void stopPlayer ( )
-	{
-		stop();
-		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
-		m_callBack.stopPlayerCompleted(true);
 	}
 
 	void stop()
 	{
+		cancelTimer();
 		pauseMode = false;
-		mTimer.cancel ();
 		if (player != null)
 			player._stop();
 		player = null;
@@ -390,6 +409,9 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 				{
 					player._setSpeed(latentSpeed);
 				}
+				if (subsDurationMillis > 0)
+					setTimer(subsDurationMillis);
+
 
 			}catch (Exception e)
 			{
@@ -408,6 +430,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	{
 		try
 		{
+			cancelTimer();
 			if (player == null)
 			{
 				m_callBack.resumePlayerCompleted(false);
@@ -440,6 +463,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			player._resumePlayer();
 			pauseMode = false;
 			playerState = t_PLAYER_STATE.PLAYER_IS_PLAYING;
+			setTimer(subsDurationMillis);
 			m_callBack.resumePlayerCompleted(true);
 
 			return true;
@@ -512,6 +536,8 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	public void setSubscriptionDuration (long duration)
 	{
 		subsDurationMillis = duration;
+		if (player != null)
+			setTimer(subsDurationMillis);
 	}
 
 	public boolean androidAudioFocusRequest ( int focusGain )

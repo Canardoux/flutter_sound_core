@@ -39,7 +39,7 @@
 - (void)stopPlayerCompleted: (bool)success;
 
 - (void)needSomeFood: (int) ln;
-- (void)updateProgressPositon: (long)position duration: (long)duration;
+- (void)updateProgressPosition: (long)position duration: (long)duration;
 - (void)audioPlayerDidFinishPlaying: (BOOL)flag;
 - (void)pause;
 - (void)resume;

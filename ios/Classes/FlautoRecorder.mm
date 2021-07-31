@@ -347,6 +347,11 @@ AudioRecInterface* audioRec;
 - (void)setSubscriptionDuration: (long)millisec
 {
         subscriptionDuration = ((double)millisec)/1000.0;
+        if (audioRec != nil)
+        {
+                [self startRecorderTimer];
+        }
+
 }
 
 - (void)pauseRecorder
