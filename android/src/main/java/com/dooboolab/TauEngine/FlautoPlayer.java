@@ -100,6 +100,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	public		t_PLAYER_STATE 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	private double latentVolume = -1.0;
 	private double latentSpeed = -1.0;
+	private long latentSeek = -1;
 
 
 	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
@@ -116,6 +117,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	{
 		latentVolume = -1.0;
 		latentSpeed = -1.0;
+		latentSeek = -1;
 		boolean r = setAudioFocus(focus, category, sessionMode, audioFlags, audioDevice);
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 		m_callBack.openPlayerCompleted(r);
@@ -403,14 +405,18 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			{
 				if (latentVolume >= 0)
 				{
-					player._setVolume(latentVolume);
+					setVolume(latentVolume);
 				}
 				if (latentSpeed >= 0)
 				{
-					player._setSpeed(latentSpeed);
+					setSpeed(latentSpeed);
 				}
 				if (subsDurationMillis > 0)
 					setTimer(subsDurationMillis);
+				if (latentSeek >= 0)
+				{
+					seekToPlayer(latentSeek);
+				}
 
 
 			}catch (Exception e)
@@ -480,13 +486,13 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 		if ( player == null )
 		{
-			logError("seekToPlayer() error: "  );
+			latentSeek = millis;
 			return false;
 		}
 
 
 		logDebug("seekTo: " + millis );
-
+		latentSeek = -1;
 		player._seekTo ( millis );
 		return true;
 	}

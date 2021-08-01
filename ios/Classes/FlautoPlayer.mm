@@ -62,6 +62,7 @@ static bool _isIosDecoderSupported [] =
         double subscriptionDuration;
         double latentVolume;
         double latentSpeed;
+        long latentSeek;
 
 
 }
@@ -71,6 +72,7 @@ static bool _isIosDecoderSupported [] =
         m_callBack = callback;
         latentVolume = -1.0;
         latentSpeed = -1.0;
+        latentSeek = -1;
         subscriptionDuration = 0;
         timer = nil;
         return [super init];
@@ -103,6 +105,7 @@ static bool _isIosDecoderSupported [] =
         [self logDebug:  @"IOS:--> initializeFlautoPlayer"];
         latentVolume = -1.0;
         latentSpeed = -1.0;
+        latentSeek = -1;
         BOOL r = [self setAudioFocus: focus category: category mode: mode audioFlags: audioFlags audioDevice: audioDevice ];
         [m_callBack openPlayerCompleted: r];
         [self logDebug:  @"IOS:<-- initializeFlautoPlayer"];
@@ -238,13 +241,7 @@ static bool _isIosDecoderSupported [] =
         if (dataBuffer != nil)
         {
                 [m_playerEngine startPlayerFromBuffer: dataBuffer];
-               if (latentVolume >= 0)
-                        [m_playerEngine setVolume: latentVolume fadeDuration: 0];
-                if (latentSpeed >= 0)
-                {
-                        [m_playerEngine setSpeed:latentSpeed] ;
-                }
-                bool b = [m_playerEngine play];
+                bool b = [self play];
 
                 if (!b)
                 {
@@ -284,13 +281,7 @@ static bool _isIosDecoderSupported [] =
                                         // We must create a new Audio Player instance to be able to play a different Url
                                         //int toto = data.length;
                                         [self ->m_playerEngine startPlayerFromBuffer: data ];
-                                        if (self ->latentVolume >= 0)
-                                                [self ->m_playerEngine setVolume: self ->latentVolume fadeDuration: 0];
-                                        if (self ->latentSpeed >= 0)
-                                        {
-                                                [self ->m_playerEngine setSpeed: self ->latentSpeed] ;
-                                        }
-                                        bool b = [self ->m_playerEngine play];
+                                        bool b = [self play];
 
                                         if (!b)
                                         {
@@ -318,13 +309,7 @@ static bool _isIosDecoderSupported [] =
         {
                 [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate ];
         }
-        if (latentVolume >= 0)
-                [m_playerEngine setVolume: latentVolume fadeDuration: 0];
-        if (latentSpeed >= 0)
-        {
-                [m_playerEngine setSpeed:latentSpeed] ;
-        }
-        b = [m_playerEngine play];
+        b = [self play];
 
         if (b)
         {
@@ -336,6 +321,22 @@ static bool _isIosDecoderSupported [] =
         return b;
 }
 
+- (bool) play
+{
+        if (latentVolume >= 0)
+                [self setVolume: latentVolume fadeDuration: 0];
+        if (latentSpeed >= 0)
+        {
+                [self setSpeed: latentSpeed] ;
+        }
+        if (latentSeek >= 0)
+        {
+                [self seekToPlayer: latentSeek] ;
+        }
+        
+        return  [m_playerEngine play];
+
+}
 
 - (void)needSomeFood: (int)ln
 {
@@ -541,10 +542,12 @@ static bool _isIosDecoderSupported [] =
         [self logDebug: @"IOS:--> seekToPlayer"];
         if (m_playerEngine != nil)
         {
+                latentSeek = -1;
                 [m_playerEngine seek: t];
                 [self updateProgress: nil];
         } else
         {
+                latentSeek = t;
         }
         [self logDebug:  @"IOS:<-- seekToPlayer"];
 }
