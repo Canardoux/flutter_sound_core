@@ -1,6 +1,6 @@
 {
-        "name": "tau_core",
-        "version": "8.4.0+2",
+        "name": "flutter_sound_core",
+        "version": "8.4.0+3",
         "description": "The Tau Engine for Web App",
         "homepage": "https://github.com/canardoux/flutter_sound",
         "keywords": [
@@ -8,7 +8,7 @@
                 "flutter_sound",
                 "tau",
                 "tau_engine",
-                "tau_core",
+                "flutter_sound_core",
                 "audio",
                 "sound",
                 "web audio",

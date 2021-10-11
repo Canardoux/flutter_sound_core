@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 18402
-        versionName '8.4.0+2'
+        versionCode 18403
+        versionName '8.4.0+3'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -88,7 +88,7 @@ dependencies {
 }
 ext {
     PUBLISH_GROUP_ID = 'com.github.canardoux'
-    PUBLISH_ARTIFACT_ID = 'tau_core'
+    PUBLISH_ARTIFACT_ID = 'flutter_sound_core'
     PUBLISH_VERSION = android.defaultConfig.versionName // '0.0.2' // project.getProperty(“libraryVersion”)
 }
 
@@ -136,7 +136,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = PUBLISH_GROUP_ID
-                artifactId = 'tau_core'
+                artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
             }
 
@@ -146,7 +146,7 @@ afterEvaluate {
                 from components.debug
 
                 groupId = PUBLISH_GROUP_ID
-                artifactId = 'tau_core'
+                artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
             }
 

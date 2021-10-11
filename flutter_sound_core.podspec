@@ -7,8 +7,8 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'tau_core'
-  s.version          = '8.4.0+2'
+  s.name             = 'flutter_sound_core'
+  s.version          = '8.4.0+3'
   s.summary          = 'Provides simple recorder and player functionalities for both Android and iOS platforms.'
 
 # This description is used to generate tags and improve search results.
