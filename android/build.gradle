@@ -51,7 +51,7 @@ apply plugin: 'com.android.library'
 //group = 'com.github.canardoux'
 
 //apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.Canardoux'
+group='com.github.canardoux'
 
 android {
     compileSdkVersion 30
@@ -87,7 +87,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 }
 ext {
-    PUBLISH_GROUP_ID = 'com.github.Canardoux'
+    PUBLISH_GROUP_ID = 'com.github.canardoux'
     PUBLISH_ARTIFACT_ID = 'tau_core'
     PUBLISH_VERSION = android.defaultConfig.versionName // '0.0.2' // project.getProperty(“libraryVersion”)
 }

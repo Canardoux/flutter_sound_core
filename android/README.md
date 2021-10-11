@@ -1,16 +1,16 @@
-<a href="https://tau.canardoux.xyz/readme.html">
-        <img src="https://tau.canardoux.xyz/images/banner5.svg" width="70%" height="70%" />
+<a href="https://flutter-sound.canardoux.xyz/readme.html">
+        <img src="https://flutter-sound.canardoux.xyz/images/banner5.svg" width="70%" height="70%" />
 </a>
 <p align="left">
-  <a href="https://tau.canardoux.xyz/readme.html">
+  <a href="https://flutter-sound.canardoux.xyz/readme.html">
         <img alt="pub version" src="https://img.shields.io/pub/v/flutter_sound.svg" />
   </a>
 </p>
 
 -------------------------------------------------------------------------------------
 
-- ## Flutter Sound user: your [documentation is there](https://tau.canardoux.xyz/readme.html)
-- ## The [CHANGELOG file is here](https://tau.canardoux.xyz/changelog.html)
+- ## Flutter Sound user: your [documentation is there](https://flutter-sound.canardoux.xyz/readme.html)
+- ## The [CHANGELOG file is here](https://flutter-sound.canardoux.xyz/changelog.html)
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -52,12 +52,12 @@ The Flutter Sound package includes the following features
 
 ## Changelog
 
-You can find the [changes here](https://tau.canardoux.xyz/changelog.html)
+You can find the [changes here](https://flutter-sound.canardoux.xyz/changelog.html)
 
 
 ## Documentation
 
-The [documentation is here](https://tau.canardoux.xyz/readme.html)
+The [documentation is here](https://flutter-sound.canardoux.xyz/readme.html)
 
 
 ## Licenses
@@ -65,7 +65,7 @@ The [documentation is here](https://tau.canardoux.xyz/readme.html)
 - Flutter Sound is copyrighted by Dooboolab (2018, 2019, 2020, 2021).
 - Flutter Sound is released under a license with a *copyleft* clause: the LGPL-V3 license. This means that if you modify some of Flutter Sound code you must publish your modifications under the LGPL license too.
 
-- Tau React is copyrighted by Canardoux (2021).
+- Tau React is copyrighted by canardoux (2021).
 - Tau React is released under a license with a **strong** *copyleft* clause : the GPL-V3 license. This means that if you use part or all of Tau React in your App, this App must be published under the GPL-V3 license, too.
 
 
