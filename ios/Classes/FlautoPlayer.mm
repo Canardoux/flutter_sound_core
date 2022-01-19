@@ -25,7 +25,6 @@
 #import "FlautoPlayerEngine.h"
 #import "FlautoPlayer.h"
 //#import "FlautoTrackPlayer.h"
-#import "FlautoTrack.h"
 
 
 
@@ -392,12 +391,6 @@ static bool _isIosDecoderSupported [] =
 }
 
 
-- (bool)startPlayerFromTrack: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
-        progress: (NSNumber*)progress duration: (NSNumber*)duration removeUIWhenStopped: (bool)removeUIWhenStopped defaultPauseResume: (bool)defaultPauseResume;
-{
-        assert(false);
-}
-
 
 - (bool)pausePlayer
 {
@@ -505,20 +498,6 @@ static bool _isIosDecoderSupported [] =
         return b;
 }
 
-
-
-
-- (void)setUIProgressBar: (NSNumber*)pos duration: (NSNumber*)duration
-{
-        assert(false);
-}
-
-- (void)nowPlaying: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
-                defaultPauseResume: (bool)defaultPauseResume progress: (NSNumber*)progress duration: (NSNumber*)duration
-
-{
-        assert(false);
-}
 
 
 

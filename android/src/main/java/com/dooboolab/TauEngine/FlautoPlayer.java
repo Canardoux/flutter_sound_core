@@ -251,7 +251,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	public boolean startPlayerFromTrack
 	(
-		FlautoTrack track,
 		boolean canPause,
 		boolean canSkipForward,
 		boolean canSkipBackward,
@@ -609,7 +608,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	public void nowPlaying
 	(
-		FlautoTrack track,
 		boolean canPause,
 		boolean canSkipForward,
 		boolean canSkipbackward,

@@ -27,7 +27,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "FlautoPlayerEngine.h"
 #import "FlautoSession.h"
-#import "FlautoTrack.h"
 
 
 
@@ -78,9 +77,6 @@
         sampleRate: (long)sampleRate
         ;
 - (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels;
-- (bool)startPlayerFromTrack: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
-        progress: (NSNumber*)progress duration: (NSNumber*)duration removeUIWhenStopped: (bool)removeUIWhenStopped defaultPauseResume: (bool)defaultPauseResume;
-
 - (void)stopPlayer;
 - (bool)pausePlayer;
 - (bool)resumePlayer;
@@ -99,8 +95,6 @@
 - (void)stopTimer;
 - (long)getPosition;
 - (long)getDuration;
-- (void)nowPlaying: (FlautoTrack*)track canPause: (bool)canPause canSkipForward: (bool)canSkipForward canSkipBackward: (bool)canSkipBackward
-                defaultPauseResume: (bool)defaultPauseResume progress: (NSNumber*)progress duration: (NSNumber*)duration;
 - (void)logDebug: (NSString*)msg;
 
 
