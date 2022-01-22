@@ -35,73 +35,73 @@ public class FlautoRecorderMedia
 
 	static int codecArray[] =
 	{
-		MediaRecorder.AudioEncoder.DEFAULT,
-		MediaRecorder.AudioEncoder.AAC,
-		MediaRecorder.AudioEncoder.OPUS,
-		0, // CODEC_CAF_OPUS (specific Apple)
-		0,// CODEC_MP3 (not implemented)
-		MediaRecorder.AudioEncoder.VORBIS,
-		7, // MediaRecorder.AudioEncoder.DEFAULT // CODEC_PCM (not implemented)
-		0, // wav
-		0, // aiff
-		0, // pcmCAF
-		0, // flac
-		MediaRecorder.AudioEncoder.AAC, // aacMP4
-		MediaRecorder.AudioEncoder.AMR_NB,
-		MediaRecorder.AudioEncoder.AMR_WB,
-		0, // pcm8
-		0, // pcmFloat32
-		0, // pcmWebM
-		MediaRecorder.AudioEncoder.OPUS, // opusWebM
-		MediaRecorder.AudioEncoder.VORBIS, // vorbisWebM
+			MediaRecorder.AudioEncoder.DEFAULT,
+			MediaRecorder.AudioEncoder.AAC,
+			MediaRecorder.AudioEncoder.OPUS,
+			0, // CODEC_CAF_OPUS (specific Apple)
+			0,// CODEC_MP3 (not implemented)
+			MediaRecorder.AudioEncoder.VORBIS,
+			7, // MediaRecorder.AudioEncoder.DEFAULT // CODEC_PCM (not implemented)
+			0, // wav
+			0, // aiff
+			0, // pcmCAF
+			0, // flac
+			MediaRecorder.AudioEncoder.AAC, // aacMP4
+			MediaRecorder.AudioEncoder.AMR_NB,
+			MediaRecorder.AudioEncoder.AMR_WB,
+			0, // pcm8
+			0, // pcmFloat32
+			0, // pcmWebM
+			MediaRecorder.AudioEncoder.OPUS, // opusWebM
+			MediaRecorder.AudioEncoder.VORBIS, // vorbisWebM
 	};
 
 
 
 	static int formatsArray[] =
 	{
-		MediaRecorder.OutputFormat.DEFAULT // DEFAULT
-		, MediaRecorder.OutputFormat.AAC_ADTS // CODEC_AAC
-		, MediaRecorder.OutputFormat.OGG // CODEC_OPUS
-		, 0 // CODEC_CAF_OPUS (this is apple specific)
-		, 0 // CODEC_MP3
-		, MediaRecorder.OutputFormat.OGG // CODEC_VORBIS
-		, 0 //ENCODING_PCM_16BIT// CODEC_PCM
-		, 0 // wav
-		, 0 // aiff
-		, 0 // pcmCAF
-		, 0 // flac
-		, MediaRecorder.OutputFormat.MPEG_4 // aacMP4
-		, MediaRecorder.OutputFormat.AMR_NB
-		, MediaRecorder.OutputFormat.AMR_WB
-		, 0 // pcm8
-		, 0 // pcmFloat32
-		, MediaRecorder.OutputFormat.WEBM // pcmWebM
-		, MediaRecorder.OutputFormat.WEBM // opusWebM
-		, MediaRecorder.OutputFormat.WEBM // vorbisWebM
+			MediaRecorder.OutputFormat.DEFAULT // DEFAULT
+			, MediaRecorder.OutputFormat.AAC_ADTS // CODEC_AAC
+			, MediaRecorder.OutputFormat.OGG // CODEC_OPUS
+			, 0 // CODEC_CAF_OPUS (this is apple specific)
+			, 0 // CODEC_MP3
+			, MediaRecorder.OutputFormat.OGG // CODEC_VORBIS
+			, 0 //ENCODING_PCM_16BIT// CODEC_PCM
+			, 0 // wav
+			, 0 // aiff
+			, 0 // pcmCAF
+			, 0 // flac
+			, MediaRecorder.OutputFormat.MPEG_4 // aacMP4
+			, MediaRecorder.OutputFormat.AMR_NB
+			, MediaRecorder.OutputFormat.AMR_WB
+			, 0 // pcm8
+			, 0 // pcmFloat32
+			, MediaRecorder.OutputFormat.WEBM // pcmWebM
+			, MediaRecorder.OutputFormat.WEBM // opusWebM
+			, MediaRecorder.OutputFormat.WEBM // vorbisWebM
 	};
 
 	static       String pathArray[]               =
 	{
-		"sound.fs" // DEFAULT
-		, "sound.aac" // CODEC_AAC
-		, "sound.opus" // CODEC_OPUS
-		, "sound_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
-		, "sound.mp3" // CODEC_MP3
-		, "sound.ogg" // CODEC_VORBIS
-		, "sound.pcm" // CODEC_PCM
-		, "sound.wav" // pcm16WAV
-		, "sound.aiff" // pcm16AIFF
-		, "sound_pcm.caf" // pcm16CAF
-		, "sound.flac" // flac
-		, "sound.mp4" // aacMP4
-		, "sound.amr" // amrNB
-		, "sound.amr" // amrWB
-		, "sound.pcm" // pcm8
-		, "sound.pcm" // pcmFloat32
-		, "sound.webm" // pcmWebM
-		, "sound.opus" // opusWebM
-		, "sound.vorbis" // vorbisWebM
+			"sound.fs" // DEFAULT
+			, "sound.aac" // CODEC_AAC
+			, "sound.opus" // CODEC_OPUS
+			, "sound_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
+			, "sound.mp3" // CODEC_MP3
+			, "sound.ogg" // CODEC_VORBIS
+			, "sound.pcm" // CODEC_PCM
+			, "sound.wav" // pcm16WAV
+			, "sound.aiff" // pcm16AIFF
+			, "sound_pcm.caf" // pcm16CAF
+			, "sound.flac" // flac
+			, "sound.mp4" // aacMP4
+			, "sound.amr" // amrNB
+			, "sound.amr" // amrWB
+			, "sound.pcm" // pcm8
+			, "sound.pcm" // pcmFloat32
+			, "sound.webm" // pcmWebM
+			, "sound.opus" // opusWebM
+			, "sound.vorbis" // vorbisWebM
 
 	};
 
@@ -115,7 +115,6 @@ public class FlautoRecorderMedia
 
 	public boolean CheckPermissions()
 	{
-		//int result = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
 		int result1 = ContextCompat.checkSelfPermission(Flauto.androidContext, RECORD_AUDIO);
 		return result1 == PackageManager.PERMISSION_GRANTED;
 	}
@@ -130,7 +129,7 @@ public class FlautoRecorderMedia
 			String path,
 			int audioSource,
 			FlautoRecorder session
-                )
+		)
 		throws
 		IOException, Exception
 	{
@@ -153,53 +152,53 @@ public class FlautoRecorderMedia
 
 		try
 		{
-			mediaRecorder.reset();
-			mediaRecorder.setAudioSource (audioSource );
-			int androidEncoder      = codecArray[ codec.ordinal () ];
-			int androidOutputFormat = formatsArray[ codec.ordinal () ];
-			mediaRecorder.setOutputFormat ( androidOutputFormat );
+				mediaRecorder.reset();
+				mediaRecorder.setAudioSource (audioSource );
+				int androidEncoder      = codecArray[ codec.ordinal () ];
+				int androidOutputFormat = formatsArray[ codec.ordinal () ];
+				mediaRecorder.setOutputFormat ( androidOutputFormat );
 
-			if ( path == null )
-			{
-				path = pathArray[ codec.ordinal () ];
+				if ( path == null )
+				{
+					path = pathArray[ codec.ordinal () ];
+				}
+
+				mediaRecorder.setOutputFile ( path );
+				mediaRecorder.setAudioEncoder ( androidEncoder );
+
+				if ( numChannels != null )
+				{
+					mediaRecorder.setAudioChannels ( numChannels );
+				}
+
+				if ( sampleRate != null )
+				{
+					mediaRecorder.setAudioSamplingRate ( sampleRate );
+				}
+
+				// If bitrate is defined, then use it, otherwise use the OS default
+				if ( bitRate != null )
+				{
+					mediaRecorder.setAudioEncodingBitRate ( bitRate );
+				}
+
+				mediaRecorder.prepare ();
+				mediaRecorder.start ();
+
 			}
-
-			mediaRecorder.setOutputFile ( path );
-			mediaRecorder.setAudioEncoder ( androidEncoder );
-
-			if ( numChannels != null )
-			{
-				mediaRecorder.setAudioChannels ( numChannels );
-			}
-
-			if ( sampleRate != null )
-			{
-				mediaRecorder.setAudioSamplingRate ( sampleRate );
-			}
-
-			// If bitrate is defined, then use it, otherwise use the OS default
-			if ( bitRate != null )
-			{
-				mediaRecorder.setAudioEncodingBitRate ( bitRate );
-			}
-
-			mediaRecorder.prepare ();
-			mediaRecorder.start ();
-
-		}
 		catch ( Exception e )
 		{
-			m_callback.log(Flauto.t_LOG_LEVEL.ERROR,  "Exception: " );
-			//
-			try
-			{
-				_stopRecorder( );
+				m_callback.log(Flauto.t_LOG_LEVEL.ERROR,  "Exception: " );
+				//
+				try
+				{
+					_stopRecorder( );
 
-			} catch (Exception e2)
-			{
+				} catch (Exception e2)
+				{
 
-			}
-			throw(e);
+				}
+				throw(e);
 		}
 	}
 

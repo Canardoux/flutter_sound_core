@@ -52,43 +52,6 @@ public class Flauto
 		vorbisWebM,
 	}
 
-	public enum t_AUDIO_FOCUS
-	{
-		requestFocus,
-
-		/// request focus and allow other audio
-		/// to continue playing at their current volume.
-		requestFocusAndKeepOthers,
-
-		/// request focus and stop other audio playing
-		requestFocusAndStopOthers,
-
-		/// request focus and reduce the volume of other players
-		/// In the Android world this is know as 'Duck Others'.
-		requestFocusAndDuckOthers,
-
-		requestFocusAndInterruptSpokenAudioAndMixWithOthers,
-
-		requestFocusTransient,
-		requestFocusTransientExclusive,
-
-
-		/// relinquish the audio focus.
-		abandonFocus,
-
-		doNotRequestFocus,
-	}
-
-
-	public enum t_AUDIO_DEVICE
-	{
-		speaker,
-		headset,
-		earPiece,
-		blueTooth,
-		blueToothA2DP,
-		airPlay
-	}
 
 
 	public enum t_PLAYER_STATE
@@ -108,32 +71,6 @@ public class Flauto
 
 
 
-
-
-	public enum t_SESSION_CATEGORY
-	{
-		ambient,
-		multiRoute,
-		playAndRecord,
-		playback,
-		record,
-		soloAmbient,
-		audioProcessing,
-	}
-
-
-	public enum   t_SESSION_MODE
-	{
-		modeDefault, // 'AVAudioSessionModeDefault',
-		modeGameChat, //'AVAudioSessionModeGameChat',
-		modeMeasurement, //'AVAudioSessionModeMeasurement',
-		modeMoviePlayback, //'AVAudioSessionModeMoviePlayback',
-		modeSpokenAudio, //'AVAudioSessionModeSpokenAudio',
-		modeVideoChat, //'AVAudioSessionModeVideoChat',
-		modeVideoRecording, // 'AVAudioSessionModeVideoRecording',
-		modeVoiceChat, // 'AVAudioSessionModeVoiceChat',
-		// ONLY iOS 12.0 // modeVoicePrompt, // 'AVAudioSessionModeVoicePrompt',
-	}
 
 
 	public enum t_AUDIO_SOURCE

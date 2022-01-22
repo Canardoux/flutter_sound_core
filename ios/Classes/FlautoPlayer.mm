@@ -24,9 +24,6 @@
 #import "Flauto.h"
 #import "FlautoPlayerEngine.h"
 #import "FlautoPlayer.h"
-//#import "FlautoTrackPlayer.h"
-
-
 
 
 static bool _isIosDecoderSupported [] =
@@ -96,23 +93,6 @@ static bool _isIosDecoderSupported [] =
 
 
 
-- (bool)initializeFlautoPlayerFocus:
-                (t_AUDIO_FOCUS)focus
-                category: (t_SESSION_CATEGORY)category
-                mode: (t_SESSION_MODE)mode
-                audioFlags: (int)audioFlags
-                audioDevice: (t_AUDIO_DEVICE)audioDevice
-{
-        [self logDebug:  @"IOS:--> initializeFlautoPlayer"];
-        latentVolume = -1.0;
-        latentSpeed = -1.0;
-        latentSeek = -1;
-        BOOL r = [self setAudioFocus: focus category: category mode: mode audioFlags: audioFlags audioDevice: audioDevice ];
-        [m_callBack openPlayerCompleted: r];
-        [self logDebug:  @"IOS:<-- initializeFlautoPlayer"];
-        return r;
-}
-
 
 - (void)releaseFlautoPlayer
 {
@@ -123,31 +103,6 @@ static bool _isIosDecoderSupported [] =
         [self logDebug:  @"IOS:<-- releaseFlautoPlayer"];
 }
 
-
-- (bool)setCategory: (NSString*)categ mode:(NSString*)mode options:(int)options
-{
-        [self logDebug: @"IOS:--> setCategory"];
-
-        BOOL b = [[AVAudioSession sharedInstance]
-                setCategory:  categ // AVAudioSessionCategoryPlayback
-                mode: mode
-                options: options
-                error: nil];
-        if (b){}
-
-        [self logDebug:  @"IOS:<-- setCategory"];
-
-      return b;
-}
-
-
-
-- (bool)setActive: (BOOL)enabled
-{
-       BOOL b = [[AVAudioSession sharedInstance]  setActive:enabled error:nil] ;
-       hasFocus = enabled;
-       return b;
-}
 
 - (void)stop
 {
@@ -174,15 +129,6 @@ static bool _isIosDecoderSupported [] =
 - (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels
 {
         [self logDebug:  @"IOS:--> startPlayerFromMicSampleRate"];
-        if (!hasFocus) //  (It could have been released by another session)
-        {
-                hasFocus = TRUE;
-                bool b = [[AVAudioSession sharedInstance]  setActive: hasFocus error: nil] ;
-                if (!b)
-                {
-                }
-        }
-
         [self stop]; // To start a fresh new playback
         m_playerEngine = [[AudioEngineFromMic alloc] init: self ];
         [m_playerEngine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate];
@@ -226,12 +172,6 @@ static bool _isIosDecoderSupported [] =
 {
         [self logDebug:  @"IOS:--> startPlayer"];
         bool b = FALSE;
-        if (!hasFocus) //  (It could have been released by another session)
-        {
-                hasFocus = TRUE;
-                b = [[AVAudioSession sharedInstance]  setActive: hasFocus error:nil] ;
-        }
-
         [self stop]; // To start a fresh new playback
 
         if ( (path == nil ||  [path class] == [NSNull class] ) && codec == pcm16)
@@ -297,7 +237,6 @@ static bool _isIosDecoderSupported [] =
 
                         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
                         [downloadTask resume];
-                        //[self startTimer];
                         [self logDebug:  @"IOS:<-- startPlayer"];
 
                         return true;
@@ -349,12 +288,9 @@ static bool _isIosDecoderSupported [] =
 
 - (void)updateProgress: (NSTimer*)atimer
 {
-         //!!!!!!!!!!dispatch_async(dispatch_get_main_queue(),
-         //!!!!!!!!!!!!!^{
                 long position = [self ->m_playerEngine getPosition];
                 long duration = [self ->m_playerEngine getDuration];
                 [self ->m_callBack updateProgressPosition: position duration: duration];
-         //!!!!!!!!!!!!});
 }
 
 
@@ -427,35 +363,7 @@ static bool _isIosDecoderSupported [] =
         else
                 [self logDebug:  @"IOS: audioPlayer is not Playing"];
 
-
-          //bool b =  ( [self getStatus] == PLAYER_IS_PAUSED);
-          //if (!b)
-          {
-                  //[self logDebug:  @"IOS: AudioPlayerFlauto : cannot pause!!!"];
-
-          }
-
           [m_callBack pausePlayerCompleted: YES];
-          /*
-          
-          long position =   [m_playerEngine getPosition];
-          long duration =   [m_playerEngine getDuration];
-          if (duration - position < 500) // PATCH [LARPOUX]
-          {
-                [self logDebug:  @"IOS: !patch [LARPOUX]"];
-
-                [self stop];
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                        [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
-
-                        [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                        [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
-
-                 });
-
-          }
-*/
           [self logDebug:  @"IOS:<-- pause"];
 
           return true;
@@ -475,26 +383,9 @@ static bool _isIosDecoderSupported [] =
         
             
         [self startTimer];
-        //bool b2 = ([self getStatus] == PLAYER_IS_PLAYING);
-        //if (!b2)
-        {
-                //[self logDebug:  @"IOS: AudioPlayerFlauto : cannot resume!!!"];
-        }
         [self logDebug:  @"IOS:<-- resumePlayer"];
 
         [m_callBack resumePlayerCompleted: b];
-        /*
-                [self logDebug:  @"IOS: !patch [LARPOUX]"];
-                [self stop];
-                dispatch_async(dispatch_get_main_queue(),
-                ^{
-                        [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
-
-                        [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                        [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
-
-                 });
-                 */
         return b;
 }
 
@@ -624,7 +515,8 @@ static bool _isIosDecoderSupported [] =
                 [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
          });
  
-         [self logDebug:  @"IOS:<-- @audioPlayerDidFinishPlaying"];}
+         [self logDebug:  @"IOS:<-- @audioPlayerDidFinishPlaying"];
+}
 
 - (t_PLAYER_STATE)getStatus
 {

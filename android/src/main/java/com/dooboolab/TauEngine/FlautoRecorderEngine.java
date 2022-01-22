@@ -39,17 +39,17 @@ import com.dooboolab.TauEngine.Flauto.*;
 public class FlautoRecorderEngine
 	implements FlautoRecorderInterface
 {
-	private AudioRecord recorder = null;
-	//private Thread recordingThread = null;
-	private boolean isRecording = false;
-	private double maxAmplitude = 0;
-	String filePath;
-	int totalBytes = 0;
-	t_CODEC codec;
-	Runnable p;
-	FlautoRecorder session = null;
-	FileOutputStream outputStream = null;
-	final private Handler mainHandler = new Handler (Looper.getMainLooper ());
+		private AudioRecord recorder = null;
+		//private Thread recordingThread = null;
+		private boolean isRecording = false;
+		private double maxAmplitude = 0;
+		String filePath;
+		int totalBytes = 0;
+		t_CODEC codec;
+		Runnable p;
+		FlautoRecorder session = null;
+		FileOutputStream outputStream = null;
+		final private Handler mainHandler = new Handler (Looper.getMainLooper ());
 
 
 
@@ -60,29 +60,29 @@ public class FlautoRecorderEngine
 
 	private void writeAudioDataToFile(t_CODEC codec, int sampleRate, String aFilePath) throws IOException
 	{
-		// Write the output audio in byte
-		System.out.println("---> writeAudioDataToFile");
-		totalBytes = 0;
-		outputStream = null;
-		filePath = aFilePath;
-		if (filePath != null)
-		{
-			outputStream = new FileOutputStream(filePath);
+			// Write the output audio in byte
+			System.out.println("---> writeAudioDataToFile");
+			totalBytes = 0;
+			outputStream = null;
+			filePath = aFilePath;
+			if (filePath != null)
+			{
+				outputStream = new FileOutputStream(filePath);
 
-			if (codec == t_CODEC.pcm16WAV) {
-				FlautoWaveHeader header = new FlautoWaveHeader
-					(
-						FlautoWaveHeader.FORMAT_PCM,
-						(short) 1, // numChannels
-						sampleRate,
-						(short) 16,
-						100000 // total number of bytes
+				if (codec == t_CODEC.pcm16WAV) {
+					FlautoWaveHeader header = new FlautoWaveHeader
+						(
+							FlautoWaveHeader.FORMAT_PCM,
+							(short) 1, // numChannels
+							sampleRate,
+							(short) 16,
+							100000 // total number of bytes
 
-					);
-				header.write(outputStream);
+						);
+					header.write(outputStream);
+				}
 			}
-		}
-		System.out.println("<--- writeAudioDataToFile");
+			System.out.println("<--- writeAudioDataToFile");
 	}
 
 	void closeAudioDataFile(String filepath) throws Exception
@@ -141,33 +141,19 @@ public class FlautoRecorderEngine
 				// gets the voice output from microphone to byte format
 				if ( Build.VERSION.SDK_INT >= 23 )
 				{
-					//n = recorder.read(shortBuffer.array(), 0, bufferSize/2, AudioRecord.READ_NON_BLOCKING);
-					n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
-/*
-					for (int i = 0; i < n; ++ i)
-					{
-						byteBuffer.array()[2*i] = (byte)shortBuffer.array()[i];
-						byteBuffer.array()[2*i+1] = (byte)(shortBuffer.array()[i] >> 8);
-					}
-
-
- */
-					//byteBuffer.asShortBuffer().put(shortBuffer.array(), 0, n);
-					//n *= 2;
+						n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
 
 				}
 				else
 				{
-					n = recorder.read(byteBuffer.array(), 0, bufferSize);
+						n = recorder.read(byteBuffer.array(), 0, bufferSize);
 				}
-				//System.out.println("n = " + n);
 				final int ln = n;//2 * n;
 
 				if (n > 0) {
 					totalBytes += n;
 					r += n;
 					if (outputStream != null) {
-						//System.out.println("Writing : n = " + n);
 						outputStream.write(byteBuffer.array(), 0, ln);
 					} else {
 						mainHandler.post(new Runnable() {
@@ -184,9 +170,6 @@ public class FlautoRecorderEngine
 							maxAmplitude = curSample;
 						}
 					}
-				//} else if (n == AudioRecord.ERROR_INVALID_OPERATION || n ==
-					//AudioRecord.ERROR_BAD_VALUE || n == 0) {
-					//continue;
 				} else
 				{
 					break;

@@ -133,7 +133,6 @@ AudioRecInterface* audioRec;
 
 @implementation FlautoRecorder
 {
-        //NSURL *audioFileURL;
         NSTimer* dbPeakTimer;
         NSTimer* recorderTimer;
         double subscriptionDuration;
@@ -152,16 +151,10 @@ AudioRecInterface* audioRec;
         return [super init];
 }
 
-- (bool)initializeFlautoRecorder:
-               (t_AUDIO_FOCUS)focus
-                category: (t_SESSION_CATEGORY)category
-                mode: (t_SESSION_MODE)mode
-                audioFlags: (int)audioFlags
-                audioDevice: (t_AUDIO_DEVICE)audioDevice
+- (bool)initializeFlautoRecorder
 {
-        BOOL r = [self setAudioFocus: focus category: category mode: mode audioFlags: audioFlags audioDevice: audioDevice ];
-        [m_callBack openRecorderCompleted: r];
-        return r;
+        [m_callBack openRecorderCompleted: YES];
+        return YES;
 }
 
 - (bool)isEncoderSupported:(t_CODEC)codec 
@@ -205,25 +198,7 @@ AudioRecInterface* audioRec;
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
                 bitRate: (long)bitRate
-                audioSource: (t_AUDIO_SOURCE) audioSource
 {
-        AVAudioSession* audioSession = [AVAudioSession sharedInstance];
-        NSArray<AVAudioSessionPortDescription*>* availableInputs = [audioSession availableInputs];
-        //bool found = false;
-        if (tabSessionPort[audioSource] != 0)
-        {
-                for (AVAudioSessionPortDescription* portDescr in availableInputs)
-                {
-                        AVAudioSessionPort port = [portDescr portType];
-                        if ([port isEqual:tabSessionPort[audioSource]])
-                        {
-                                [audioSession setPreferredInput: portDescr error: nil ];
-                                break;
-                                //found = true;
-                        }
-                }
-        }
-
         NSMutableDictionary* audioSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithLong: sampleRate], AVSampleRateKey,
                                  [NSNumber numberWithInt: formats[codec] ], AVFormatIDKey,

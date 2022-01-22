@@ -93,75 +93,6 @@ typedef enum
 
 
 
-
-/// Used by [AudioPlayer.audioFocus]
-/// to control the focus mode.
-typedef enum
-{
-          requestFocus,
-
-          /// request focus and allow other audio
-          /// to continue playing at their current volume.
-          requestFocusAndKeepOthers,
-
-          /// request focus and stop other audio playing
-          requestFocusAndStopOthers,
-
-          /// request focus and reduce the volume of other players
-          /// In the Android world this is know as 'Duck Others'.
-          requestFocusAndDuckOthers,
-          
-          requestFocusAndInterruptSpokenAudioAndMixWithOthers,
-          
-          requestFocusTransient,
-          requestFocusTransientExclusive,
-
-
-          /// relinquish the audio focus.
-          abandonFocus,
-
-          doNotRequestFocus,
-} t_AUDIO_FOCUS;
-
-
-
-typedef enum
-{
-          ambient,
-          multiRoute,
-          playAndRecord,
-          playback,
-          record,
-          soloAmbient,
-          audioProcessing,
-} t_SESSION_CATEGORY ;
-
-
-typedef enum
-{
-          modeDefault, // 'AVAudioSessionModeDefault',
-          modeGameChat, //'AVAudioSessionModeGameChat',
-          modeMeasurement, //'AVAudioSessionModeMeasurement',
-          modeMoviePlayback, //'AVAudioSessionModeMoviePlayback',
-          modeSpokenAudio, //'AVAudioSessionModeSpokenAudio',
-          modeVideoChat, //'AVAudioSessionModeVideoChat',
-          modeVideoRecording, // 'AVAudioSessionModeVideoRecording',
-          modeVoiceChat, // 'AVAudioSessionModeVoiceChat',
-          // ONLY iOS 12.0 // modeVoicePrompt, // 'AVAudioSessionModeVoicePrompt',
-}  t_SESSION_MODE;
-
-
-typedef enum
-{
-          speaker,
-          headset,
-          earPiece,
-          blueTooth,
-          blueToothA2DP,
-          airPlay
-} t_AUDIO_DEVICE;
-
-
 typedef enum
 {
         PLAYER_IS_STOPPED,
@@ -170,24 +101,6 @@ typedef enum
 } t_PLAYER_STATE;
 
 
-
-typedef enum
-{
-          defaultSource,
-          microphone,
-          voiceDownlink, // (if someone can explain me what it is, I will be grateful ;-) )
-          camCorder,
-          remote_submix,
-          unprocessed,
-          voice_call,
-          voice_communication,
-          voice_performance,
-          voice_recognition,
-          voiceUpLink,
-          bluetoothHFP,
-          headsetMic,
-          lineIn
-} t_AUDIO_SOURCE;
 
 typedef enum
 {
@@ -200,14 +113,6 @@ typedef enum
      NOTHING,
 } t_LOG_LEVEL;
 
-// Audio Flags
-// -----------
-#define outputToSpeaker  1
-// NOT USED // const int allowHeadset = 2;
-// NOT USED // const int allowEarPiece = 4;
-#define allowBlueTooth  8
-#define allowAirPlay 16
-#define allowBlueToothA2DP  32
 
 
 @interface Flauto : NSObject

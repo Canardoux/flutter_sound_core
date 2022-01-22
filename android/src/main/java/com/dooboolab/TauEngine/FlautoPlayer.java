@@ -37,7 +37,7 @@ import java.lang.Thread;
 import com.dooboolab.TauEngine.Flauto.*;
 import com.dooboolab.TauEngine.Flauto;
 
-public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorListener
+public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 {
 
 	static boolean _isAndroidDecoderSupported[] = {
@@ -64,7 +64,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 
 	String extentionArray[] = {
-		".aac" // DEFAULT
+		  ".aac" // DEFAULT
 		, ".aac" // CODEC_AAC
 		, ".opus" // CODEC_OPUS
 		, "_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
@@ -89,9 +89,7 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 
 	final static  String           TAG         = "FlautoPlayer";
-	//final         PlayerAudioModel model       = new PlayerAudioModel ();
 	long subsDurationMillis = 0;
-	//MediaPlayer mediaPlayer                    = null;
 	FlautoPlayerEngineInterface player;
 	private       Timer            mTimer   ;
 	final private Handler          mainHandler = new Handler (Looper.getMainLooper ());
@@ -113,23 +111,19 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 	}
 
 
-	public boolean openPlayer (t_AUDIO_FOCUS focus, t_SESSION_CATEGORY category, t_SESSION_MODE sessionMode, int audioFlags, t_AUDIO_DEVICE audioDevice)
+	public boolean openPlayer ()
 	{
 		latentVolume = -1.0;
 		latentSpeed = -1.0;
 		latentSeek = -1;
-		boolean r = setAudioFocus(focus, category, sessionMode, audioFlags, audioDevice);
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
-		m_callBack.openPlayerCompleted(r);
-		return r;
+		m_callBack.openPlayerCompleted(true);
+		return true;
 	}
 
 	public void closePlayer ( )
 	{
 		stop();
-		if (hasFocus)
-			abandonFocus();
-		releaseSession();
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 		m_callBack.closePlayerCompleted(true);
 	}
@@ -149,10 +143,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	public boolean startPlayerFromMic (int numChannels, int sampleRate, int blockSize )
 	{
-		//if ( ! hasFocus ) // We always require focus because it could have been abandoned by another Session
-		{
-			requestFocus ();
-		}
 		stop(); // To start a new clean playback
 
 		try
@@ -171,17 +161,11 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 
 	public boolean startPlayer (t_CODEC codec, String fromURI, byte[] dataBuffer, int numChannels, int sampleRate, int blockSize )
 	{
-
-		//if ( ! hasFocus ) // We always require focus because it could have been abandoned by another Session
-		{
-			requestFocus ();
-		}
-
 		if (dataBuffer != null)
 		{
 			try
 			{
-				File             f   = File.createTempFile ( "flauto_buffer-" + Integer.toString(slotNo), extentionArray[ codec.ordinal () ] );
+				File             f   = File.createTempFile ( "flauto_buffer" , extentionArray[ codec.ordinal () ] );
 				FileOutputStream fos = new FileOutputStream ( f );
 				fos.write ( dataBuffer );
 				fromURI = f.getPath();
@@ -249,20 +233,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		});
 	}
 
-	public boolean startPlayerFromTrack
-	(
-		boolean canPause,
-		boolean canSkipForward,
-		boolean canSkipBackward,
-		int progress,
-		int duration,
-		boolean removeUIWhenStopped,
-		boolean defaultPauseResume
-	)
-	{
-		logError ( "Must be initialized With UI" );
-		return false;
-	}
 
 	public boolean onError(MediaPlayer mp, int what, int extra)
 	{
@@ -301,10 +271,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 				{
 					System.out.println(e.toString());
 				}
-				//invokeMethodWithInteger("startPlayerCompleted", (int) duration);
-				//Map<String, Object> dico = new HashMap<String, Object> ();
-				//dico.put( "duration", (int) duration);
-				//dico.put( "state",  (int)getPlayerState());
 				playerState = t_PLAYER_STATE.PLAYER_IS_PLAYING;
 
 				m_callBack.startPlayerCompleted(true, duration);
@@ -357,12 +323,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 									{
 										position = duration;
 									}
-	/*
-										Map<String, Object> dic = new HashMap<String, Object>();
-										dic.put("position", position);
-										dic.put("duration", duration);
-										dic.put("playerStatus", getPlayerState());
-	*/
 									m_callBack.updateProgress(position, duration);
 								}
 							} catch (Exception e)
@@ -545,46 +505,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 			setTimer(subsDurationMillis);
 	}
 
-	public boolean androidAudioFocusRequest ( int focusGain )
-	{
-
-		if ( Build.VERSION.SDK_INT >= 26 )
-		{
-			audioFocusRequest = new AudioFocusRequest.Builder ( focusGain )
-				// .setAudioAttributes(mPlaybackAttributes)
-				// .setAcceptsDelayedFocusGain(true)
-				// .setWillPauseWhenDucked(true)
-				// .setOnAudioFocusChangeListener(this, mMyHandler)
-				.build ();
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
-
-
-	public boolean setActive (Boolean enabled )
-	{
-
-		Boolean b = false;
-		try
-		{
-			if ( enabled )
-			{
-				b = requestFocus ();
-			} else
-			{
-
-				b = abandonFocus ();
-			}
-		}
-		catch ( Exception e )
-		{
-			b = false;
-		}
-		return b;
-	}
 
 	public Map<String, Object> getProgress (  )
 	{
@@ -606,24 +526,6 @@ public class FlautoPlayer extends FlautoSession implements MediaPlayer.OnErrorLi
 		return dic;
 	}
 
-	public void nowPlaying
-	(
-		boolean canPause,
-		boolean canSkipForward,
-		boolean canSkipbackward,
-		boolean defaultPauseResume,
-		int progress,
-		int duration
-	)
-	{
-		throw new RuntimeException(); // TODO
-	}
-
-
-	public void setUIProgressBar (int progress, int duration)
-	{
-		throw new RuntimeException(); // TODO
-	}
 
 
 	void logDebug (String msg)

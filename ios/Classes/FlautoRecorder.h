@@ -29,7 +29,6 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import "Flauto.h"
-#import "FlautoSession.h"
  
 
 @protocol FlautoRecorderCallback <NSObject>
@@ -44,17 +43,12 @@
 - (void)log: (t_LOG_LEVEL)level msg: (NSString*)msg;
 @end
 
-@interface FlautoRecorder  : FlautoSession <  AVAudioRecorderDelegate>
+@interface FlautoRecorder  : NSObject <AVAudioRecorderDelegate>
 {
         NSObject<FlautoRecorderCallback>* m_callBack;
 }
 - (FlautoRecorder*)init: (NSObject<FlautoRecorderCallback>*) callback;
-- (bool)initializeFlautoRecorder:
-               (t_AUDIO_FOCUS)focus
-                category: (t_SESSION_CATEGORY)category
-                mode: (t_SESSION_MODE)mode
-                audioFlags: (int)audioFlags
-                audioDevice: (t_AUDIO_DEVICE)audioDevice;
+- (bool)initializeFlautoRecorder;
 
 - (bool)isEncoderSupported:(t_CODEC)codec ;
 - (void)releaseFlautoRecorder;
@@ -63,8 +57,7 @@
                 toPath: (NSString*)path
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
-                bitRate: (long)bitRate
-                audioSource: (t_AUDIO_SOURCE) audioSource;
+                bitRate: (long)bitRate;
                 
 - (void)stopRecorder;
 - (void)setSubscriptionDuration: (long)millisec;

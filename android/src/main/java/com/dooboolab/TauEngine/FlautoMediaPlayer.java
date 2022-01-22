@@ -64,7 +64,6 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 	void _setSpeed(double speed)
 	{
 		float v = (float)speed;
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO mediaPlayer.setVolume ( v, v );
 	}
 
 	void _stop() {

@@ -114,9 +114,6 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 
 	}
 
-	void _finish() { // NO-OP
-	}
-
 
 
 	void _pausePlayer() throws Exception {

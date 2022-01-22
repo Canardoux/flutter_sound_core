@@ -191,7 +191,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 	void _setSpeed(double volume)  throws Exception
 	{
 
-			throw new Exception("Not implemented"); //!!!!!!!!!!!!!!!!
+			throw new Exception("Not implemented");
 
 	}
 

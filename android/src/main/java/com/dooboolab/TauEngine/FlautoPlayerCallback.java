@@ -31,10 +31,6 @@ public interface FlautoPlayerCallback
 	abstract public void needSomeFood (int ln);
 	abstract public void updateProgress(long position, long duration);
 	abstract public void audioPlayerDidFinishPlaying (boolean flag);
-	abstract public void pause();
-	abstract public void resume();
-	abstract public void skipForward();
-	abstract public void skipBackward();
 	abstract public void updatePlaybackState(t_PLAYER_STATE newState);
 	abstract public void log(t_LOG_LEVEL level, String msg);
 }

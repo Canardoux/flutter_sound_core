@@ -26,7 +26,6 @@
 #import "Flauto.h"
 #import <AVFoundation/AVFoundation.h>
 #import "FlautoPlayerEngine.h"
-#import "FlautoSession.h"
 
 
 
@@ -50,7 +49,7 @@
 @end
 
 
-@interface FlautoPlayer  : FlautoSession <AVAudioPlayerDelegate>
+@interface FlautoPlayer  : NSObject <AVAudioPlayerDelegate>
 {
         NSObject<FlautoPlayerEngineInterface>* m_playerEngine;
         NSObject<FlautoPlayerCallback>* m_callBack;
@@ -60,16 +59,7 @@
            
 - (t_PLAYER_STATE)getPlayerState;
 - (bool)isDecoderSupported: (t_CODEC)codec ;
-
-- (bool)initializeFlautoPlayerFocus:
-                (t_AUDIO_FOCUS)focus
-                category: (t_SESSION_CATEGORY)category
-                mode: (t_SESSION_MODE)mode
-                audioFlags: (int)audioFlags
-                audioDevice: (t_AUDIO_DEVICE)audioDevice;
-                
 - (void)releaseFlautoPlayer;
-
 - (bool)startPlayerCodec: (t_CODEC)codec
         fromURI: (NSString*)path
         fromDataBuffer: (NSData*)dataBuffer
@@ -84,9 +74,6 @@
 - (void)setSubscriptionDuration: (long)call ;
 - (void)setVolume: (double)volume fadeDuration: (NSTimeInterval) fadeDuration;
 - (void)setSpeed: (double)speed ;
-- (bool)setCategory: (NSString*)categ mode:(NSString*)mode options:(int)options ;
-- (bool)setActive:(BOOL)enabled ;
-- (void)setUIProgressBar: (NSNumber*)pos duration: (NSNumber*)duration;
 - (NSDictionary*)getProgress ;
 - (int)feed: (NSData*)data;
 - (void)needSomeFood: (int) ln;

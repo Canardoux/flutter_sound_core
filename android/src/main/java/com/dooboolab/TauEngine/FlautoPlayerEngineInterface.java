@@ -31,7 +31,6 @@ abstract class FlautoPlayerEngineInterface
 	abstract long _getDuration();
 	abstract long _getCurrentPosition();
 	abstract int feed(byte[] data) throws Exception;
-	abstract void _finish() ;
 	abstract void _play();
 
 
