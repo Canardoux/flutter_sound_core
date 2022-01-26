@@ -26,7 +26,7 @@ const IS_PLAYER_PLAYING = 1;
 const IS_PLAYER_PAUSED = 2;
 
 const CB_updateProgress = 0;
-const CB_updatePlaybackState = 1 ;
+const CB_updatePlaybackState = 1;
 const CB_needSomeFood = 2;
 const CB_audioPlayerFinished = 3;
 const CB_startPlayerCompleted = 4;
