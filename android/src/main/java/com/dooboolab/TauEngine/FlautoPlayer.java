@@ -44,13 +44,13 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		true, // DEFAULT
 		true, // aacADTS				// OK
 		Build.VERSION.SDK_INT >= 23, // opusOGG	// (API 29 ???)
-		Build.VERSION.SDK_INT >= 23, // opusCAF				/
+		false, // opusCAF				/
 		true, // MP3					// OK
 		true, //Build.VERSION.SDK_INT >= 23, // vorbisOGG// OK
 		true, // pcm16
 		true, // pcm16WAV				// OK
 		true, // pcm16AIFF				// OK
-		true, // pcm16CAF				// NOK
+		false, // pcm16CAF				// NOK
 		true, // flac					// OK
 		true, // aacMP4					// OK
 		true, // amrNB					// OK

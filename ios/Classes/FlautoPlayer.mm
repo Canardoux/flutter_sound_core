@@ -30,7 +30,7 @@ static bool _isIosDecoderSupported [] =
 {
 		true, // DEFAULT
 		true, // aacADTS
-		true, // opusOGG
+		false, // opusOGG
 		true, // opusCAF
 		true, // MP3
 		false, // vorbisOGG

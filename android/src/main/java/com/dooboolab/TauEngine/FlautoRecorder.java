@@ -55,7 +55,7 @@ public class FlautoRecorder
 		false, // pcm8
 		false, // pcmFloat32
 		false, // pcmWebM
-		true, // opusWebM
+		false, // opusWebM
 		false, // vorbisWebM
 	};
 
