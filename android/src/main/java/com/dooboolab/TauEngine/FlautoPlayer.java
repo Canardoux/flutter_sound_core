@@ -522,7 +522,7 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		Map<String, Object> dic = new HashMap<String, Object> ();
 		dic.put ( "position", position );
 		dic.put ( "duration", duration );
-		dic.put ( "playerStatus", getPlayerState() );
+		dic.put ( "playerStatus", getPlayerState().ordinal() ); // An int because necessary with Flutter Channels
 		return dic;
 	}
 
