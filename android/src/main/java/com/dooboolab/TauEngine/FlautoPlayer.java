@@ -99,6 +99,8 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 	private double latentVolume = -1.0;
 	private double latentSpeed = -1.0;
 	private long latentSeek = -1;
+	static int currentPlayerID = 0;
+	private int myPlayerId = 0;
 
 
 	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
@@ -111,8 +113,15 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 	}
 
 
+	private String getTempFileName()
+	{
+		File outputDir = Flauto.androidContext.getCacheDir(); // context being the Activity pointer
+		return outputDir.getPath() + "/flutter_sound_" + myPlayerId;
+	}
 	public boolean openPlayer ()
 	{
+		++currentPlayerID;
+		myPlayerId = currentPlayerID;
 		latentVolume = -1.0;
 		latentSpeed = -1.0;
 		latentSeek = -1;
@@ -161,11 +170,14 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 
 	public boolean startPlayer (t_CODEC codec, String fromURI, byte[] dataBuffer, int numChannels, int sampleRate, int blockSize )
 	{
+		stop(); // To start a new clean playback
 		if (dataBuffer != null)
 		{
 			try
 			{
-				File             f   = File.createTempFile ( "flauto_buffer" , extentionArray[ codec.ordinal () ] );
+				String fileName = getTempFileName();
+				deleteTempFile(); // Delete old file if exists
+				File             f   = new  File(fileName);
 				FileOutputStream fos = new FileOutputStream ( f );
 				fos.write ( dataBuffer );
 				fromURI = f.getPath();
@@ -176,7 +188,6 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			}
 		}
 
-		stop(); // To start a new clean playback
 
 		try
 		{
@@ -344,14 +355,38 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 
 	}
 
+	private void deleteTempFile()
+	{
+		String fileName = getTempFileName();
+		try
+		{
+			File fdelete = new File(fileName);
+			if (fdelete.exists())
+			{
+				if (fdelete.delete())
+				{
+					logDebug("file Deleted :" + fileName);
+				} else
+				{
+					logError("Cannot delete file " + fileName);
+				}
+			}
+
+		} catch (Exception e)
+		{
+			return;
+		}
+
+	}
+
 	void stop()
 	{
+		deleteTempFile();
 		cancelTimer();
 		pauseMode = false;
 		if (player != null)
 			player._stop();
 		player = null;
-
 	}
 
 	public boolean play()
