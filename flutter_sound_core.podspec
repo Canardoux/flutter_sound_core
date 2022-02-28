@@ -28,7 +28,7 @@ It has been extracted to be isolated from Flutter and can be used with other fra
   s.author           = { 'larpoux' => 'larpoux@gmail.com' }
   s.source           = { :git => 'https://github.com/canardoux/flutter_sound_core.git', :tag => '' + s.version.to_s }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '15.4'
 
   s.source_files = 'ios/Classes/*'
   s.frameworks = 'AVFoundation', 'MediaPlayer'
