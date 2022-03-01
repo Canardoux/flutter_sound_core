@@ -1,0 +1,6 @@
+use_frameworks!
+target 'flutter_sound_core_Tests' do
+  pod 'flutter_sound_core', :path => '../'
+  
+  
+end

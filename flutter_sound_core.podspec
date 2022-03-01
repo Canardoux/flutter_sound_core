@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'flutter_sound_core'
   s.version          = '9.1.4'
-  s.summary          = 'Provides simple recorder and player functionalities for both Android and iOS platforms.'
+  s.summary          = 'Provides simple recorder and player functionalities for iOS platform.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -23,12 +23,12 @@ This code was originally inside the flutter_sound/ios directory.
 It has been extracted to be isolated from Flutter and can be used with other frameworks.
                        DESC
 
-  s.homepage         = 'https://github.com/dooboolab/flutter_sound'
-  s.license          = { :type => 'LGPL', :file => 'LICENSE' }
+  s.homepage         = 'https://github.com/canardoux/flutter_sound'
+  s.license          = { :type => 'MPL2', :file => 'LICENSE' }
   s.author           = { 'larpoux' => 'larpoux@gmail.com' }
   s.source           = { :git => 'https://github.com/canardoux/flutter_sound_core.git', :tag => '' + s.version.to_s }
 
-  s.ios.deployment_target = '15.4'
+  s.ios.deployment_target = '9.0'
 
   s.source_files = 'ios/Classes/*'
   s.frameworks = 'AVFoundation', 'MediaPlayer'
