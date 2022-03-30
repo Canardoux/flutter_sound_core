@@ -45,6 +45,18 @@
 
         AVAudioInputNode* inputNode = [engine inputNode];
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
+        double sRate = [inputFormat sampleRate];
+        AVAudioChannelCount channelCount = [inputFormat channelCount];
+        AVAudioChannelLayout* layout = [inputFormat channelLayout];
+        CMAudioFormatDescriptionRef formatDescription = [inputFormat formatDescription];
+        
+        if (sRate == 0 || layout == nil)
+        {
+                [NSException raise:@"Invalid Audio Session state" format:@"The Audio Session is not in a correct state to do Recording."];
+        }
+
+        
+        
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
         //sampleRate = [NSNumber numberWithInt: 44000];
