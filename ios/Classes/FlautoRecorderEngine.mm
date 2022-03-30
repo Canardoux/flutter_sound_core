@@ -46,9 +46,9 @@
         AVAudioInputNode* inputNode = [engine inputNode];
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
         double sRate = [inputFormat sampleRate];
-        //AVAudioChannelCount channelCount = [inputFormat channelCount];
+        // -AVAudioChannelCount channelCount = [inputFormat channelCount];
         AVAudioChannelLayout* layout = [inputFormat channelLayout];
-        //CMAudioFormatDescriptionRef formatDescription = [inputFormat formatDescription];
+        // -CMAudioFormatDescriptionRef formatDescription = [inputFormat formatDescription];
         
         if (sRate == 0 || layout == nil)
         {
