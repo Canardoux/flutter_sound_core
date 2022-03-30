@@ -236,7 +236,7 @@
                     
                         if (converter != nil)
                         {
-                            converter = nil;
+                            converter = nil; // ARC will dealloc the converter (I hope ;-) )
                         }
                 }
        }
