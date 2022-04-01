@@ -178,6 +178,8 @@
                         NSError* err;
                         if (![outputNode setVoiceProcessingEnabled:YES error:&err]) {
                            [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                        } else {
+                            [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
                         }
                     }
                 } else {
