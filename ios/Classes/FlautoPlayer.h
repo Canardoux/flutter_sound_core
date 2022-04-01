@@ -57,6 +57,8 @@
 
 - (FlautoPlayer*)init: (NSObject<FlautoPlayerCallback>*) callback;
            
+- (void)setVoiceProcessing: (bool) enabled;
+- (bool)isVoiceProcessingEnabled;
 - (t_PLAYER_STATE)getPlayerState;
 - (bool)isDecoderSupported: (t_CODEC)codec ;
 - (void)releaseFlautoPlayer;

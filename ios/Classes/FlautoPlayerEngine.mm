@@ -172,6 +172,18 @@
                 waitingBlock = nil;
                 engine = [[AVAudioEngine alloc] init];
                 outputNode = [engine outputNode];
+           
+                if (@available(iOS 13.0, *)) {
+                    if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
+                        NSError* err;
+                        if (![outputNode setVoiceProcessingEnabled:YES error:&err]) {
+                           [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                        }
+                    }
+                } else {
+                   [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
+                }
+               
                 outputFormat = [outputNode inputFormatForBus: 0];
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
