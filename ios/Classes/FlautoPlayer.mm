@@ -61,7 +61,7 @@ static bool _isIosDecoderSupported [] =
         double latentVolume;
         double latentSpeed;
         long latentSeek;
-
+        bool voiceProcessing;
 
 }
 
@@ -74,6 +74,16 @@ static bool _isIosDecoderSupported [] =
         subscriptionDuration = 0;
         timer = nil;
         return [super init];
+}
+
+- (void)setVoiceProcessing: (bool) enabled
+{
+        voiceProcessing = enabled;
+}
+
+- (bool)isVoiceProcessingEnabled
+{
+        return voiceProcessing;
 }
 
 
