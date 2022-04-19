@@ -97,7 +97,7 @@
                         //NSString* s =  error.localizedDescription;
                         
                         //s = error.localizedFailureReason;
-                        [flautoRecorder logDebug: s];
+                        [flautoRecorder logDebug:  @"Error [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock] during AudioRecorderEngine::AudioRecorderEngine"];
                         return;
                 }
                 int n = [convertedBuffer frameLength];
