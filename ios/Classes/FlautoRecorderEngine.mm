@@ -94,9 +94,9 @@
                 BOOL r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
                 if (!r)
                 {
-                        NSString* s =  error.localizedDescription;
+                        //NSString* s =  error.localizedDescription;
                         
-                        s = error.localizedFailureReason;
+                        //s = error.localizedFailureReason;
                         [flautoRecorder logDebug: s];
                         return;
                 }
