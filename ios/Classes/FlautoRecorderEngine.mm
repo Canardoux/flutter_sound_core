@@ -91,15 +91,14 @@
                         return buffer;
                 };
                 NSError* error;
-                BOOL r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
-                if (!r)
+                [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
+                if (error != nil)
                 {
-                        //NSString* s =  error.localizedDescription;
-                        
-                        //s = error.localizedFailureReason;
-                        [flautoRecorder logDebug:  @"Error [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock] during AudioRecorderEngine::AudioRecorderEngine"];
+                        NSString *errorMessage = [NSString stringWithFormat: @"[converter convertToBuffer:] error: %@", error.localizedDescription];
+                        [flautoRecorder logDebug: errorMessage];
                         return;
                 }
+
                 int n = [convertedBuffer frameLength];
                 int16_t *const  bb = [convertedBuffer int16ChannelData][0];
                 NSData* b = [[NSData alloc] initWithBytes: bb length: n * 2 ];
