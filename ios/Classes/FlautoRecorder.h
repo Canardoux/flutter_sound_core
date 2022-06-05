@@ -57,7 +57,8 @@
                 toPath: (NSString*)path
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
-                bitRate: (long)bitRate;
+                bitRate: (long)bitRate
+                bufferSizeMs: (int)bufferSizeMs;
                 
 - (void)stopRecorder;
 - (void)setSubscriptionDuration: (long)millisec;
