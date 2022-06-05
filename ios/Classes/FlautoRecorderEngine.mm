@@ -45,6 +45,9 @@
 
         AVAudioInputNode* inputNode = [engine inputNode];
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
+        NSNumber* bufferSizeMs = audioSettings [@"bufferSizeMs"];
+        double samplePerMs = [inputFormat sampleRate] / 1000.0;
+        unsigned int bufferSize = (unsigned int)(samplePerMs * [bufferSizeMs doubleValue]);
         double sRate = [inputFormat sampleRate];
         // -AVAudioChannelCount channelCount = [inputFormat channelCount];
         AVAudioChannelLayout* layout = [inputFormat channelLayout];
@@ -59,7 +62,6 @@
         
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
-        //sampleRate = [NSNumber numberWithInt: 44000];
         AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: YES];
         AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: recordingFormat];
         NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -76,7 +78,7 @@
         }
 
 
-        [inputNode installTapOnBus: 0 bufferSize: 20480 format: inputFormat block:
+        [inputNode installTapOnBus: 0 bufferSize: bufferSize format: inputFormat block:
         ^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when)
         {
                 inputStatus = AVAudioConverterInputStatus_HaveData ;

@@ -50,6 +50,7 @@ public class FlautoRecorderEngine
 		FlautoRecorder session = null;
 		FileOutputStream outputStream = null;
 		final private Handler mainHandler = new Handler (Looper.getMainLooper ());
+		private ByteBuffer buffer = null;
 
 
 
@@ -136,33 +137,57 @@ public class FlautoRecorderEngine
 		int r = 0;
 		while (isRecording ) {
 			//ShortBuffer shortBuffer = ShortBuffer.allocate(bufferSize/2);
-			ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 			try {
 				// gets the voice output from microphone to byte format
 				if ( Build.VERSION.SDK_INT >= 23 )
 				{
-						n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+						n = recorder.read(byteBuffer, bufferSize, AudioRecord.READ_NON_BLOCKING);
 
 				}
 				else
 				{
-						n = recorder.read(byteBuffer.array(), 0, bufferSize);
+						n = recorder.read(byteBuffer, bufferSize);
 				}
-				final int ln = n;//2 * n;
+				byteBuffer.position(byteBuffer.position() + n);
 
 				if (n > 0) {
 					totalBytes += n;
 					r += n;
 					if (outputStream != null) {
-						outputStream.write(byteBuffer.array(), 0, ln);
+						outputStream.write(byteBuffer.array(), 0, n);
 					} else {
-						mainHandler.post(new Runnable() {
-							@Override
-							public void run() {
-
-								session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, ln));
+						if (n < buffer.remaining()) {
+							byteBuffer.flip();
+							buffer.put(byteBuffer);
+						} else {
+							int rem = buffer.remaining();
+							// Fill remaining internal buffer with data
+							{
+								byteBuffer.flip();
+								int oldLimit = byteBuffer.limit();
+								assert oldLimit == n;
+								byteBuffer.limit(rem);
+								buffer.put(byteBuffer);
+								assert byteBuffer.position() == rem;
+								byteBuffer.limit(oldLimit);
 							}
-						});
+							// Create copy of the internal buffer
+							buffer.flip();
+							byte[] bufferToSend = new byte[buffer.limit()];
+							buffer.get(bufferToSend);
+							// Clear the internal buffer and put remaining new bytes
+							buffer.clear();
+							buffer.put(byteBuffer);
+							assert buffer.position() == (n - rem);
+							// Send full buffer
+							mainHandler.post(new Runnable() {
+								@Override
+								public void run() {
+									session.recordingData(bufferToSend);
+								}
+							});
+						}
 					}
 					for (int i = 0; i < n / 2; ++i) {
 						short curSample = getShort(byteBuffer.array()[i * 2], byteBuffer.array()[i * 2 + 1]);
@@ -194,6 +219,7 @@ public class FlautoRecorderEngine
 			Integer numChannels,
 			Integer sampleRate,
 			Integer bitRate,
+			Integer bufferSizeMs,
 			t_CODEC theCodec,
 			String path,
 			int audioSource,
@@ -207,25 +233,27 @@ public class FlautoRecorderEngine
 		codec = theCodec;
 		int channelConfig = (numChannels == 1) ? AudioFormat.CHANNEL_IN_MONO : AudioFormat.CHANNEL_IN_STEREO;
 		int audioFormat = tabCodec[codec.ordinal()];
-		int bufferSize = AudioRecord.getMinBufferSize
+		int minBufferSize = AudioRecord.getMinBufferSize
 			(
 				sampleRate,
-			      	channelConfig,
+				channelConfig,
 				tabCodec[codec.ordinal()]
-			) * 2;
+		);
+		int requestedBufferSize = (bufferSizeMs * sampleRate / 1000) * 2; // Assume 16bit PCM
+		int bufferSize = Integer.max(minBufferSize * 2, requestedBufferSize);
 
-
-		recorder = new AudioRecord( 	audioSource,
-						sampleRate,
-						channelConfig,
-		                            	audioFormat,
-		                            	bufferSize
-					);
+		recorder = new AudioRecord(audioSource,
+				sampleRate,
+				channelConfig,
+				audioFormat,
+				bufferSize
+		);
 
 		if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
 		{
 			recorder.startRecording();
 			isRecording = true;
+			buffer = ByteBuffer.allocateDirect(bufferSize);
 			try {
 				writeAudioDataToFile(codec, sampleRate, path);
 			} catch (Exception e) {
