@@ -240,7 +240,7 @@ public class FlautoRecorderEngine
 				tabCodec[codec.ordinal()]
 		);
 		int requestedBufferSize = (bufferSizeMs * sampleRate / 1000) * 2; // Assume 16bit PCM
-		int bufferSize = Integer.max(minBufferSize * 2, requestedBufferSize);
+		int bufferSize = Integer.max(minBufferSize, requestedBufferSize);
 
 		recorder = new AudioRecord(audioSource,
 				sampleRate,
