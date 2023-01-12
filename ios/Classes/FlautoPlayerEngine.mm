@@ -156,6 +156,7 @@
         AVAudioPlayerNode* playerNode;
         AVAudioFormat* playerFormat;
         AVAudioFormat* outputFormat;
+        AVAudioUnitTimePitch* timePitchUnit;
         AVAudioOutputNode* outputNode;
         AVAudioConverter* converter;
         CFTimeInterval mStartPauseTime ; // The time when playback was paused
@@ -172,6 +173,8 @@
                 waitingBlock = nil;
                 engine = [[AVAudioEngine alloc] init];
                 outputNode = [engine outputNode];
+                timePitchUnit = [[AVAudioUnitTimePitch alloc] init];
+                [timePitchUnit setRate:1];
            
                 if (@available(iOS 13.0, *)) {
                     if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
@@ -190,8 +193,10 @@
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
                 [engine attachNode: playerNode];
-
-                [engine connect: playerNode to: outputNode format: outputFormat];
+                [engine attachNode: timePitchUnit];
+           
+                [engine connect: playerNode to: timePitchUnit format: outputFormat];
+                [engine connect: timePitchUnit to: outputNode format: outputFormat];
                 bool b = [engine startAndReturnError: nil];
                 if (!b)
                 {
@@ -244,7 +249,13 @@
                                 [playerNode stop];
                                 // Does not work !!! // [engine detachNode:  playerNode];
                                 playerNode = nil;
-                         }
+                        }
+
+                        if (timePitchUnit != nil)
+                        {
+                                timePitchUnit = nil;
+                        }
+
                         [engine stop];
                         engine = nil;
                     
@@ -282,6 +293,14 @@
        -(bool)  seek: (double) pos
        {
                 return false;
+       }
+
+       -(bool)  setSpeed: (double) rate // range: 1/32 -> 32
+       {
+                if (timePitchUnit == nil || timePitchUnit ==  (id)[NSNull null]) return false;
+                if (rate < 1/32 || rate > 32) return false;
+                [timePitchUnit setRate: rate];
+                return true;
        }
 
        -(int)  getStatus
@@ -361,14 +380,13 @@
                 }
          }
 
--(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration// TODO
+-(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration
 {
-        return true; // TODO
-}
+        if (playerNode == nil || playerNode ==  (id)[NSNull null]) return false;
+        [playerNode setVolume: volume];
 
-- (bool) setSpeed: (double) speed
-{
-        return true; // TODO
+        //TODO: implement fadeDuration programmatically since its not available on playerNode
+        return true; 
 }
 
 

@@ -27,6 +27,7 @@ import android.media.AudioTrack;
 import android.os.Build;
 import android.os.SystemClock;
 import java.lang.Thread;
+import android.media.PlaybackParams;
 
 
 //-------------------------------------------------------------------------------------------------------------
@@ -188,10 +189,20 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 
 	}
 
-	void _setSpeed(double volume)  throws Exception
+	void _setSpeed(double speed)  throws Exception
 	{
-
-			throw new Exception("Not implemented");
+		float v = (float)speed;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			try {
+				PlaybackParams params = audioTrack.getPlaybackParams();
+				params.setSpeed(v);
+				audioTrack.setPlaybackParams(params);
+				return;
+			} catch (Exception err) {
+				mSession.logError("setSpeed: error " + err.getMessage());
+			}
+		}
+		mSession.logError("setSpeed: not supported" );
 
 	}
 
