@@ -130,6 +130,13 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return true;
 	}
 
+	public int getAudioSessionId() throws Exception {
+		if (player == null) {
+			throw new Exception("getAudioSessionId() : player is null");
+		}
+		return player._getAudioSessionId();
+	}
+
 	public void closePlayer ( )
 	{
 		stop();

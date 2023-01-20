@@ -114,7 +114,9 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 
 	}
 
-
+	int _getAudioSessionId() {
+		return mediaPlayer.getAudioSessionId();
+	}
 
 	void _pausePlayer() throws Exception {
 		if (mediaPlayer == null) {

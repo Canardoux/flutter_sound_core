@@ -282,6 +282,10 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		}
 	}
 
+	int _getAudioSessionId() {
+		return sessionId;
+	}
+
 	void _finish()
 	{
 	}
