@@ -115,5 +115,36 @@
 @end
 
 
+typedef NS_ENUM(NSInteger, EffectType) {
+    DarwinEqualizer,
+};
+
+
+@protocol EffectData <NSObject>
+    @property (nonatomic, readonly) EffectType type;
+@end
+
+
+@interface BandEqualizerData : NSObject
+    @property (nonatomic, readonly) int index;
+    @property (nonatomic, readonly) float centerFrequency;
+    @property (nonatomic, readonly) float gain;
+@end
+
+
+@interface ParamsEqualizerData : NSObject
+    @property (nonatomic, readonly) NSArray<BandEqualizerData *> *bands;
+@end
+
+
+@interface EqualizerEffectData : NSObject <EffectData>
+    @property (nonatomic, readonly) BOOL enabled;
+    @property (nonatomic, readonly) ParamsEqualizerData *parameters;
+
+       + (EqualizerEffectData *)fromJson:(NSDictionary *)map;
+       + (id<EffectData>)effectFrom:(NSDictionary *)map;
+       + (float)gainFrom:(float)value;
+@end
+
 
 #endif /* PlayerEngine_h */
