@@ -475,6 +475,11 @@ static bool _isIosDecoderSupported [] =
          return [m_playerEngine getDuration];
 }
 
+- (bool)initEqualizer:(NSDictionary*) arguments
+{
+    return [m_playerEngine initEqualizer: arguments];
+}
+
 
 - (NSDictionary*)getProgress
 {
@@ -545,7 +550,6 @@ static bool _isIosDecoderSupported [] =
 {
         [m_callBack log: DBG msg: msg];
 }
-
 
 @end
 //---------------------------------------------------------------------------------------------

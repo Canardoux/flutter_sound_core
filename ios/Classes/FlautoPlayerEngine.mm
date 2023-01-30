@@ -27,7 +27,6 @@
 #import "Flauto.h"
 #import "FlautoPlayerEngine.h"
 #import "FlautoPlayer.h"
-#import <Flutter/Flutter.h>
 
 @implementation AudioPlayerFlauto
 {
@@ -170,149 +169,143 @@
 
        - (AudioEngine*)init: (FlautoPlayer*)owner
        {
-                flutterSoundPlayer = owner;
-                waitingBlock = nil;
-                engine = [[AVAudioEngine alloc] init];
-                outputNode = [engine outputNode];
+            flutterSoundPlayer = owner;
+            waitingBlock = nil;
+            engine = [[AVAudioEngine alloc] init];
+            outputNode = [engine outputNode];
            
-                if (@available(iOS 13.0, *)) {
-                    if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
-                        NSError* err;
-                        if (![outputNode setVoiceProcessingEnabled:YES error:&err]) {
-                           [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
-                        } else {
-                            [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
-                        }
+            if (@available(iOS 13.0, *)) {
+                if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
+                    NSError* err;
+                    if (![outputNode setVoiceProcessingEnabled:YES error:&err]) {
+                        [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                    } else {
+                        [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
                     }
-                } else {
-                   [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
                 }
-               
-                outputFormat = [outputNode inputFormatForBus: 0];
-                playerNode = [[AVAudioPlayerNode alloc] init];
-
-                [engine attachNode: playerNode];
-
-                [engine connect: playerNode to: outputNode format: outputFormat];
-                bool b = [engine startAndReturnError: nil];
-                if (!b)
-                {
-                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
-                }
-
-                mPauseTime = 0.0; // Total number of seconds in pause mode
-		mStartPauseTime = -1; // Not in paused mode
-		systemTime = CACurrentMediaTime(); // The time when started
-                return [super init];
-       }
-
-       - (void) attachEqualizer: (AVAudioUnitEQ*) eq
-       {
+            } else {
+                [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
+            }
+           
+            outputFormat = [outputNode inputFormatForBus: 0];
+            playerNode = [[AVAudioPlayerNode alloc] init];
+       
+            if(eq){
+                NSLog(@"EQ found! Attach it");
                 [engine attachNode: eq];
+            } else {
+                NSLog(@"EQ NOT FOUND!!!");
+            }
+
+            [engine attachNode: playerNode];
+       
+            if(eq){
+                NSLog(@"EQ found! Connect it");
                 [engine connect: playerNode to: eq format: playerFormat];
                 [engine connect: eq to: outputNode format: outputFormat];
+            }
+
+            [engine connect: playerNode to: outputNode format: outputFormat];
+            bool b = [engine startAndReturnError: nil];
+            if (!b)
+            {
+                [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
+            }
+
+            mPauseTime = 0.0; // Total number of seconds in pause mode
+            mStartPauseTime = -1; // Not in paused mode
+            systemTime = CACurrentMediaTime(); // The time when started
+            return [super init];
        }
 
-       - (void) detachEqualizer: (AVAudioUnitEQ*) eq
+       - (void) enableEffect: (NSString *) type enabled: (bool) enabled
        {
-                [engine disconnectNodeInput: eq];
-                [engine disconnectNodeInput: playerNode];
-                [engine disconnectNodeInput: outputNode];
-                [engine connect: playerNode to: outputNode format: outputFormat];
-                [engine detachNode: eq];
-       }
-
-       - (void) enableEffect: (String) type, bool enabled
-       {
-                switch (type)
+           if ([type  isEqual: @"DarwinEqualizer"])
+           {
+                if (eq == nil)
                 {
-                        case "DarwinEqualizer":
-                                
-                                if (eq == nil)
-                                {
-                                        [flutterSoundPlayer logDebug: @"Cannot enable the equalizer because it is not initialized"];
-                                        return;
-                                }
-                                eq.bypass = !enabled;
-                                
-                                break;
-                        default:
-
-                                break;
+                    [flutterSoundPlayer logDebug: @"Cannot enable the equalizer because it is not initialized"];
+                    return;
                 }
+                eq.bypass = !enabled;
+            }
        }
 
        - (void) setEqiualizerBandGain: (int) bandIndex gain: (double) gain
        {
-                if (eq == nil)
-                {
-                        [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the equalizer is not initialized"];
-                        return;
-                }
-                if (bandIndex < 0 || bandIndex >= eq.bands.count)
-                {
-                        [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the band index is out of range"];
-                        return;
-                }
-                AVAudioUnitEQFilterParameters* band = eq.bands[bandIndex];
-                band.gain = gain;
+            if (eq == nil)
+            {
+                [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the equalizer is not initialized"];
+                return;
+            }
+            if (bandIndex < 0 || bandIndex >= eq.bands.count)
+            {
+                [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the band index is out of range"];
+                return;
+            }
+            AVAudioUnitEQFilterParameters* band = eq.bands[bandIndex];
+            band.gain = gain;
        }
 
-       - (void)initEqualizer:(FlutterMethodCall *)call result:(FlutterResult)result {
-                [flutterSoundPlayer logDebug:@"Initialize darwin EQ!"];
-                NSDictionary *arguments = call.arguments;
-                if (![arguments isKindOfClass:[NSDictionary class]]) {
-                        result([FlutterError errorWithCode:@"ABNORMAL_PARAMETER" message:@"no parameters" details:nil]);
-                        return;
-                }
-                
-                [flutterSoundPlayer logDebug:@"%@", arguments];
-                NSArray *effectsRaw = [arguments objectForKey:@"DarwinEqualizer"];
-                if (!effectsRaw) {
-                        result([FlutterError errorWithCode:@"ABNORMAL_PARAMETER" message:@"no DarwinEqualizer type found" details:nil]);
-                        return;
-                }
-                
-                NSDictionary *equalizerRaw = [effectsRaw filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
-                        return [[evaluatedObject objectForKey:@"type"] isEqualToString:@"DarwinEqualizer"];
-                }]].firstObject;
-                
-                NSDictionary *parameters = [equalizerRaw objectForKey:@"parameters"];
-                NSArray *rawBands = [parameters objectForKey:@"bands"];
-                BOOL enabled = [[equalizerRaw objectForKey:@"enabled"] boolValue];
-                
-                NSArray *frequenciesAndBands = [rawBands filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
-                        return [evaluatedObject objectForKey:@"centerFrequency"] && [evaluatedObject objectForKey:@" Gain"];
-                }]];
-                
-                NSArray *frequencies = [frequenciesAndBands valueForKeyPath:@"centerFrequency"];
-                NSArray *bands = [frequenciesAndBands valueForKeyPath:@" Gain"];
-                
-                if (!audioEngine) {
-                        [flutterSoundPlayer logDebug: @"Setting audio engine!"];
-                        audioEngine = [[AVAudioEngine alloc] init];
-                        
-                        if (!eq) {
-                                [flutterSoundPlayer logDebug: @"Setting Equalizer!"];
-                                eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands:(unsigned int)bands.count];
-                                
-                                for (int i = 0; i < rawBands.count; i++) {
-                                        NSDictionary *band = rawBands[i];
-                                        eq.bands[i].filterType = AVAudioUnitEQFilterTypeParametric;
-                                        eq.bands[i].frequency = [[band objectForKey:@"centerFrequency"] floatValue];
-                                        eq.bands[i].bandwidth = 1.0f;
-                                        eq.bands[i]. Gain = EqualizerEffectData.GainFrom([[band objectForKey:@" Gain"] floatValue]);
-                                        eq.bands[i].byPass = NO;
-                                }
-                                eq.bypass = !enabled;
+       - (bool) initEqualizer:(NSDictionary*) arguments {
+           NSLog(@"Initialize darwin EQ! (LAST PLACE TO CALL)");
+           [flutterSoundPlayer logDebug:@"Initialize darwin EQ!"];
 
-                        }else{
-                                [flutterSoundPlayer logDebug: @"Equalizer already set!"];
-                        }
-                } else {
-                        [flutterSoundPlayer logDebug:@"Audio engine already set!"];
-                }
-        }
+           NSArray *effectsRaw = [arguments objectForKey:@"DarwinEqualizer"];
+           if (!effectsRaw) {
+               [flutterSoundPlayer logDebug:@"no DarwinEqualizer type found"];
+               return false;
+            }
+                
+           NSDictionary *equalizerRaw = [effectsRaw filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+                    return [[evaluatedObject objectForKey:@"type"] isEqualToString:@"DarwinEqualizer"];
+           }]].firstObject;
+                
+           NSDictionary *parameters = [equalizerRaw objectForKey:@"parameters"];
+           NSArray *rawBands = [parameters objectForKey:@"bands"];
+           BOOL enabled = [[equalizerRaw objectForKey:@"enabled"] boolValue];
+                
+//           NSArray *frequenciesAndBands = [rawBands filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+//                    return [evaluatedObject objectForKey:@"centerFrequency"] && [evaluatedObject objectForKey:@" Gain"];
+//           }]];
+//           NSArray *frequencies = [frequenciesAndBands valueForKeyPath:@"centerFrequency"];
+//           NSArray *bands = [frequenciesAndBands valueForKeyPath:@" Gain"];
+                
+//           if (!engine) {
+//               //               [flutterSoundPlayer logDebug: @"Setting audio engine!"];
+//               //               NSLog(@"Setting audio engine!");
+//               //               engine = [[AVAudioEngine alloc] init];
+//               NSLog(@"No Audio engine found!");
+//               return false;
+//           }
+           if (!eq) {
+               [flutterSoundPlayer logDebug: @"Setting Equalizer!"];
+               NSLog(@"Setting Equalizer!");
+               eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands:(unsigned int)rawBands.count];
+                            
+               for (int i = 0; i < rawBands.count; i++) {
+                   NSDictionary *band = rawBands[i];
+                   eq.bands[i].filterType = AVAudioUnitEQFilterTypeParametric;
+                   eq.bands[i].frequency = [[band objectForKey:@"centerFrequency"] floatValue];
+                   eq.bands[i].bandwidth = 1.0f;
+                   eq.bands[i].gain = [self gainFrom: ([[band objectForKey:@" Gain"] floatValue])];
+                   eq.bands[i].bypass = NO;
+               }
+               eq.bypass = !enabled;
+//               [self attachEqualizer: eq];
+           }else{
+               NSLog(@"Equalizer already set!");
+               [flutterSoundPlayer logDebug: @"Equalizer already set!"];
+                   return true;
+           }
+           return true;
+           
+//           } else {
+//               NSLog(@"Audio engine already set!");
+//               [flutterSoundPlayer logDebug:@"Audio engine already set!"];
+//               return true;
+//           }
+       }
 
 
        -(void) startPlayerFromBuffer: (NSData*) dataBuffer
@@ -483,6 +476,13 @@
 }
 
 
+- (float) gainFrom:(float) value
+{
+    //Equalize the level between iOS and Android
+    return value * 2.8;
+}
+
+
 @end
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -612,95 +612,13 @@
         return 0;
        }
 
+      - (bool)initEqualizer:(NSDictionary*)arguments{
+          NSLog(@"Initialize darwin EQ! (MICROPHONE - NOT IMPLEMENTED)");
+          return true;
+          //TODO
+       }
+
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
-
-
-// convert this to objective-c:
-// struct EqualizerEffectData: EffectData, Codable {
-//     let type: EffectType
-//     let enabled: Bool
-//     let parameters: ParamsEqualizerData
-
-//     static func fromJson(_ map: [String: Any]) -> EqualizerEffectData {
-//         return try! JSONDecoder().decode(EqualizerEffectData.self, from: JSONSerialization.data(withJSONObject: map))
-//     }
-
-//     static func effectFrom(_ map: [String: Any]) throws -> EffectData {
-//         let type = map["type"] as! String
-//         switch type {
-//         case EffectType.darwinEqualizer.rawValue:
-//             return EqualizerEffectData.fromJson(map)
-//         default:
-//             throw NotSupportedError(value: type, "When decoding effect")
-//         }
-//     }
-    
-//     static func gainFrom(_ value: Float) -> Float {
-//         // Equalize the level between iOS and android
-//         return value * 2.8
-//     }
-// }
-
-@implementation EqualizerEffectData
-{
-        // convert this to objective-c:
-        //     let type: EffectType
-        //     let enabled: Bool
-        //     let parameters: ParamsEqualizerData
-
-        EffectType: type;
-        bool enabled;
-        ParamsEqualizerData parameters;
-}
-
-        // convert this to objective-c:
-        //     static func fromJson(_ map: [String: Any]) -> EqualizerEffectData {
-        //         return try! JSONDecoder().decode(EqualizerEffectData.self, from: JSONSerialization.data(withJSONObject: map))
-        //     }
-
-        -(EqualizerEffectData*) fromJson: (NSDictionary*) map
-        {
-                return JSONDecoder().decode(EqualizerEffectData.self, from: JSONSerialization.data(withJSONObject: map));
-        }
-
-
-
-        // convert this to objective-c:
-        //     static func effectFrom(_ map: [String: Any]) throws -> EffectData {
-        //         let type = map["type"] as! String
-        //         switch type {
-        //         case EffectType.darwinEqualizer.rawValue:
-        //             return EqualizerEffectData.fromJson(map)
-        //         default:
-        //             throw NotSupportedError(value: type, "When decoding effect")
-        //         }
-        //     }
-
-        -(EffectData*) effectFrom: (NSDictionary*) map
-        {
-                NSString* type = map[@"type"];
-                switch (type)
-                {
-                        case EffectType.darwinEqualizer.rawValue:
-                                return [self fromJson: map];
-                        default:
-                                throw NotSupportedError(value: type, "When decoding effect");
-                }
-        }
-
-        // convert this to objective-c:
-        //     static func gainFrom(_ value: Float) -> Float {
-        //         // Equalize the level between iOS and android
-        //         return value * 2.8
-        //     }
-
-        -(float) gainFrom: (float) value
-        {
-                // Equalize the level between iOS and android
-                return value * 2.8;
-        }
-
-
-
 @end

@@ -48,6 +48,7 @@
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
        - (int) feed: (NSData*)data;
+       - (bool)initEqualizer:(NSDictionary*)arguments;
 
 @end
 
@@ -69,6 +70,7 @@
        - (AVAudioPlayer*) getAudioPlayer;
        - (void) setAudioPlayer: (AVAudioPlayer*)thePlayer;
        - (int) feed: (NSData*)data;
+       - (bool)initEqualizer:(NSDictionary*)arguments;
 
 @end
 
@@ -90,6 +92,7 @@
        - (bool) seek: (double) pos;
        - (int)  getStatus;
        - (int) feed: (NSData*)data;
+       - (float)gainFrom:(float)value;
 
 @end
 
@@ -114,37 +117,51 @@
 
 @end
 
-
-typedef NS_ENUM(NSInteger, EffectType) {
-    DarwinEqualizer,
-};
-
-
-@protocol EffectData <NSObject>
-    @property (nonatomic, readonly) EffectType type;
-@end
-
-
-@interface BandEqualizerData : NSObject
-    @property (nonatomic, readonly) int index;
-    @property (nonatomic, readonly) float centerFrequency;
-    @property (nonatomic, readonly) float gain;
-@end
-
-
-@interface ParamsEqualizerData : NSObject
-    @property (nonatomic, readonly) NSArray<BandEqualizerData *> *bands;
-@end
-
-
-@interface EqualizerEffectData : NSObject <EffectData>
-    @property (nonatomic, readonly) BOOL enabled;
-    @property (nonatomic, readonly) ParamsEqualizerData *parameters;
-
-       + (EqualizerEffectData *)fromJson:(NSDictionary *)map;
-       + (id<EffectData>)effectFrom:(NSDictionary *)map;
-       + (float)gainFrom:(float)value;
-@end
+//#pragma mark - Enum EffectType
+//typedef NS_ENUM(NSUInteger, EffectType) {
+//        EffectTypeDarwinEqualizer, NotImplemented
+//    };
+//
+//NSString *NSStringFromEffectType(EffectType type) {
+//    switch (type) {
+//        case EffectTypeDarwinEqualizer:
+//            return @"DarwinEqualizer";
+//        default:
+//            return @"";
+//    }
+//}
+//EffectType EffectTypeFromNSString(NSString *string) {
+//    if ([string isEqualToString:@"DarwinEqualizer"]) {
+//        return EffectTypeDarwinEqualizer;
+//    }
+//    return NotImplemented;
+//}
+//
+//#pragma mark - Protocol EffectData
+//@protocol EffectData <NSObject>
+//    @property (nonatomic, assign, readonly) EffectType type;
+//@end
+//
+//#pragma mark - Struct BandEqualizerData
+//@interface BandEqualizerData : NSObject <NSCoding, NSSecureCoding>
+//    @property (nonatomic, assign) NSUInteger index;
+//    @property (nonatomic, assign) float centerFrequency;
+//    @property (nonatomic, assign) float gain;
+//@end
+//
+//#pragma mark - Struct ParamsEqualizerData
+//@interface ParamsEqualizerData : NSObject <NSCoding, NSSecureCoding>
+//    @property (nonatomic, strong) NSArray<BandEqualizerData *> *bands;
+//@end
+//
+//#pragma mark - Struct EqualizerEffectData
+//@interface EqualizerEffectData : NSObject <EffectData>
+//    @property (nonatomic, assign) EffectType type;
+//    @property (nonatomic, assign) BOOL enabled;
+//    @property (nonatomic, strong) ParamsEqualizerData *parameters;
+//    - (instancetype)fromJson:(NSDictionary *)map;
+//    - (id<EffectData>)effectFrom:(NSDictionary *)map error:(NSError **)error;
+//@end
 
 
 #endif /* PlayerEngine_h */

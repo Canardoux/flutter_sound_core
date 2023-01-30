@@ -85,6 +85,7 @@
 - (long)getPosition;
 - (long)getDuration;
 - (void)logDebug: (NSString*)msg;
+- (bool)initEqualizer:(NSDictionary*) arguments;
 
 
 
