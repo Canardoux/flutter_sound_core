@@ -62,6 +62,7 @@ static bool _isIosDecoderSupported [] =
         double latentSpeed;
         long latentSeek;
         bool voiceProcessing;
+        NSDictionary* equalizerParams;
 
 }
 
@@ -185,7 +186,7 @@ static bool _isIosDecoderSupported [] =
         [self stop]; // To start a fresh new playback
 
         if ( (path == nil ||  [path class] == [NSNull class] ) && codec == pcm16)
-                m_playerEngine = [[AudioEngine alloc] init: self ];
+                m_playerEngine = [[AudioEngine alloc] init: self eqParams: equalizerParams ];
         else
                 m_playerEngine = [[AudioPlayerFlauto alloc]init: self];
         
@@ -475,9 +476,9 @@ static bool _isIosDecoderSupported [] =
          return [m_playerEngine getDuration];
 }
 
-- (bool)initEqualizer:(NSDictionary*) arguments
+- (void)initEqualizer:(NSDictionary*) params
 {
-    return [m_playerEngine initEqualizer: arguments];
+    equalizerParams = params;
 }
 
 
