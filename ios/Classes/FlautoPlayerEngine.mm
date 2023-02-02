@@ -308,15 +308,6 @@
            [flutterSoundPlayer logDebug: @"Setting Equalizer!"];
            
            // Init equalizer
-//           _eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands: 1];
-//           [_eq setBypass : false];
-//           [_eq setGlobalGain : 1];
-//           _eq.bands[0].frequency = 1000;
-//           _eq.bands[0].gain = -60.0;
-//           _eq.bands[0].bypass = false;
-//           _eq.bands[0].filterType = AVAudioUnitEQFilterTypeParametric;
-           
-           
            _eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands:(unsigned int)rawBands.count + 1];
            [_eq setBypass : !enabled];
            [_eq setGlobalGain : 1];
@@ -333,7 +324,7 @@
            //Band pass filter
            AVAudioUnitEQFilterParameters *bandPassFilter;
            bandPassFilter = _eq.bands[(unsigned int)rawBands.count];
-           bandPassFilter.frequency = 1000;
+           bandPassFilter.frequency = 2000;
 //           bandPassFilter.bandwidth = 2.0f;
            bandPassFilter.gain = -60;
            bandPassFilter.bypass = false;
