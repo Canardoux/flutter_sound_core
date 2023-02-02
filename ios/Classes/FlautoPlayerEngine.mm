@@ -36,59 +36,63 @@
 
        - (AVAudioPlayer*) getAudioPlayer
        {
-                return player;
+            return player;
        }
 
         - (void) setAudioPlayer: (AVAudioPlayer*)thePlayer
         {
-                player = thePlayer;
+            player = thePlayer;
         }
 
-
-
-       - (AudioPlayerFlauto*)init: (FlautoPlayer*)owner
-       {
-                flautoPlayer = owner;
-                return [super init];
-       }
-
-       -(void) startPlayerFromBuffer: (NSData*) dataBuffer
-       {
-                NSError* error = [[NSError alloc] init];
-                [self setAudioPlayer:  [[AVAudioPlayer alloc] initWithData: dataBuffer error: &error]];
-                [self getAudioPlayer].delegate = flautoPlayer;
-       }
-
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
-
-       {
-                [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
-                [self getAudioPlayer].delegate = flautoPlayer;
+        - (AudioPlayerFlauto*)init: (FlautoPlayer*)owner
+        {
+            flautoPlayer = owner;
+            return [super init];
         }
 
+        -(void) startPlayerFromBuffer: (NSData*) dataBuffer
+        {
+            NSError* error = [[NSError alloc] init];
+            [self setAudioPlayer:  [[AVAudioPlayer alloc] initWithData: dataBuffer error: &error]];
+            [self getAudioPlayer].delegate = flautoPlayer;
+        }
 
-       -(long)  getDuration
-       {
-                double duration =  [self getAudioPlayer].duration;
-                return (long)(duration * 1000.0);
-       }
+        -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+        {
+            [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
+            [self getAudioPlayer].delegate = flautoPlayer;
+        }
 
-       -(long)  getPosition
-       {
-                double position = [self getAudioPlayer].currentTime ;
-                return (long)( position * 1000.0);
-       }
+        -(long)  getDuration
+        {
+            double duration =  [self getAudioPlayer].duration;
+            return (long)(duration * 1000.0);
+        }
 
-       -(void)  stop
-       {
-                [ [self getAudioPlayer] stop];
-                [self setAudioPlayer: nil];
-       }
+        -(long)  getPosition
+        {
+            double position = [self getAudioPlayer].currentTime ;
+            return (long)( position * 1000.0);
+        }
+
+        -(void)  stop
+        {
+            [ [self getAudioPlayer] stop];
+            [self setAudioPlayer: nil];
+        }
 
         -(bool)  play
         {
-                bool b = [ [self getAudioPlayer] play];
-                return b;
+            // This fixes the audio output to the speaker (LAPSI fix)
+            NSError *error = nil;
+            [[AVAudioSession sharedInstance]
+            setCategory: AVAudioSessionCategoryPlayAndRecord
+            mode: AVAudioSessionModeDefault
+            options: AVAudioSessionCategoryOptionAllowBluetoothA2DP | AVAudioSessionCategoryOptionAllowBluetooth
+            error:&error];
+                
+            bool b = [ [self getAudioPlayer] play];
+            return b;
         }
 
 
@@ -173,7 +177,7 @@
             waitingBlock = nil;
             engine = [[AVAudioEngine alloc] init];
             outputNode = [engine outputNode];
-            eq = [self setEqualizer: params];
+            playerNode = [[AVAudioPlayerNode alloc] init];
            
             if (@available(iOS 13.0, *)) {
                 if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
@@ -188,68 +192,96 @@
                 [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
             }
            
-            outputFormat = [outputNode inputFormatForBus: 0];
-            playerNode = [[AVAudioPlayerNode alloc] init];
+           outputFormat = [outputNode inputFormatForBus: 0];
+           
+           eq = [self setEqualizer: params];
+           
+           if(eq){
+               [flutterSoundPlayer logDebug: @"EQ found! Attach it"];
+               [engine attachNode: eq];
+           } else {
+               [flutterSoundPlayer logDebug: @"EQ NOT FOUND!!!"];
+           }
+           
+           [engine attachNode: playerNode];
+           AVAudioMixerNode *mixerNode = [engine mainMixerNode];
+//           AVAudioFormat * format = [[engine mainMixerNode] outputFormatForBus:0];
        
             if(eq){
-                NSLog(@"EQ found! Attach it");
-                [engine attachNode: eq];
+                [flutterSoundPlayer logDebug: @"EQ found! Connect it"];
+                [engine connect: playerNode to: eq format: outputFormat];
+                [engine connect: eq to: mixerNode format: outputFormat];
             } else {
-                NSLog(@"EQ NOT FOUND!!!");
+                [engine connect: playerNode to: outputNode format: outputFormat];
             }
+           
+           [engine prepare];
 
-            [engine attachNode: playerNode];
-       
-            if(eq){
-                NSLog(@"EQ found! Connect it");
-                [engine connect: playerNode to: eq format: playerFormat];
-                [engine connect: eq to: outputNode format: outputFormat];
-            }
-
-            [engine connect: playerNode to: outputNode format: outputFormat];
             bool b = [engine startAndReturnError: nil];
             if (!b)
             {
+                NSLog(@"Cannot start the audio engine!");
                 [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
             }
 
             mPauseTime = 0.0; // Total number of seconds in pause mode
             mStartPauseTime = -1; // Not in paused mode
             systemTime = CACurrentMediaTime(); // The time when started
-            return [super init];
+           return [super init];
        }
 
-       - (void) enableEffect: (NSString *) type enabled: (bool) enabled
-       {
-           if ([type  isEqual: @"DarwinEqualizer"])
-           {
-                if (eq == nil)
-                {
-                    [flutterSoundPlayer logDebug: @"Cannot enable the equalizer because it is not initialized"];
-                    return;
-                }
-                eq.bypass = !enabled;
-            }
-       }
-
-       - (void) setEqiualizerBandGain: (int) bandIndex gain: (double) gain
+       - (void) enableEqualizer:(bool) enabled
        {
             if (eq == nil)
             {
-                [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the equalizer is not initialized"];
+                [flutterSoundPlayer logDebug: @"Cannot enable the equalizer because it is not initialized"];
                 return;
             }
-            if (bandIndex < 0 || bandIndex >= eq.bands.count)
-            {
-                [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the band index is out of range"];
-                return;
-            }
-            AVAudioUnitEQFilterParameters* band = eq.bands[bandIndex];
-            band.gain = gain;
+           
+           [engine prepare];
+           eq.bypass = !enabled;
+           
+           // Start the engine.
+           NSError *error;
+           [engine startAndReturnError:&error];
+           if (error) {
+               NSLog(@"error:%@", error);
+           }
+       }
+
+       - (void) setEqualizerBandGain: (int) bandIndex gain: (float) gain
+       {
+           if (eq == nil)
+           {
+               [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the equalizer is not initialized"];
+               NSLog(@"Cannot set the equalizer band gain because the equalizer is not initialized");
+               return;
+           }
+           if (bandIndex < 0 || bandIndex >= eq.bands.count)
+           {
+               [flutterSoundPlayer logDebug: @"Cannot set the equalizer band gain because the band index is out of range"];
+               NSLog(@"Cannot set the equalizer band gain because the band index is out of range");
+               return;
+           }
+           
+           [engine prepare];
+           
+//           NSLog(@"Received (flutter): band %d: to: %f ",bandIndex, gain);
+           
+//           NSLog(@"Setting gain for band: %d to %f", bandIndex, [self gainFrom: gain]);
+           
+           AVAudioUnitEQFilterParameters* band = eq.bands[bandIndex];
+           band.gain = [self gainFrom: gain];
+           
+           // Start the engine.
+           NSError *error;
+           [engine startAndReturnError:&error];
+           if (error) {
+               NSLog(@"error:%@", error);
+           }
        }
 
        - (AVAudioUnitEQ *) setEqualizer:(NSDictionary*) arguments; {
-           NSLog(@"Initialize darwin EQ! (LAST PLACE TO CALL)");
            [flutterSoundPlayer logDebug:@"Initialize darwin EQ!"];
            
            AVAudioUnitEQ* _eq;
@@ -274,24 +306,39 @@
            BOOL enabled = [[equalizerRaw objectForKey:@"enabled"] boolValue];
                 
            [flutterSoundPlayer logDebug: @"Setting Equalizer!"];
-           NSLog(@"Setting Equalizer!");
            
            // Init equalizer
-           _eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands:(unsigned int)rawBands.count];
+//           _eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands: 1];
+//           [_eq setBypass : false];
+//           [_eq setGlobalGain : 1];
+//           _eq.bands[0].frequency = 1000;
+//           _eq.bands[0].gain = -60.0;
+//           _eq.bands[0].bypass = false;
+//           _eq.bands[0].filterType = AVAudioUnitEQFilterTypeParametric;
            
-           // Set bands
+           
+           _eq = [[AVAudioUnitEQ alloc] initWithNumberOfBands:(unsigned int)rawBands.count + 1];
+           [_eq setBypass : !enabled];
+           [_eq setGlobalGain : 1];
+//           // Set bands
            for (int i = 0; i < rawBands.count; i++) {
                NSDictionary *band = rawBands[i];
-               _eq.bands[i].filterType = AVAudioUnitEQFilterTypeParametric;
                _eq.bands[i].frequency = [[band objectForKey:@"centerFrequency"] floatValue];
-               _eq.bands[i].bandwidth = 1.0f;
+//               _eq.bands[i].bandwidth = 1.0f;
                _eq.bands[i].gain = [self gainFrom: ([[band objectForKey:@" Gain"] floatValue])];
-               _eq.bands[i].bypass = NO;
+               _eq.bands[i].bypass = false;
+               _eq.bands[i].filterType = AVAudioUnitEQFilterTypeParametric;
            }
            
-           // Enable eq
-           _eq.bypass = !enabled;
-
+           //Band pass filter
+           AVAudioUnitEQFilterParameters *bandPassFilter;
+           bandPassFilter = _eq.bands[(unsigned int)rawBands.count];
+           bandPassFilter.frequency = 1000;
+//           bandPassFilter.bandwidth = 2.0f;
+           bandPassFilter.gain = -60;
+           bandPassFilter.bypass = false;
+           bandPassFilter.filterType = AVAudioUnitEQFilterTypeLowPass;
+           
            return _eq;
        }
 
@@ -344,13 +391,16 @@
                         {
                             converter = nil; // ARC will dealloc the converter (I hope ;-) )
                         }
+                    if(eq != nil){
+                        eq = nil;
+                    }
                 }
        }
 
         -(bool) play
         {
-                [playerNode play];
-                return true;
+            [playerNode play];
+            return true;
 
         }
        -(bool)  resume
@@ -393,10 +443,16 @@
                 if (ready < NB_BUFFERS )
                 {
                         int ln = (int)[data length];
-                        int frameLn = ln/2;
-                        int frameLength =  8*frameLn;// Two octets for a frame (Monophony, INT Linear 16)
+                        int frameLn = ln/4;
+                        int frameLength =  frameLn;// Two octets for a frame (Monophony, INT Linear 16)
 
-                        playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
+                        AVAudioChannelLayout *chLayout = [[AVAudioChannelLayout alloc] initWithLayoutTag:kAudioChannelLayoutTag_Stereo];
+                        playerFormat = [[AVAudioFormat alloc] 
+                                initWithCommonFormat: AVAudioPCMFormatInt16
+                                sampleRate: (double)m_sampleRate
+                                // channels: m_numChannels
+                                interleaved: YES
+                                channelLayout: chLayout];
 
                         AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: playerFormat frameCapacity: frameLn];
                         memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln);
@@ -466,8 +522,8 @@
 
         - (float) gainFrom:(float) value
         {
-        //Equalize the level between iOS and Android
-        return value * 2.8;
+            //Equalize the level between iOS and Android
+            return value * 2.8;
         }
 
 
@@ -598,6 +654,16 @@
         {
                 return 0;
         }
+
+- (void)enableEqualizer:(bool)enabled {
+    NSLog(@"enableEqualizer not implemented (MIC)");
+}
+
+
+- (void)setEqualizerBandGain:(int)bandIndex gain:(float)gain {
+    NSLog(@"setEqualizerBandGain not implemented (MIC)");
+}
+
 
 
 

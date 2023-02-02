@@ -86,6 +86,8 @@
 - (long)getDuration;
 - (void)logDebug: (NSString*)msg;
 - (void)initEqualizer:(NSDictionary*) params;
+- (void)enableEqualizer:(bool)enable;
+- (void) setEqualizerBandGain: (int) bandIndex gain: (float) gain;
 
 
 

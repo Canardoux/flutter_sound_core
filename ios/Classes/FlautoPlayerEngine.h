@@ -48,6 +48,8 @@
     - (bool) seek: (double) pos;
     - (t_PLAYER_STATE) getStatus;
     - (int) feed: (NSData*)data;
+    - (void) enableEqualizer:(bool) enabled;
+    - (void) setEqualizerBandGain: (int) bandIndex gain: (float) gain;
 
 @end
 

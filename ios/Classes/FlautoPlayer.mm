@@ -481,6 +481,16 @@ static bool _isIosDecoderSupported [] =
     equalizerParams = params;
 }
 
+- (void)enableEqualizer:(bool) enable
+{
+    [m_playerEngine enableEqualizer: enable];
+}
+
+- (void) setEqualizerBandGain: (int) bandIndex gain: (float) gain
+{
+    [m_playerEngine setEqualizerBandGain: bandIndex gain: gain];
+}
+
 
 - (NSDictionary*)getProgress
 {
