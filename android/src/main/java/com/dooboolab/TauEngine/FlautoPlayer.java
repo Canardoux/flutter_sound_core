@@ -20,22 +20,25 @@ package com.dooboolab.TauEngine;
 
 
 import android.media.MediaPlayer;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Equalizer;
+import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
-import android.media.AudioFocusRequest;
-
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.lang.Thread;
 
 import com.dooboolab.TauEngine.Flauto.*;
-import com.dooboolab.TauEngine.Flauto;
 
 public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 {
@@ -101,6 +104,12 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 	private long latentSeek = -1;
 	static int currentPlayerID = 0;
 	private int myPlayerId = 0;
+
+	//--------------- EQ related -----------------------//
+	private List<Object> rawAudioEffects = new ArrayList();
+	private List<AudioEffect> audioEffects = new ArrayList<AudioEffect>();
+	private Map<String, AudioEffect> audioEffectsMap = new HashMap<String, AudioEffect>();
+	private Integer audioSessionId;
 
 
 	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
@@ -194,7 +203,6 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 				return false;
 			}
 		}
-
 
 		try
 		{
@@ -325,34 +333,32 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run() {
-					mainHandler.post(new Runnable()
+				mainHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
 					{
-						@Override
-						public void run()
+						try
 						{
-							try
+							if (player != null)
 							{
-								if (player != null)
+
+								long position = player._getCurrentPosition();
+								long duration = player._getDuration();
+								if (position > duration)
 								{
-
-									long position = player._getCurrentPosition();
-									long duration = player._getDuration();
-									if (position > duration)
-									{
-										position = duration;
-									}
-									m_callBack.updateProgress(position, duration);
+									position = duration;
 								}
-							} catch (Exception e)
-							{
-								logDebug( "Exception: " + e.toString());
-								stopPlayer();
+								m_callBack.updateProgress(position, duration);
 							}
+						} catch (Exception e)
+						{
+							logDebug( "Exception: " + e.toString());
+							stopPlayer();
 						}
-					});
-
-
-				}
+					}
+				});
+			}
 			};
 
 			mTimer = new Timer();
@@ -398,34 +404,34 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 
 	public boolean play()
 	{
-			if (player == null)
+		if (player == null)
+		{
+				return false;
+		}
+		try
+		{
+			if (latentVolume >= 0)
 			{
-					return false;
+				setVolume(latentVolume);
 			}
-			try
+			if (latentSpeed >= 0)
 			{
-				if (latentVolume >= 0)
-				{
-					setVolume(latentVolume);
-				}
-				if (latentSpeed >= 0)
-				{
-					setSpeed(latentSpeed);
-				}
-				if (subsDurationMillis > 0)
-					setTimer(subsDurationMillis);
-				if (latentSeek >= 0)
-				{
-					seekToPlayer(latentSeek);
-				}
-
-
-			}catch (Exception e)
-			{
-
+				setSpeed(latentSpeed);
 			}
-			player._play();
-			return true;
+			if (subsDurationMillis > 0)
+				setTimer(subsDurationMillis);
+			if (latentSeek >= 0)
+			{
+				seekToPlayer(latentSeek);
+			}
+
+
+		}catch (Exception e)
+		{
+
+		}
+		player._play();
+		return true;
 	}
 
 	public boolean isDecoderSupported (t_CODEC codec )
@@ -568,9 +574,104 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return dic;
 	}
 
+	// ----------------------------Equalizer related----------------------------------------//
+
+	public void initEqualizer(Integer audioSessionId) throws Exception {
+		System.out.printf("audioSessionId: %d", audioSessionId);
+		if(audioSessionId == null) {
+			this.audioSessionId = this.getAudioSessionId();
+		} else {
+			this.audioSessionId = audioSessionId;
+		}
+
+		// Init with basic info
+		this.rawAudioEffects.add(mapOf("type","AndroidEqualizer", "enabled", false));
+
+		clearAudioEffects();
+		if (this.audioSessionId != null) {
+			for (Object rawAudioEffect : this.rawAudioEffects) {
+				Map<?, ?> json = (Map<?, ?>)rawAudioEffect;
+				AudioEffect audioEffect = decodeAudioEffect(rawAudioEffect, this.audioSessionId);
+				if ((Boolean)json.get("enabled")) {
+					audioEffect.setEnabled(true);
+				}
+				this.audioEffects.add(audioEffect);
+				this.audioEffectsMap.put((String)json.get("type"), audioEffect);
+			}
+		}
+	}
+
+	public void setAudioSessionId(Integer audioSessionId) {
+		this.audioSessionId = audioSessionId;
+	}
+
+	public void equalizerBandSetGain(int bandIndex, double gain) {
+		((Equalizer) Objects.requireNonNull(this.audioEffectsMap.get("AndroidEqualizer"))).setBandLevel((short)bandIndex,
+				(short)(Math.round(gain * 1000.0)));
+	}
+
+	public void audioEffectSetEnabled(String type, boolean enabled) {
+		Objects.requireNonNull(this.audioEffectsMap.get(type)).setEnabled(enabled);
+	}
+
+	public Map<String, Object> equalizerAudioEffectGetParameters() {
+		Equalizer equalizer = (Equalizer)this.audioEffectsMap.get("AndroidEqualizer");
+		ArrayList<Object> rawBands = new ArrayList<>();
+		for (short i = 0; i < Objects.requireNonNull(equalizer).getNumberOfBands(); i++) {
+			rawBands.add(mapOf(
+				"index", i,
+				"lowerFrequency", (double)equalizer.getBandFreqRange(i)[0] / 1000.0,
+				"upperFrequency", (double)equalizer.getBandFreqRange(i)[1] / 1000.0,
+				"centerFrequency", (double)equalizer.getCenterFreq(i) / 1000.0,
+				"gain", equalizer.getBandLevel(i) / 1000.0
+			));
+		}
+		return mapOf(
+			"parameters", mapOf(
+				"minDecibels", equalizer.getBandLevelRange()[0] / 1000.0,
+				"maxDecibels", equalizer.getBandLevelRange()[1] / 1000.0,
+				"bands", rawBands
+			)
+		);
+	}
+
+	private AudioEffect decodeAudioEffect(final Object json, int audioSessionId) {
+		Map<?, ?> map = (Map<?, ?>) json;
+		String type = (String) map.get("type");
+		switch (Objects.requireNonNull(type)) {
+			case "AndroidLoudnessEnhancer":
+				if (Build.VERSION.SDK_INT < 19)
+					throw new RuntimeException("AndroidLoudnessEnhancer requires minSdkVersion >= 19");
+				int targetGain = (int) Math.round((((Double) map.get("targetGain")) * 1000.0));
+				LoudnessEnhancer loudnessEnhancer = new LoudnessEnhancer(audioSessionId);
+				loudnessEnhancer.setTargetGain(targetGain);
+				return loudnessEnhancer;
+			case "AndroidEqualizer":
+				return new Equalizer(0, audioSessionId);
+			default:
+				throw new IllegalArgumentException("Unknown AudioEffect type: " + map.get("type"));
+		}
+	}
+
+	private void clearAudioEffects() {
+		for (Iterator<AudioEffect> it = this.audioEffects.iterator(); it.hasNext();) {
+			AudioEffect audioEffect = it.next();
+			audioEffect.release();
+			it.remove();
+		}
+		this.audioEffectsMap.clear();
+	}
+
+	static Map<String, Object> mapOf(Object... args) {
+		Map<String, Object> map = new HashMap<>();
+		for (int i = 0; i < args.length; i += 2) {
+			map.put((String)args[i], args[i + 1]);
+		}
+		return map;
+	}
 
 
-	void logDebug (String msg)
+		void logDebug (String msg)
 	{
 		m_callBack.log ( t_LOG_LEVEL.DBG , msg);
 	}
