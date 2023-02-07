@@ -321,14 +321,14 @@
                _eq.bands[i].filterType = AVAudioUnitEQFilterTypeParametric;
            }
            
-           //Band pass filter
-           AVAudioUnitEQFilterParameters *bandPassFilter;
-           bandPassFilter = _eq.bands[(unsigned int)rawBands.count];
-           bandPassFilter.frequency = 2000;
-//           bandPassFilter.bandwidth = 2.0f;
-           bandPassFilter.gain = -60;
-           bandPassFilter.bypass = false;
-           bandPassFilter.filterType = AVAudioUnitEQFilterTypeLowPass;
+//           //Band pass filter
+//           AVAudioUnitEQFilterParameters *bandPassFilter;
+//           bandPassFilter = _eq.bands[(unsigned int)rawBands.count];
+//           bandPassFilter.frequency = 2000;
+////           bandPassFilter.bandwidth = 2.0f;
+//           bandPassFilter.gain = -60;
+//           bandPassFilter.bypass = false;
+//           bandPassFilter.filterType = AVAudioUnitEQFilterTypeLowPass;
            
            return _eq;
        }
