@@ -83,14 +83,6 @@
 
         -(bool)  play
         {
-            // This fixes the audio output to the speaker (LAPSI fix)
-            NSError *error = nil;
-            [[AVAudioSession sharedInstance]
-            setCategory: AVAudioSessionCategoryPlayAndRecord
-            mode: AVAudioSessionModeDefault
-            options: AVAudioSessionCategoryOptionAllowBluetoothA2DP | AVAudioSessionCategoryOptionAllowBluetooth
-            error:&error];
-                
             bool b = [ [self getAudioPlayer] play];
             return b;
         }
