@@ -50,6 +50,10 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 		mediaPlayer.start();
 	}
 
+	int _getAudioSessionId(){
+		return mediaPlayer.getAudioSessionId();
+	}
+
 	int feed(byte[] data) throws Exception
 	{
 		throw new Exception("Cannot feed a Media Player");

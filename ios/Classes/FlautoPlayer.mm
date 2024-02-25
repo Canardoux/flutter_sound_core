@@ -62,6 +62,7 @@ static bool _isIosDecoderSupported [] =
         double latentSpeed;
         long latentSeek;
         bool voiceProcessing;
+        NSDictionary* equalizerParams;
 
 }
 
@@ -185,7 +186,7 @@ static bool _isIosDecoderSupported [] =
         [self stop]; // To start a fresh new playback
 
         if ( (path == nil ||  [path class] == [NSNull class] ) && codec == pcm16)
-                m_playerEngine = [[AudioEngine alloc] init: self ];
+                m_playerEngine = [[AudioEngine alloc] init: self eqParams: equalizerParams ];
         else
                 m_playerEngine = [[AudioPlayerFlauto alloc]init: self];
         
@@ -475,6 +476,21 @@ static bool _isIosDecoderSupported [] =
          return [m_playerEngine getDuration];
 }
 
+- (void)initEqualizer:(NSDictionary*) params
+{
+    equalizerParams = params;
+}
+
+- (void)enableEqualizer:(bool) enable
+{
+    [m_playerEngine enableEqualizer: enable];
+}
+
+- (void) setEqualizerBandGain: (int) bandIndex gain: (float) gain
+{
+    [m_playerEngine setEqualizerBandGain: bandIndex gain: gain];
+}
+
 
 - (NSDictionary*)getProgress
 {
@@ -545,7 +561,6 @@ static bool _isIosDecoderSupported [] =
 {
         [m_callBack log: DBG msg: msg];
 }
-
 
 @end
 //---------------------------------------------------------------------------------------------

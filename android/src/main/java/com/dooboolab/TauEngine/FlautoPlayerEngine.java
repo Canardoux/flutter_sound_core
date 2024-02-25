@@ -150,6 +150,10 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 		blockThread = null;
 	}
 
+	int _getAudioSessionId() {
+		return sessionId;
+	}
+
 	void _finish()
 	{
 	}
