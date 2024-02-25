@@ -198,11 +198,13 @@ AudioRecInterface* audioRec;
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
                 bitRate: (long)bitRate
+                bufferSizeMs: (int)bufferSizeMs
 {
         NSMutableDictionary* audioSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithLong: sampleRate], AVSampleRateKey,
                                  [NSNumber numberWithInt: formats[codec] ], AVFormatIDKey,
                                  [NSNumber numberWithInt: numChannels ], AVNumberOfChannelsKey,
+                                 [NSNumber numberWithInt: bufferSizeMs ], @"bufferSizeMs",
                          nil];
 
         // If bitrate is defined, we use it, otherwise use the OS default

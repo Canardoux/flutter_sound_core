@@ -252,6 +252,7 @@ public class FlautoRecorder
 		Integer                         sampleRate          ,
 		Integer                         numChannels         ,
 		Integer                         bitRate             ,
+		Integer                         bufferSizeMs        ,
 		String                     		path                ,
 		t_AUDIO_SOURCE                  _audioSource        ,
 		boolean 						toStream
@@ -278,7 +279,7 @@ public class FlautoRecorder
 		}
 		try
 		{
-				recorder._startRecorder( numChannels, sampleRate, bitRate, codec, path, audioSource, this );
+				recorder._startRecorder( numChannels, sampleRate, bitRate, bufferSizeMs, codec, path, audioSource, this);
 				if (subsDurationMillis > 0)
 						setTimer(subsDurationMillis);
 
