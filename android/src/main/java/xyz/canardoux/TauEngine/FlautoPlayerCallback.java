@@ -1,6 +1,6 @@
-package com.dooboolab.TauEngine;
+package xyz.canardoux.TauEngine;
 /*
- * Copyright 2018, 2019, 2020, 2021 Dooboolab.
+ * Copyright 2018, 2019, 2020, 2021 Canardoux.
  *
  * This file is part of Flutter-Sound.
  *
@@ -18,7 +18,7 @@ package com.dooboolab.TauEngine;
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import com.dooboolab.TauEngine.Flauto.*;
+import xyz.canardoux.TauEngine.Flauto.*;
 
 public interface FlautoPlayerCallback
 {

@@ -1,6 +1,6 @@
-package com.dooboolab.TauEngine;
+package xyz.canardoux.TauEngine;
 /*
- * Copyright 2018, 2019, 2020, 2021 Dooboolab.
+ * Copyright 2018, 2019, 2020, 2021 canardoux.
  *
  * This file is part of Flutter-Sound.
  *
@@ -31,7 +31,7 @@ import android.media.MediaRecorder;
 
 import java.lang.Thread;
 
-import com.dooboolab.TauEngine.Flauto.*;
+import xyz.canardoux.TauEngine.Flauto.*;
 
 //-------------------------------------------------------------------------------------------------------------
 

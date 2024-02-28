@@ -1,6 +1,6 @@
-package com.dooboolab.TauEngine;
+package xyz.canardoux.TauEngine;
 /*
- * Copyright 2018, 2019, 2020, 2021 Dooboolab.
+ * Copyright 2018, 2019, 2020, 2021 Canardoux.
  *
  * This file is part of Flutter-Sound.
  *

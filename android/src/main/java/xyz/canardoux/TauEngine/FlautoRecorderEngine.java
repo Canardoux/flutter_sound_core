@@ -1,6 +1,6 @@
-package com.dooboolab.TauEngine;
+package xyz.canardoux.TauEngine;
 /*
- * Copyright 2018, 2019, 2020, 2021 Dooboolab.
+ * Copyright 2018, 2019, 2020, 2021 Canardoux.
  *
  * This file is part of Flutter-Sound.
  *
@@ -33,7 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 
-import com.dooboolab.TauEngine.Flauto.*;
+import xyz.canardoux.TauEngine.Flauto.*;
+import xyz.canardoux.TauEngine.FlautoRecorderInterface;
+import xyz.canardoux.TauEngine.FlautoRecorder;
 
 
 public class FlautoRecorderEngine

@@ -1,4 +1,4 @@
-package com.dooboolab.TauEngine;
+package xyz.canardoux.TauEngine;
 /*
  * Copyright (C) 2009 The Android Open Source Project
  *
