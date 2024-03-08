@@ -101,7 +101,7 @@
        - (AudioEngineFromMic*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize ;
        - (void) stop;
        - (bool) play;
        - (bool) resume;

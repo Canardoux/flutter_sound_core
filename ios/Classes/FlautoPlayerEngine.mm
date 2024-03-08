@@ -426,7 +426,7 @@
 		return (long)(time * 1000);
        }
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
 
@@ -437,6 +437,7 @@
                engine = [[AVAudioEngine alloc] init];
                
                AVAudioInputNode* inputNode = [engine inputNode];
+               /*
                if (enableVoiceProcessing) {
                        if (@available(iOS 13.0, *)) {
                                NSError* err;
@@ -450,6 +451,7 @@
                                [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
                        }
                }
+                */
 
 
                outputNode = [engine outputNode];

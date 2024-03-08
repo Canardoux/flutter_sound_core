@@ -60,8 +60,6 @@
                 bitRate: (long)bitRate
                 bufferSize: (long)bufferSize
                 enableVoiceProcessing: (bool)enableVoiceProcessing;
-- (void)setVoiceProcessing: (bool) enabled;
-- (bool)isVoiceProcessingEnabled;
 
 - (void)stopRecorder;
 - (void)setSubscriptionDuration: (long)millisec;

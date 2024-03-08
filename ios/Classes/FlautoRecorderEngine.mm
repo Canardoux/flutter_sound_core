@@ -58,14 +58,14 @@
                 }
         }
        
-        long n = [inputNode numberOfOutputs];
-        NSString* nameOfBus = [inputNode nameForOutputBus: 0];
+        //long n = [inputNode numberOfOutputs];
+        //NSString* nameOfBus = [inputNode nameForOutputBus: 0];
 
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
         NSNumber* bufferSizeMs = audioSettings [@"bufferSize"];
         double samplePerMs = [inputFormat sampleRate] / 1000.0;
-        unsigned long lnBuf = (unsigned long)(samplePerMs * [bufferSizeMs doubleValue]);
-        lnBuf= MAX(lnBuf, bufferSize);
+        unsigned int lnBuf = (unsigned int)(samplePerMs * [bufferSizeMs doubleValue]);
+        lnBuf= MAX(lnBuf, (int)bufferSize);
         double sRate = [inputFormat sampleRate];
         // -AVAudioChannelCount channelCount = [inputFormat channelCount];
         AVAudioChannelLayout* layout = [inputFormat channelLayout];
