@@ -61,8 +61,7 @@ static bool _isIosDecoderSupported [] =
         double latentVolume;
         double latentSpeed;
         long latentSeek;
-        bool voiceProcessing;
-
+ 
 }
 
 - (FlautoPlayer*)init: (NSObject<FlautoPlayerCallback>*) callback
@@ -74,16 +73,6 @@ static bool _isIosDecoderSupported [] =
         subscriptionDuration = 0;
         timer = nil;
         return [super init];
-}
-
-- (void)setVoiceProcessing: (bool) enabled
-{
-        voiceProcessing = enabled;
-}
-
-- (bool)isVoiceProcessingEnabled
-{
-        return voiceProcessing;
 }
 
 
@@ -136,12 +125,13 @@ static bool _isIosDecoderSupported [] =
 
 }
 
-- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels
+- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing
 {
         [self logDebug:  @"IOS:--> startPlayerFromMicSampleRate"];
         [self stop]; // To start a fresh new playback
-        m_playerEngine = [[AudioEngineFromMic alloc] init: self ];
-        [m_playerEngine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate];
+        AudioEngineFromMic* engine = [[AudioEngineFromMic alloc] init: self ];
+        m_playerEngine = engine;
+        [engine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate bufferSize: (long)bufferSize enableVoiceProcessing: enableVoiceProcessing];
         bool b = [m_playerEngine play];
         if (b)
         {
@@ -179,6 +169,7 @@ static bool _isIosDecoderSupported [] =
         fromDataBuffer: (NSData*)dataBuffer
         channels: (int)numChannels
         sampleRate: (long)sampleRate
+        bufferSize: (long)bufferSize
 {
         [self logDebug:  @"IOS:--> startPlayer"];
         bool b = FALSE;
@@ -253,11 +244,11 @@ static bool _isIosDecoderSupported [] =
 
                 } else
                 {
-                        [m_playerEngine startPlayerFromURL: audioFileURL codec: codec channels: numChannels sampleRate: sampleRate ];
+                        [m_playerEngine startPlayerFromURL: audioFileURL codec: codec channels: numChannels sampleRate: sampleRate bufferSize: (long)bufferSize];
                 }
         } else
         {
-                [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate ];
+                [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate bufferSize: (long)bufferSize];
         }
         b = [self play];
 

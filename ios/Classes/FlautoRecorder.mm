@@ -137,6 +137,7 @@ AudioRecInterface* audioRec;
         NSTimer* recorderTimer;
         double subscriptionDuration;
         NSString* m_path;
+
 }
 
 - (void)recordingData: (NSData*)data
@@ -148,6 +149,7 @@ AudioRecInterface* audioRec;
 - (FlautoRecorder*)init: (NSObject<FlautoRecorderCallback>*) callback
 {
         m_callBack = callback;
+        
         return [super init];
 }
 
@@ -198,11 +200,14 @@ AudioRecInterface* audioRec;
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
                 bitRate: (long)bitRate
+                bufferSize: (long)bufferSize
+                enableVoiceProcessing: (bool)enableVoiceProcessing
 {
         NSMutableDictionary* audioSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithLong: sampleRate], AVSampleRateKey,
                                  [NSNumber numberWithInt: formats[codec] ], AVFormatIDKey,
                                  [NSNumber numberWithInt: numChannels ], AVNumberOfChannelsKey,
+                                 [NSNumber numberWithLong: bufferSize ], @"bufferSize",
                          nil];
 
         // If bitrate is defined, we use it, otherwise use the OS default
@@ -221,7 +226,7 @@ AudioRecInterface* audioRec;
                 {
                                 return false;
                 }
-                audioRec = new AudioRecorderEngine(codec, path, audioSettings, self);
+                audioRec = new AudioRecorderEngine(codec, path, audioSettings, bufferSize, enableVoiceProcessing, self );
         } else
         {
                 audioRec = new avAudioRec(codec, path, audioSettings, self);

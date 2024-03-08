@@ -36,7 +36,7 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		this.flautoPlayer = theSession;
 	}
 
-	void _startPlayer(String path,  int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession) throws Exception
+	void _startPlayer(String path,  int sampleRate, int numChannels, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
  	{
 		this.flautoPlayer = theSession;
  		mediaPlayer = new MediaPlayer();

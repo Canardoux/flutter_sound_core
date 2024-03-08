@@ -57,8 +57,12 @@
                 toPath: (NSString*)path
                 channels: (int)numChannels
                 sampleRate: (long)sampleRate
-                bitRate: (long)bitRate;
-                
+                bitRate: (long)bitRate
+                bufferSize: (long)bufferSize
+                enableVoiceProcessing: (bool)enableVoiceProcessing;
+- (void)setVoiceProcessing: (bool) enabled;
+- (bool)isVoiceProcessingEnabled;
+
 - (void)stopRecorder;
 - (void)setSubscriptionDuration: (long)millisec;
 - (void)pauseRecorder;

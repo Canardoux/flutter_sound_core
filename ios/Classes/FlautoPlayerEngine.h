@@ -36,7 +36,7 @@
 @protocol FlautoPlayerEngineInterface <NSObject>
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize ;
        - (long) getDuration;
        - (long) getPosition;
        - (void) stop;
@@ -57,7 +57,7 @@
 - (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
        - (void) stop;
        - (bool) play;
        - (bool) resume;
@@ -80,7 +80,7 @@
        - (AudioEngine*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
        - (bool) play;
        - (void) stop;
        - (bool) resume;
@@ -101,7 +101,7 @@
        - (AudioEngineFromMic*) init: (NSObject*)owner; // FlutterSoundPlayer*
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing;
        - (void) stop;
        - (bool) play;
        - (bool) resume;

@@ -65,7 +65,7 @@ private:
         int status;
 
 public:
-        /* ctor */ AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, FlautoRecorder* owner);
+        /* ctor */ AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, long bufferSize, bool enableVoiceProcessing, FlautoRecorder* owner);
         virtual void startRecorder();
         virtual void stopRecorder();
         virtual void pauseRecorder();

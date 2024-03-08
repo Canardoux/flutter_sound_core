@@ -159,7 +159,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		}
 	}
 
-	void startPlayerSide(int sampleRate, Integer numChannels, int blockSize) throws Exception
+	void startPlayerSide(int sampleRate, Integer numChannels, int bufferSize, boolean voiceAudioProcessing) throws Exception
 	{
 		if ( Build.VERSION.SDK_INT >= 21 )
 		{
@@ -174,7 +174,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 				.setSampleRate(sampleRate)
 				.setChannelMask(numChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO)
 				.build();
-			audioTrack = new AudioTrack(attributes, format, blockSize, AudioTrack.MODE_STREAM, sessionId);
+			audioTrack = new AudioTrack(attributes, format, bufferSize, AudioTrack.MODE_STREAM, sessionId);
 			mPauseTime = 0;
 			mStartPauseTime = -1;
 			systemTime = SystemClock.elapsedRealtime();
@@ -197,7 +197,8 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			t_CODEC codec,
 			Integer sampleRate,
 			Integer numChannels,
-			int _blockSize
+			int _bufferSize,
+			Boolean voiceAudioProcessing // Not used on Android
 		) throws Exception
 	{
 		if ( Build.VERSION.SDK_INT < 21)
@@ -211,7 +212,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 				tabCodec[codec.ordinal()]
 			) ;// !!!!! * 2 ???
 
-
+		bufferSize = Math.max(bufferSize, _bufferSize);
 		recorder = new AudioRecord(
 			MediaRecorder.AudioSource.MIC,
 			sampleRate,
@@ -241,12 +242,13 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			String path,
 			int sampleRate,
 			int numChannels,
-			int blockSize,
+			int bufferSize,
+			boolean enableVoiceProcessing, // not used on android
 			FlautoPlayer aPlayer
 		) throws Exception
 	{
-		startPlayerSide(sampleRate, numChannels, blockSize);
-		startRecorderSide(Flauto.t_CODEC.pcm16, sampleRate, numChannels, blockSize);
+		startPlayerSide(sampleRate, numChannels, bufferSize, enableVoiceProcessing);
+		startRecorderSide(Flauto.t_CODEC.pcm16, sampleRate, numChannels, bufferSize, enableVoiceProcessing);
 		mSession = aPlayer;
 
 	}

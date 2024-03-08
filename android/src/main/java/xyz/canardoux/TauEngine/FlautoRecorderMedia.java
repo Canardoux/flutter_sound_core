@@ -125,6 +125,7 @@ public class FlautoRecorderMedia
 			Integer numChannels,
 			Integer sampleRate,
 			Integer bitRate,
+			Integer bufferSize,
 			t_CODEC codec,
 			String path,
 			int audioSource,

@@ -150,14 +150,14 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return pauseMode ? t_PLAYER_STATE.PLAYER_IS_PAUSED : t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	}
 
-	public boolean startPlayerFromMic (int numChannels, int sampleRate, int blockSize )
+	public boolean startPlayerFromMic (int numChannels, int sampleRate, int bufferSize, boolean enableVoiceProcessing )
 	{
 		stop(); // To start a new clean playback
 
 		try
 		{
 			player = new FlautoPlayerEngineFromMic(this);
-			player._startPlayer(null,  sampleRate, numChannels, blockSize, this);
+			player._startPlayer(null,  sampleRate, numChannels, bufferSize, enableVoiceProcessing, this);
 			play();
 		}
 		catch ( Exception e )
@@ -168,7 +168,16 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return true;
 	}
 
-	public boolean startPlayer (t_CODEC codec, String fromURI, byte[] dataBuffer, int numChannels, int sampleRate, int blockSize )
+	public boolean startPlayer
+		(
+				t_CODEC codec,
+				String fromURI,
+				byte[] dataBuffer,
+				int numChannels,
+				int sampleRate,
+				//boolean enableVoiceProcessing, // Not used on Android
+				int bufferSize
+		)
 	{
 		stop(); // To start a new clean playback
 		if (dataBuffer != null)
@@ -200,7 +209,7 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			}
 			String path = Flauto.getPath(fromURI);
 
-			player._startPlayer(path,  sampleRate, numChannels, blockSize, this);
+			player._startPlayer(path,  sampleRate, numChannels, bufferSize, false, this);
 			play();
 		}
 		catch ( Exception e )

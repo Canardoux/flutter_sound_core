@@ -29,6 +29,7 @@
 
 
 
+
 @protocol FlautoPlayerCallback <NSObject>
 
 - (void)openPlayerCompleted: (bool)success;
@@ -57,8 +58,6 @@
 
 - (FlautoPlayer*)init: (NSObject<FlautoPlayerCallback>*) callback;
            
-- (void)setVoiceProcessing: (bool) enabled;
-- (bool)isVoiceProcessingEnabled;
 - (t_PLAYER_STATE)getPlayerState;
 - (bool)isDecoderSupported: (t_CODEC)codec ;
 - (void)releaseFlautoPlayer;
@@ -67,8 +66,9 @@
         fromDataBuffer: (NSData*)dataBuffer
         channels: (int)numChannels
         sampleRate: (long)sampleRate
+        bufferSize: (long)bufferSize
         ;
-- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels;
+- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing;
 - (void)stopPlayer;
 - (bool)pausePlayer;
 - (bool)resumePlayer;

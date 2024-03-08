@@ -29,7 +29,7 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 	MediaPlayer mediaPlayer = null;
 	FlautoPlayer flautoPlayer;
 
-	void _startPlayer(String path, int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession) throws Exception
+	void _startPlayer(String path, int sampleRate, int numChannels, int blockSize,  boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
  	{
  		mediaPlayer = new MediaPlayer();
 		if (path == null)

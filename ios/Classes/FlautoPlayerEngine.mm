@@ -59,7 +59,7 @@
                 [self getAudioPlayer].delegate = flautoPlayer;
        }
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
 
        {
                 [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
@@ -156,6 +156,7 @@
         AVAudioPlayerNode* playerNode;
         AVAudioFormat* playerFormat;
         AVAudioFormat* outputFormat;
+        AVAudioUnitTimePitch* timePitchUnit;
         AVAudioOutputNode* outputNode;
         AVAudioConverter* converter;
         CFTimeInterval mStartPauseTime ; // The time when playback was paused
@@ -172,26 +173,19 @@
                 waitingBlock = nil;
                 engine = [[AVAudioEngine alloc] init];
                 outputNode = [engine outputNode];
+                timePitchUnit = [[AVAudioUnitTimePitch alloc] init];
+                [timePitchUnit setRate:1];
            
-                if (@available(iOS 13.0, *)) {
-                    if ([flutterSoundPlayer isVoiceProcessingEnabled]) {
-                        NSError* err;
-                        if (![outputNode setVoiceProcessingEnabled:YES error:&err]) {
-                           [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
-                        } else {
-                            [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
-                        }
-                    }
-                } else {
-                   [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
-                }
-               
+                
                 outputFormat = [outputNode inputFormatForBus: 0];
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
                 [engine attachNode: playerNode];
 
-                [engine connect: playerNode to: outputNode format: outputFormat];
+                [engine attachNode: timePitchUnit];
+
+                [engine connect: playerNode to: timePitchUnit format: outputFormat];
+                [engine connect: timePitchUnit to: outputNode format: outputFormat];                
                 bool b = [engine startAndReturnError: nil];
                 if (!b)
                 {
@@ -210,7 +204,7 @@
        }
         static int ready = 0;
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
                 m_sampleRate = sampleRate;
@@ -244,7 +238,11 @@
                                 [playerNode stop];
                                 // Does not work !!! // [engine detachNode:  playerNode];
                                 playerNode = nil;
-                         }
+                        }
+                        if (timePitchUnit != nil)
+                             {
+                                     timePitchUnit = nil;
+                             }
                         [engine stop];
                         engine = nil;
                     
@@ -283,6 +281,8 @@
        {
                 return false;
        }
+
+
 
        -(int)  getStatus
        {
@@ -361,16 +361,22 @@
                 }
          }
 
--(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration// TODO
+-(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration
 {
-        return true; // TODO
+        if (playerNode == nil || playerNode ==  (id)[NSNull null]) return false;
+        [playerNode setVolume: volume];
+
+        //TODO: implement fadeDuration programmatically since its not available on playerNode
+        return true;
 }
 
-- (bool) setSpeed: (double) speed
+-(bool)  setSpeed: (double) rate // range: 1/32 -> 32
 {
-        return true; // TODO
+         if (timePitchUnit == nil || timePitchUnit ==  (id)[NSNull null]) return false;
+         if (rate < 1/32 || rate > 32) return false;
+         [timePitchUnit setRate: rate];
+         return true;
 }
-
 
 @end
 
@@ -396,14 +402,6 @@
        - (AudioEngineFromMic*)init: (FlautoPlayer*)owner
        {
                 flutterSoundPlayer = owner;
-                waitingBlock = nil;
-                engine = [[AVAudioEngine alloc] init];
-                
-                AVAudioInputNode* inputNode = [engine inputNode];
-                outputNode = [engine outputNode];
-                outputFormat = [outputNode inputFormatForBus: 0];
-                
-                [engine connect: inputNode to: outputNode format: outputFormat];
                 return [super init];
        }
        
@@ -428,13 +426,38 @@
 		return (long)(time * 1000);
        }
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
 
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
 
+               waitingBlock = nil;
+               engine = [[AVAudioEngine alloc] init];
+               
+               AVAudioInputNode* inputNode = [engine inputNode];
+               if (enableVoiceProcessing) {
+                       if (@available(iOS 13.0, *)) {
+                               NSError* err;
+                               if (![inputNode setVoiceProcessingEnabled:YES error:&err]) {
+                                       [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                               } else {
+                                       [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
+                               }
+                               
+                       } else {
+                               [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
+                       }
+               }
+
+
+               outputNode = [engine outputNode];
+               outputFormat = [outputNode inputFormatForBus: 0];
+               
+               [engine connect: inputNode to: outputNode format: outputFormat];
+
+               
                 mPauseTime = 0.0; // Total number of seconds in pause mode
 		mStartPauseTime = -1; // Not in paused mode
 		systemTime = CACurrentMediaTime(); // The time when started

@@ -35,7 +35,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 
-/* ctor */ AudioRecorderEngine::AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, FlautoRecorder* owner )
+/* ctor */ AudioRecorderEngine::AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, long bufferSize, bool enableVoiceProcessing, FlautoRecorder* owner )
 {
         flautoRecorder = owner;
         engine = [[AVAudioEngine alloc] init];
@@ -44,7 +44,28 @@
         status = 0;
 
         AVAudioInputNode* inputNode = [engine inputNode];
+        if (enableVoiceProcessing) {
+                if (@available(iOS 13.0, *)) {
+                        NSError* err;
+                        if (![inputNode setVoiceProcessingEnabled: YES error: &err]) {
+                                [flautoRecorder logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                        } else {
+                                [flautoRecorder logDebug: @"VoiceProcessing enabled"];
+                        }
+                        
+                } else {
+                        [flautoRecorder logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
+                }
+        }
+       
+        long n = [inputNode numberOfOutputs];
+        NSString* nameOfBus = [inputNode nameForOutputBus: 0];
+
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
+        NSNumber* bufferSizeMs = audioSettings [@"bufferSize"];
+        double samplePerMs = [inputFormat sampleRate] / 1000.0;
+        unsigned long lnBuf = (unsigned long)(samplePerMs * [bufferSizeMs doubleValue]);
+        lnBuf= MAX(lnBuf, bufferSize);
         double sRate = [inputFormat sampleRate];
         // -AVAudioChannelCount channelCount = [inputFormat channelCount];
         AVAudioChannelLayout* layout = [inputFormat channelLayout];
@@ -52,7 +73,9 @@
         
         if (sRate == 0 || layout == nil)
         {
-                [NSException raise:@"Invalid Audio Session state" format:@"The Audio Session is not in a correct state to do Recording."];
+                // [NSException raise:@"Invalid Audio Session state" format:@"The Audio Session is not in a correct state to do Recording."];
+                [flautoRecorder logDebug: @"The Audio Session is not in a correct state to do Recording."];
+                
         }
 
         
@@ -76,7 +99,7 @@
         }
 
 
-        [inputNode installTapOnBus: 0 bufferSize: 20480 format: inputFormat block:
+        [inputNode installTapOnBus: 0 bufferSize: lnBuf format: inputFormat block:
         ^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when)
         {
                 inputStatus = AVAudioConverterInputStatus_HaveData ;

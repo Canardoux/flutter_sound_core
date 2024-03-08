@@ -24,6 +24,7 @@ import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.PlaybackParams;
 import android.os.Build;
 import android.os.SystemClock;
 import java.lang.Thread;
@@ -102,7 +103,8 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 			String path,
 			int sampleRate,
 			int numChannels,
-			int blockSize,
+			int bufferSize,
+			boolean enableVoiceProcessing, // Not used on Android
 			FlautoPlayer theSession
 		) throws Exception
 	{
@@ -120,7 +122,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 				.setSampleRate(sampleRate)
 				.setChannelMask(numChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO)
 				.build();
-			audioTrack = new AudioTrack(attributes, format, blockSize, AudioTrack.MODE_STREAM, sessionId);
+			audioTrack = new AudioTrack(attributes, format, bufferSize, AudioTrack.MODE_STREAM, sessionId);
 			mPauseTime = 0;
 			mStartPauseTime = -1;
 			systemTime = SystemClock.elapsedRealtime();
@@ -188,12 +190,20 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface
 
 	}
 
-	void _setSpeed(double volume)  throws Exception
+	void _setSpeed(double speed)  throws Exception
 	{
-
-			throw new Exception("Not implemented");
-
-	}
+		float v = (float)speed;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			try {
+				PlaybackParams params = audioTrack.getPlaybackParams();
+				params.setSpeed(v);
+				audioTrack.setPlaybackParams(params);
+				return;
+			} catch (Exception err) {
+				mSession.logError("setSpeed: error " + err.getMessage());
+			}
+		}
+		mSession.logError("setSpeed: not supported" );	}
 
 
 

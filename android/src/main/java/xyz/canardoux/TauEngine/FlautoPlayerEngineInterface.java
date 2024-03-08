@@ -20,7 +20,7 @@ package xyz.canardoux.TauEngine;
 
 abstract class FlautoPlayerEngineInterface
 {
-	abstract void _startPlayer(String path, int sampleRate, int numChannels, int blockSize, FlautoPlayer theSession) throws Exception;
+	abstract void _startPlayer(String path, int sampleRate, int numChannels, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception;
 	abstract void _stop();
 	abstract void _pausePlayer() throws Exception;
 	abstract void _resumePlayer() throws Exception;
