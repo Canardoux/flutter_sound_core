@@ -208,6 +208,7 @@ AudioRecInterface* audioRec;
                                  [NSNumber numberWithInt: formats[codec] ], AVFormatIDKey,
                                  [NSNumber numberWithInt: numChannels ], AVNumberOfChannelsKey,
                                  [NSNumber numberWithLong: bufferSize ], @"bufferSize",
+                                 [NSNumber numberWithBool: enableVoiceProcessing ], @"enableVoiceProcessing",
                          nil];
 
         // If bitrate is defined, we use it, otherwise use the OS default

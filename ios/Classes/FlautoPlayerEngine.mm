@@ -165,6 +165,7 @@
         NSData* waitingBlock;
         long m_sampleRate ;
         int  m_numChannels;
+        long m_bufferSize;
 }
 
        - (AudioEngine*)init: (FlautoPlayer*)owner
@@ -209,6 +210,7 @@
                 assert(url == nil || url ==  (id)[NSNull null]);
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
+                m_bufferSize = bufferSize;
                 ready = 0;
        }
 
@@ -303,6 +305,7 @@
                         int ln = (int)[data length];
                         int frameLn = ln/2;
                         int frameLength =  8*frameLn;// Two octets for a frame (Monophony, INT Linear 16)
+                        frameLength = MAX(frameLength, m_bufferSize);
 
                         playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
 
@@ -387,10 +390,6 @@
 {
         FlautoPlayer* flutterSoundPlayer; // Owner
         AVAudioEngine* engine;
-        AVAudioPlayerNode* playerNode;
-        AVAudioFormat* playerFormat;
-        AVAudioFormat* outputFormat;
-        AVAudioOutputNode* outputNode;
         CFTimeInterval mStartPauseTime ; // The time when playback was paused
 	CFTimeInterval systemTime ; //The time when  StartPlayer() ;
         double mPauseTime ; // The number of seconds during the total Pause mode
@@ -401,6 +400,7 @@
 
        - (AudioEngineFromMic*)init: (FlautoPlayer*)owner
        {
+               //engine = [[AVAudioEngine alloc] init];
                 flutterSoundPlayer = owner;
                 return [super init];
        }
@@ -434,31 +434,54 @@
                 m_numChannels= numChannels;
 
                waitingBlock = nil;
+               //AVAudioEngine* engine = [[AVAudioEngine alloc] init];
                engine = [[AVAudioEngine alloc] init];
-               
                AVAudioInputNode* inputNode = [engine inputNode];
-               /*
-               if (enableVoiceProcessing) {
+               AVAudioOutputNode* outputNode = [engine outputNode];
+               //[engine attachNode:inputNode];
+               
+               //if (enableVoiceProcessing) {
                        if (@available(iOS 13.0, *)) {
                                NSError* err;
-                               if (![inputNode setVoiceProcessingEnabled:YES error:&err]) {
-                                       [flutterSoundPlayer logDebug:[NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                               if (![inputNode setVoiceProcessingEnabled: YES error: &err]) {
+                                       [flutterSoundPlayer logDebug: [NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
                                } else {
                                        [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
                                }
-                               
+                               if (![outputNode setVoiceProcessingEnabled: YES error: &err]) {
+                                       [flutterSoundPlayer logDebug: [NSString stringWithFormat:@"error enabling voiceProcessing => %@", err]];
+                               } else {
+                                       [flutterSoundPlayer logDebug: @"VoiceProcessing enabled"];
+                               }
+
                        } else {
                                [flutterSoundPlayer logDebug: @"WARNING! VoiceProcessing is only available on iOS13+"];
                        }
-               }
-                */
-
-
-               outputNode = [engine outputNode];
-               outputFormat = [outputNode inputFormatForBus: 0];
                
-               [engine connect: inputNode to: outputNode format: outputFormat];
 
+// ================================
+
+               AVAudioFormat* outputFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:
+                                                                         44000
+                                                                          channels: 1
+                                                                       ];
+               /*
+               AVAudioPCMBuffer* buffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat
+                                                                        frameCapacity: (AVAudioFrameCount)bufferSize];
+               buffer.frameLength = (AVAudioFrameCount)buffer.frameCapacity;
+               int nbChannel = [
+                       buffer.format channelCount
+               ];
+               double sr = [buffer.format sampleRate];
+               //memset(buffer.int16ChannelData[0], 0, buffer.frameLength * outputFormat.streamDescription->mBytesPerFrame); // zero fill
+               //AVAudioMixerNode *mainMixer = [engine mainMixerNode];
+
+           // The following line results in a kAudioUnitErr_FormatNotSupported -10868 error
+              // [engine connect: inputNode to: outputNode format:buffer.format];
+ */
+// =======================
+               AVAudioFormat* format = [inputNode outputFormatForBus: 0];
+               [engine connect: inputNode to: outputNode format: outputFormat];
                
                 mPauseTime = 0.0; // Total number of seconds in pause mode
 		mStartPauseTime = -1; // Not in paused mode
@@ -479,10 +502,13 @@
 
         -(bool) play
         {
-                bool b = [engine startAndReturnError: nil];
+                NSError* err;
+                bool b = [engine startAndReturnError: &err];
                 if (!b)
                 {
-                        [flutterSoundPlayer logDebug: @"Cannot start the audio engine"];
+                        NSString* s = err.localizedDescription;
+                        [flutterSoundPlayer logDebug: [NSString stringWithFormat:@"Cannot start the audio engine => %@", err]];
+                        [flutterSoundPlayer logDebug: s];
                 }
                 return b;
         }

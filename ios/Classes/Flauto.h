@@ -104,13 +104,31 @@ typedef enum
 
 typedef enum
 {
-     VERBOSE,
-     DBG,
-     INFO,
-     WARNING,
-     ERROR,
-     WTF,
-     NOTHING,
+        /*
+          all(0),
+          @Deprecated('[verbose] is being deprecated in favor of [trace].')
+          verbose(999),
+          trace(1000),
+          debug(2000),
+          info(3000),
+          warning(4000),
+          error(5000),
+          @Deprecated('[wtf] is being deprecated in favor of [fatal].')
+          wtf(5999),
+          fatal(6000),
+          @Deprecated('[nothing] is being deprecated in favor of [off].')
+          nothing(9999),
+          off(10000),
+         */
+        
+     ALL = 0,
+     VERBOSE = 999,
+     DBG = 2000,
+     INFO = 3000,
+     WARNING = 4000,
+     ERROR = 5000,
+     WTF = 5999,
+     NOTHING = 9999,
 } t_LOG_LEVEL;
 
 
