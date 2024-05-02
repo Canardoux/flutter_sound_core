@@ -305,7 +305,7 @@
                         int ln = (int)[data length];
                         int frameLn = ln/2;
                         int frameLength =  8*frameLn;// Two octets for a frame (Monophony, INT Linear 16)
-                        frameLength = MAX(frameLength, m_bufferSize);
+                        frameLength = MAX(frameLength, (int)m_bufferSize);
 
                         playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
 
@@ -480,7 +480,7 @@
               // [engine connect: inputNode to: outputNode format:buffer.format];
  */
 // =======================
-               AVAudioFormat* format = [inputNode outputFormatForBus: 0];
+               //AVAudioFormat* format = [inputNode outputFormatForBus: 0];
                [engine connect: inputNode to: outputNode format: outputFormat];
                
                 mPauseTime = 0.0; // Total number of seconds in pause mode
