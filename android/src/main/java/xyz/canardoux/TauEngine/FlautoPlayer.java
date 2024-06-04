@@ -327,11 +327,11 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run() {
-					//mainHandler.post(new Runnable()
-					//{
-						//@Override
-						//public void run()
-						//{
+					mainHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
 							try
 							{
 								if (player != null)
@@ -350,8 +350,8 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 								logDebug( "Exception: " + e.toString());
 								stopPlayer();
 							}
-						//}
-					//});
+						}
+					});
 
 
 				}
