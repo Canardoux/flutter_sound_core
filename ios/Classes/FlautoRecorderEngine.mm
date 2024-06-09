@@ -152,15 +152,31 @@
  */
 /* ctor */ AudioRecorderEngine::AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, long bufferSize, bool enableVoiceProcessing, FlautoRecorder* owner )
 {
+ 
         flautoRecorder = owner;
          engine = [[AVAudioEngine alloc] init];
          dateCumul = 0;
          previousTS = 0;
          status = 0;
-
+        
+   
+        
          AVAudioInputNode* inputNode = [engine inputNode];
+ 
+        // AVAudioConnectionPoint* connexionPoint = [[AVAudioConnectionPoint alloc] initWithNode:inputNode bus: 0 ];
+        
+         NSString* busName = [inputNode nameForInputBus: 0];
+         //[flautoRecorder logDebug: busName];
+         NSUInteger numberOfInputs = [inputNode numberOfInputs];
+         //AVAudioOutputNode* outputNode = [engine outputNode];
+         //AVAudioFormat* inputFormat = [inputNode inputFormatForBus: 0];
          AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
+        
+        
+
+         //AVAudioFormat* outputFormat = [outputNode inputFormatForBus: 0];
          NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
+         //nbChannels = [NSNumber numberWithInt: 2];
          NSNumber* sampleRate = audioSettings [AVSampleRateKey];
          //sampleRate = [NSNumber numberWithInt: 44000];
          AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: YES];
@@ -177,11 +193,24 @@
          {
                  fileHandle = nil;
          }
+        
+        /*
+        [engine enableManualRenderingMode: AVAudioEngineManualRenderingModeRealtime
+                           format: inputFormat
+                maximumFrameCount: 3
+                            error:nil];
+        [engine prepare];
+         */
+        //[engine attachNode: inputNode];
+        //b = [engine startAndReturnError: nil];
 
+        //AVAudioFormat* commonFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:44100 channels:2 interleaved:NO];
 
-         [inputNode installTapOnBus: 0 bufferSize: 20480 format: inputFormat block:
+         [inputNode installTapOnBus: 0 bufferSize: bufferSize format: nil block:
+          
          ^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when)
          {
+                 
                  inputStatus = AVAudioConverterInputStatus_HaveData ;
                  AVAudioPCMBuffer* convertedBuffer = [[AVAudioPCMBuffer alloc]initWithPCMFormat: recordingFormat frameCapacity: [buffer frameCapacity]];
 
@@ -197,12 +226,13 @@
                  BOOL r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
                  if (!r)
                  {
-                         NSString* s =  error.localizedDescription;
+                         //NSString* s =  error.localizedDescription;
                          
-                         s = error.localizedFailureReason;
-                         [flautoRecorder logDebug: s];
-                         return;
+                         //s = error.localizedFailureReason;
+                         //[flautoRecorder logDebug: s];
+                         //return;
                  }
+                 
                  int n = [convertedBuffer frameLength];
                  int16_t *const  bb = [convertedBuffer int16ChannelData][0];
                  NSData* b = [[NSData alloc] initWithBytes: bb length: n * 2 ];
@@ -213,8 +243,11 @@
                                  [fileHandle writeData: b];
                          } else
                          {
-                                 [flautoRecorder  recordingData: b];
-                         }
+                                 dispatch_async(dispatch_get_main_queue(), 
+                                ^{
+                                         [flautoRecorder  recordingData: b];
+                                 });
+                          }
                          
                          int16_t* pt = [convertedBuffer int16ChannelData][0];
                          for (int i = 0; i < [buffer frameLength]; ++pt, ++i)
@@ -228,6 +261,7 @@
                          }
                  }
          }];
+     
 }
 
 void AudioRecorderEngine::startRecorder()
