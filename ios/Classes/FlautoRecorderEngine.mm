@@ -165,9 +165,9 @@
  
         // AVAudioConnectionPoint* connexionPoint = [[AVAudioConnectionPoint alloc] initWithNode:inputNode bus: 0 ];
         
-         NSString* busName = [inputNode nameForInputBus: 0];
+         //NSString* busName = [inputNode nameForInputBus: 0];
          //[flautoRecorder logDebug: busName];
-         NSUInteger numberOfInputs = [inputNode numberOfInputs];
+         //NSUInteger numberOfInputs = [inputNode numberOfInputs];
          //AVAudioOutputNode* outputNode = [engine outputNode];
          //AVAudioFormat* inputFormat = [inputNode inputFormatForBus: 0];
          AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
@@ -206,7 +206,7 @@
 
         //AVAudioFormat* commonFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:44100 channels:2 interleaved:NO];
 
-         [inputNode installTapOnBus: 0 bufferSize: bufferSize format: nil block:
+         [inputNode installTapOnBus: 0 bufferSize: (int)bufferSize format: nil block:
           
          ^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when)
          {
