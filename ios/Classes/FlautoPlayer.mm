@@ -507,9 +507,10 @@ static bool _isIosDecoderSupported [] =
         [self logDebug:  @"IOS:--> @audioPlayerDidFinishPlaying"];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-                [self stopTimer];
-                [ self ->m_playerEngine stop];
-                self ->m_playerEngine = nil;
+                // Whe don't stop the player. This is Flutter responsibility
+                //[self stopTimer];
+                //[ self ->m_playerEngine stop];
+                //self ->m_playerEngine = nil;
                 [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
 
                 [self ->m_callBack  audioPlayerDidFinishPlaying: true];
