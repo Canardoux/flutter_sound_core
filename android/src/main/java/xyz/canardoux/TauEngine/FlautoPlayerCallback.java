@@ -20,17 +20,26 @@ package xyz.canardoux.TauEngine;
 
 import xyz.canardoux.TauEngine.Flauto.*;
 
-public interface FlautoPlayerCallback
-{
-  	abstract public void openPlayerCompleted(boolean success);
+public interface FlautoPlayerCallback {
+	abstract public void openPlayerCompleted(boolean success);
+
 	abstract public void closePlayerCompleted(boolean success);
+
 	abstract public void stopPlayerCompleted(boolean success);
+
 	abstract public void pausePlayerCompleted(boolean success);
+
 	abstract public void resumePlayerCompleted(boolean success);
-	abstract public void startPlayerCompleted (boolean success, long duration);
-	abstract public void needSomeFood (int ln);
+
+	abstract public void startPlayerCompleted(boolean success, long duration);
+
+	abstract public void needSomeFood(int ln);
+
 	abstract public void updateProgress(long position, long duration);
-	abstract public void audioPlayerDidFinishPlaying (boolean flag);
+
+	abstract public void audioPlayerDidFinishPlaying(boolean flag);
+
 	abstract public void updatePlaybackState(t_PLAYER_STATE newState);
+
 	abstract public void log(t_LOG_LEVEL level, String msg);
 }

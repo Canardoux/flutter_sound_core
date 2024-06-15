@@ -18,7 +18,6 @@ package xyz.canardoux.TauEngine;
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
@@ -37,89 +36,75 @@ import java.lang.Thread;
 import xyz.canardoux.TauEngine.Flauto.*;
 import xyz.canardoux.TauEngine.Flauto;
 
-public class FlautoPlayer  implements MediaPlayer.OnErrorListener
-{
+public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 	static boolean _isAndroidDecoderSupported[] = {
-		true, // DEFAULT
-		true, // aacADTS				// OK
-		Build.VERSION.SDK_INT >= 23, // opusOGG	// (API 29 ???)
-		false, // opusCAF				/
-		true, // MP3					// OK
-		true, //Build.VERSION.SDK_INT >= 23, // vorbisOGG// OK
-		true, // pcm16
-		true, // pcm16WAV				// OK
-		true, // pcm16AIFF				// OK
-		false, // pcm16CAF				// NOK
-		true, // flac					// OK
-		true, // aacMP4					// OK
-		true, // amrNB					// OK
-		true, // amrWB					// OK
-		false, // pcm8
-		false, // pcmFloat32
-		false, // pcmWebM
-		true, // opusWebM
-		true, // vorbisWebM
+			true, // DEFAULT
+			true, // aacADTS // OK
+			Build.VERSION.SDK_INT >= 23, // opusOGG // (API 29 ???)
+			false, // opusCAF /
+			true, // MP3 // OK
+			true, // Build.VERSION.SDK_INT >= 23, // vorbisOGG// OK
+			true, // pcm16
+			true, // pcm16WAV // OK
+			true, // pcm16AIFF // OK
+			false, // pcm16CAF // NOK
+			true, // flac // OK
+			true, // aacMP4 // OK
+			true, // amrNB // OK
+			true, // amrWB // OK
+			false, // pcm8
+			false, // pcmFloat32
+			false, // pcmWebM
+			true, // opusWebM
+			true, // vorbisWebM
 	};
-
 
 	String extentionArray[] = {
-		  ".aac" // DEFAULT
-		, ".aac" // CODEC_AAC
-		, ".opus" // CODEC_OPUS
-		, "_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
-		, ".mp3" // CODEC_MP3
-		, ".ogg" // CODEC_VORBIS
-		, ".pcm" // CODEC_PCM
-		, ".wav"
-		, ".aiff"
-		, "._pcm.caf"
-		, ".flac"
-		, ".mp4"
-		, ".amr" // amrNB
-		, ".amr" // amrWB
-		, ".pcm" // pcm8
-		, ".pcm" // pcmFloat323
-		, ".webm" // pcmWebM
-		, ".opus" // opusWebM
-		, ".vorbis" // vorbisWebM
+			".aac" // DEFAULT
+			, ".aac" // CODEC_AAC
+			, ".opus" // CODEC_OPUS
+			, "_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
+			, ".mp3" // CODEC_MP3
+			, ".ogg" // CODEC_VORBIS
+			, ".pcm" // CODEC_PCM
+			, ".wav", ".aiff", "._pcm.caf", ".flac", ".mp4", ".amr" // amrNB
+			, ".amr" // amrWB
+			, ".pcm" // pcm8
+			, ".pcm" // pcmFloat323
+			, ".webm" // pcmWebM
+			, ".opus" // opusWebM
+			, ".vorbis" // vorbisWebM
 	};
 
-
-
-
-	final static  String           TAG         = "FlautoPlayer";
+	final static String TAG = "FlautoPlayer";
 	long subsDurationMillis = 0;
 	FlautoPlayerEngineInterface player;
-	private       Timer            mTimer   ;
-	final private Handler          mainHandler = new Handler (Looper.getMainLooper ());
+	private Timer mTimer;
+	final private Handler mainHandler = new Handler(Looper.getMainLooper());
 	boolean pauseMode;
 	FlautoPlayerCallback m_callBack;
-	public		t_PLAYER_STATE 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
+	public t_PLAYER_STATE playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	private double latentVolume = -1.0;
 	private double latentSpeed = -1.0;
 	private long latentSeek = -1;
 	static int currentPlayerID = 0;
 	private int myPlayerId = 0;
 
-
-	static final String ERR_UNKNOWN           = "ERR_UNKNOWN";
-	static final String ERR_PLAYER_IS_NULL    = "ERR_PLAYER_IS_NULL";
+	static final String ERR_UNKNOWN = "ERR_UNKNOWN";
+	static final String ERR_PLAYER_IS_NULL = "ERR_PLAYER_IS_NULL";
 	static final String ERR_PLAYER_IS_PLAYING = "ERR_PLAYER_IS_PLAYING";
 
-	/* ctor */ public FlautoPlayer(FlautoPlayerCallback callBack)
-	{
+	/* ctor */ public FlautoPlayer(FlautoPlayerCallback callBack) {
 		m_callBack = callBack;
 	}
 
-
-	private String getTempFileName()
-	{
+	private String getTempFileName() {
 		File outputDir = Flauto.androidContext.getCacheDir(); // context being the Activity pointer
 		return outputDir.getPath() + "/flutter_sound_" + myPlayerId;
 	}
-	public boolean openPlayer ()
-	{
+
+	public boolean openPlayer() {
 		++currentPlayerID;
 		myPlayerId = currentPlayerID;
 		latentVolume = -1.0;
@@ -130,19 +115,16 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return true;
 	}
 
-	public void closePlayer ( )
-	{
+	public void closePlayer() {
 		stop();
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 		m_callBack.closePlayerCompleted(true);
 	}
 
-	public t_PLAYER_STATE getPlayerState()
-	{
+	public t_PLAYER_STATE getPlayerState() {
 		if (player == null)
 			return t_PLAYER_STATE.PLAYER_IS_STOPPED;
-		if (player._isPlaying())
-		{
+		if (player._isPlaying()) {
 			if (pauseMode)
 				throw new RuntimeException();
 			return t_PLAYER_STATE.PLAYER_IS_PLAYING;
@@ -150,146 +132,115 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		return pauseMode ? t_PLAYER_STATE.PLAYER_IS_PAUSED : t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	}
 
-	public boolean startPlayerFromMic (int numChannels, int sampleRate, int bufferSize, boolean enableVoiceProcessing )
-	{
+	public boolean startPlayerFromMic(int numChannels, int sampleRate, int bufferSize,
+			boolean enableVoiceProcessing) {
 		stop(); // To start a new clean playback
 
-		try
-		{
+		try {
 			player = new FlautoPlayerEngineFromMic(this);
-			player._startPlayer(null,  sampleRate, numChannels, bufferSize, enableVoiceProcessing, this);
+			player._startPlayer(null, sampleRate, numChannels, bufferSize, enableVoiceProcessing, this);
 			play();
-		}
-		catch ( Exception e )
-		{
-			logError ("startPlayer() exception" );
+		} catch (Exception e) {
+			logError("startPlayer() exception");
 			return false;
 		}
 		return true;
 	}
 
-	public boolean startPlayer
-		(
-				t_CODEC codec,
-				String fromURI,
-				byte[] dataBuffer,
-				int numChannels,
-				int sampleRate,
-				//boolean enableVoiceProcessing, // Not used on Android
-				int bufferSize
-		)
-	{
+	public boolean startPlayer(
+			t_CODEC codec,
+			String fromURI,
+			byte[] dataBuffer,
+			int numChannels,
+			int sampleRate,
+			// boolean enableVoiceProcessing, // Not used on Android
+			int bufferSize) {
 		stop(); // To start a new clean playback
 		_toto_position = 0;
-		if (dataBuffer != null)
-		{
-			try
-			{
+		if (dataBuffer != null) {
+			try {
 				String fileName = getTempFileName();
 				deleteTempFile(); // Delete old file if exists
-				File             f   = new  File(fileName);
-				FileOutputStream fos = new FileOutputStream ( f );
-				fos.write ( dataBuffer );
+				File f = new File(fileName);
+				FileOutputStream fos = new FileOutputStream(f);
+				fos.write(dataBuffer);
 				fromURI = f.getPath();
-			}
-			catch ( Exception e )
-			{
+			} catch (Exception e) {
 				return false;
 			}
 		}
 
-
-		try
-		{
-			if (fromURI == null && codec == t_CODEC.pcm16)
-			{
+		try {
+			if (fromURI == null && codec == t_CODEC.pcm16) {
 				player = new FlautoPlayerEngine();
-			} else
-			{
+			} else {
 				player = new FlautoPlayerMedia(this);
 			}
 			String path = Flauto.getPath(fromURI);
 
-			player._startPlayer(path,  sampleRate, numChannels, bufferSize, false, this);
+			player._startPlayer(path, sampleRate, numChannels, bufferSize, false, this);
 			play();
-		}
-		catch ( Exception e )
-		{
-			logError (  "startPlayer() exception" );
+		} catch (Exception e) {
+			logError("startPlayer() exception");
 			return false;
 		}
 		return true;
 	}
 
-	public int feed( byte[] data) throws  Exception
-	{
-		if (player == null)
-		{
+	public int feed(byte[] data) throws Exception {
+		if (player == null) {
 			throw new Exception("feed() : player is null");
 		}
 
-		try
-		{
+		try {
 			int ln = player.feed(data);
 			assert (ln >= 0);
 			return ln;
-		} catch (Exception e)
-		{
-			logError (  "feed() exception" );
+		} catch (Exception e) {
+			logError("feed() exception");
 			throw e;
 		}
 	}
 
-	public void needSomeFood(int ln)
-	{
+	public void needSomeFood(int ln) {
 		if (ln < 0)
 			throw new RuntimeException();
-		mainHandler.post(new Runnable()
-		{
+		mainHandler.post(new Runnable() {
 			@Override
-			public void run()
-			{
+			public void run() {
 				m_callBack.needSomeFood(ln);
 			}
 		});
 	}
 
-
-	public boolean onError(MediaPlayer mp, int what, int extra)
-	{
+	public boolean onError(MediaPlayer mp, int what, int extra) {
 		// ... react appropriately ...
 		// The MediaPlayer has moved to the Error state, must be reset!
 		return false;
 	}
 
-
 	// listener called when media player has completed playing.
-	public void onCompletion()
-	{
-			/*
-			 * Reset player.
-			 */
-			logDebug("Playback completed.");
-			stop();
-			playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
-			m_callBack.audioPlayerDidFinishPlaying(true);
+	public void onCompletion() {
+		/*
+		 * Reset player.
+		 */
+		logDebug("Playback completed.");
+		// stop();// We don't close automaticaly when finished'
+		playerState = t_PLAYER_STATE.PLAYER_IS_PAUSED;
+		m_callBack.audioPlayerDidFinishPlaying(true);
 	}
 
 	// Listener called when media player has completed preparation.
-	public void onPrepared( )
-	{
-		logDebug ("mediaPlayer prepared and started");
+	public void onPrepared() {
+		logDebug("mediaPlayer prepared and started");
 
-		mainHandler.post(new Runnable()
-		{
+		mainHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				long duration = 0;
-				try
-				{
-					 duration = player._getDuration();
-				} catch(Exception e)
-				{
+				try {
+					duration = player._getDuration();
+				} catch (Exception e) {
 					System.out.println(e.toString());
 				}
 				playerState = t_PLAYER_STATE.PLAYER_IS_PLAYING;
@@ -302,69 +253,60 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		 */
 	}
 
-
-	public void stopPlayer ( )
-	{
+	public void stopPlayer() {
 		stop();
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 		m_callBack.stopPlayerCompleted(true);
 	}
 
-	void cancelTimer()
-	{
+	void cancelTimer() {
 		if (mTimer != null)
-			mTimer.cancel ();
+			mTimer.cancel();
 		mTimer = null;
 	}
+
 	long _toto_position = 0;
-	void setTimer(long duration)
-	{
+
+	void setTimer(long duration) {
 		cancelTimer();
 		subsDurationMillis = duration;
 		if (player == null || duration == 0)
 			return;
 
-		if (subsDurationMillis > 0)
-		{
+		if (subsDurationMillis > 0) {
 			TimerTask task = new TimerTask() {
 				@Override
 				public void run() {
-					mainHandler.post(new Runnable()
-					{
+					mainHandler.post(new Runnable() {
 						@Override
-						public void run()
-						{
-							try
-							{
-								if (player != null)
-								{
+						public void run() {
+							try {
+								if (player != null) {
 
 									long position = player._getCurrentPosition();
 									long duration = player._getDuration();
-									//assert(_toto_position <= position);
-									if (position < _toto_position)
-									{
-										//throw new Exception("position < _toto_position");
-										//System.out.println("_toto_position > position");
-										logDebug( "Position is decreasing on FlautoPlayer::setTimer::TimerTask");
+									// assert(_toto_position <= position);
+									if (position < _toto_position) {
+										// throw new Exception("position <
+										// _toto_position");
+										// System.out.println("_toto_position >
+										// position");
+										logDebug("Position is decreasing on FlautoPlayer::setTimer::TimerTask");
 										position = _toto_position;
 
 									}
 									_toto_position = position;
-									if (position > duration)
-									{
+									if (position > duration) {
 										position = duration;
 									}
 									m_callBack.updateProgress(position, duration);
 								}
-							} catch (Exception e)
-							{
-								logDebug( "Exception: " + e.toString());
+							} catch (Exception e) {
+								logDebug("Exception: " + e.toString());
 								stopPlayer();
 							}
 						}
 					});
-
 
 				}
 			};
@@ -376,32 +318,25 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 
 	}
 
-	private void deleteTempFile()
-	{
+	private void deleteTempFile() {
 		String fileName = getTempFileName();
-		try
-		{
+		try {
 			File fdelete = new File(fileName);
-			if (fdelete.exists())
-			{
-				if (fdelete.delete())
-				{
+			if (fdelete.exists()) {
+				if (fdelete.delete()) {
 					logDebug("file Deleted :" + fileName);
-				} else
-				{
+				} else {
 					logError("Cannot delete file " + fileName);
 				}
 			}
 
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			return;
 		}
 
 	}
 
-	void stop()
-	{
+	void stop() {
 		deleteTempFile();
 		cancelTimer();
 		pauseMode = false;
@@ -410,50 +345,38 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 		player = null;
 	}
 
-	public boolean play()
-	{
-			if (player == null)
-			{
-					return false;
+	public boolean play() {
+		if (player == null) {
+			return false;
+		}
+		try {
+			if (latentVolume >= 0) {
+				setVolume(latentVolume);
 			}
-			try
-			{
-				if (latentVolume >= 0)
-				{
-					setVolume(latentVolume);
-				}
-				if (latentSpeed >= 0)
-				{
-					setSpeed(latentSpeed);
-				}
-				if (subsDurationMillis > 0)
-					setTimer(subsDurationMillis);
-				if (latentSeek >= 0)
-				{
-					seekToPlayer(latentSeek);
-				}
-
-
-			}catch (Exception e)
-			{
-
+			if (latentSpeed >= 0) {
+				setSpeed(latentSpeed);
 			}
-			player._play();
-			return true;
+			if (subsDurationMillis > 0)
+				setTimer(subsDurationMillis);
+			if (latentSeek >= 0) {
+				seekToPlayer(latentSeek);
+			}
+
+		} catch (Exception e) {
+
+		}
+		player._play();
+		return true;
 	}
 
-	public boolean isDecoderSupported (t_CODEC codec )
-	{
-		return _isAndroidDecoderSupported[ codec.ordinal() ];
+	public boolean isDecoderSupported(t_CODEC codec) {
+		return _isAndroidDecoderSupported[codec.ordinal()];
 	}
 
-	public boolean pausePlayer (  )
-	{
-		try
-		{
+	public boolean pausePlayer() {
+		try {
 			cancelTimer();
-			if (player == null)
-			{
+			if (player == null) {
 				m_callBack.resumePlayerCompleted(false);
 				return false;
 			}
@@ -463,22 +386,17 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			m_callBack.pausePlayerCompleted(true);
 
 			return true;
-		}
-		catch ( Exception e )
-		{
-			logError( "pausePlay exception: " + e.getMessage () );
+		} catch (Exception e) {
+			logError("pausePlay exception: " + e.getMessage());
 			return false;
 		}
 
 	}
 
-	public boolean resumePlayer (  )
-	{
-		try
-		{
-			if (player == null)
-			{
-				//m_callBack.resumePlayerCompleted(false);
+	public boolean resumePlayer() {
+		try {
+			if (player == null) {
+				// m_callBack.resumePlayerCompleted(false);
 				return false;
 			}
 			player._resumePlayer();
@@ -488,56 +406,45 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 			m_callBack.resumePlayerCompleted(true);
 
 			return true;
-		}
-		catch ( Exception e )
-		{
-			logError( "mediaPlayer resume: " + e.getMessage () );
+		} catch (Exception e) {
+			logError("mediaPlayer resume: " + e.getMessage());
 			return false;
 		}
 	}
 
-	public boolean seekToPlayer (long millis)
-	{
+	public boolean seekToPlayer(long millis) {
 
-		if ( player == null )
-		{
+		if (player == null) {
 			latentSeek = millis;
 			return false;
 		}
 
-
-		logDebug("seekTo: " + millis );
+		logDebug("seekTo: " + millis);
 		latentSeek = -1;
-		player._seekTo ( millis );
+		player._seekTo(millis);
 		return true;
 	}
 
-	public boolean setVolume ( double volume )
-	{
-		try
-		{
+	public boolean setVolume(double volume) {
+		try {
 
 			latentVolume = volume;
 			if (player == null) {
-				//logError( "setVolume(): player is null" );
+				// logError( "setVolume(): player is null" );
 				return false;
 			}
 
-			//float mVolume = (float) volume;
+			// float mVolume = (float) volume;
 			player._setVolume(volume);
 			return true;
-		} catch(Exception e)
-		{
-			logError ("setVolume: " + e.getMessage () );
+		} catch (Exception e) {
+			logError("setVolume: " + e.getMessage());
 			return false;
 		}
 	}
 
-
-	public boolean setSpeed ( double speed )
-	{
-		try
-		{
+	public boolean setSpeed(double speed) {
+		try {
 
 			latentSpeed = speed;
 			if (player == null) {
@@ -546,54 +453,42 @@ public class FlautoPlayer  implements MediaPlayer.OnErrorListener
 
 			player._setSpeed(speed);
 			return true;
-		} catch(Exception e)
-		{
-			logError ("setSpeed: " + e.getMessage () );
+		} catch (Exception e) {
+			logError("setSpeed: " + e.getMessage());
 			return false;
 		}
 	}
 
-
-	public void setSubscriptionDuration (long duration)
-	{
+	public void setSubscriptionDuration(long duration) {
 		subsDurationMillis = duration;
 		if (player != null)
 			setTimer(subsDurationMillis);
 	}
 
-
-	public Map<String, Object> getProgress (  )
-	{
+	public Map<String, Object> getProgress() {
 		long position = 0;
 		long duration = 0;
-		if ( player != null ) {
-			 position = player._getCurrentPosition();
-			 duration = player._getDuration();
+		if (player != null) {
+			position = player._getCurrentPosition();
+			duration = player._getDuration();
 		}
-		if (position > duration)
-		{
+		if (position > duration) {
 			position = duration;
 		}
 
-		Map<String, Object> dic = new HashMap<String, Object> ();
-		dic.put ( "position", position );
-		dic.put ( "duration", duration );
-		dic.put ( "playerStatus", getPlayerState().ordinal() ); // An int because necessary with Flutter Channels
+		Map<String, Object> dic = new HashMap<String, Object>();
+		dic.put("position", position);
+		dic.put("duration", duration);
+		dic.put("playerStatus", getPlayerState().ordinal()); // An int because necessary with Flutter Channels
 		return dic;
 	}
 
-
-
-	void logDebug (String msg)
-	{
-		m_callBack.log ( t_LOG_LEVEL.DBG , msg);
+	void logDebug(String msg) {
+		m_callBack.log(t_LOG_LEVEL.DBG, msg);
 	}
 
-
-	void logError (String msg)
-	{
-		m_callBack.log ( t_LOG_LEVEL.ERROR , msg);
+	void logError(String msg) {
+		m_callBack.log(t_LOG_LEVEL.ERROR, msg);
 	}
 
 }
-

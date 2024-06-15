@@ -279,12 +279,26 @@ static bool _isIosDecoderSupported [] =
 
 }
 
-- (void)needSomeFood: (int)ln
+- (void)needSomeFood: (int)ln // Called from the engine, not from the app
 {
         dispatch_async(dispatch_get_main_queue(),
         ^{
                 [self ->m_callBack needSomeFood: ln];
          });
+}
+- (void)audioPlayerDidFinishPlaying: (BOOL)flag
+{
+        dispatch_async(dispatch_get_main_queue(),
+        ^{
+                [self ->m_callBack audioPlayerDidFinishPlaying: flag];
+         });
+
+}
+
+
+- (void)nothingMoreToPlay
+{
+        
 }
 
 - (void)updateProgress: (NSTimer*)atimer
@@ -341,24 +355,6 @@ static bool _isIosDecoderSupported [] =
         }
         if ([self getStatus] == PLAYER_IS_PLAYING )
         {
-                  /*
-                  long position =   [m_playerEngine getPosition];
-                  long duration =   [m_playerEngine getDuration];
-                  if (duration - position < 200) // PATCH [LARPOUX]
-                  {
-                        [self logDebug:  @"IOS: !patch [LARPOUX]"];
-                        dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                                [self stop];
-                                [self logDebug:  @"IOS:--> ^audioPlayerFinishedPlaying"];
-
-                                [self ->m_callBack  audioPlayerDidFinishPlaying: true];
-                                [self logDebug:  @"IOS:<-- ^audioPlayerFinishedPlaying"];
-                         });
-                        //return false;
-                  } else
-                  */
-
                         [m_playerEngine pause];
         }
         else

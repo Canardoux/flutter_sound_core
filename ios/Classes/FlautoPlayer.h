@@ -79,6 +79,7 @@
 - (NSDictionary*)getProgress ;
 - (int)feed: (NSData*)data;
 - (void)needSomeFood: (int) ln;
+- (void)audioPlayerDidFinishPlaying: (BOOL)flag;
 - (t_PLAYER_STATE)getStatus;
 - (void)startTimer;
 - (void)stopTimer;

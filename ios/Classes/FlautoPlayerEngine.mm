@@ -333,13 +333,13 @@
                         [converter convertToBuffer: thePCMOutputBuffer error: &error withInputFromBlock: inputBlock];
                          // if (r == AVAudioConverterOutputStatus_HaveData || true)
                         {
-                                ++ready ;
+                                ++ready ; // The number of waiting packets to be sent by the Device
                                 [playerNode scheduleBuffer: thePCMOutputBuffer  completionHandler:
                                 ^(void)
                                 {
                                         dispatch_async(dispatch_get_main_queue(),
                                         ^{
-                                                --ready;
+                                                --ready; // The Device has sent its packet. One less to send.
                                                 assert(ready < NB_BUFFERS);
                                                 if (self ->waitingBlock != nil)
                                                 {
@@ -349,6 +349,11 @@
                                                         int l = [self feed: blk]; // Recursion here
                                                         assert (l == ln);
                                                         [self ->flutterSoundPlayer needSomeFood: ln];
+                                                }
+                                                if (ready == 0) // Nothing more to play. Send an indication to the App
+                                                {
+                                                        [self ->flutterSoundPlayer  audioPlayerDidFinishPlaying: true];
+
                                                 }
                                         });
 

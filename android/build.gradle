@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 1950
-        versionName '9.5.0'
+        versionCode 1960
+        versionName '9.6.0'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
