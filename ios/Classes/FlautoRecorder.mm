@@ -51,7 +51,7 @@ static bool _isIosEncoderSupported [] =
                 false, // amrWB
                 
                 false, // pcm8
-                false, // pcmFloat32
+                true, // pcmFloat32
                 false, // pcmWebM
                 false, // opusWebM
                 false, // vorbisWebM
@@ -221,12 +221,8 @@ AudioRecInterface* audioRec;
         path = [self getpath: path];
         m_path = path;
 
-        if(codec == pcm16)
+        if(codec == pcm16 || codec == pcmFloat32)
         {
-                if (numChannels != 1)
-                {
-                                return false;
-                }
                 audioRec = new AudioRecorderEngine(codec, path, audioSettings, bufferSize, enableVoiceProcessing, self );
         } else
         {

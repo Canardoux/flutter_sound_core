@@ -39,7 +39,7 @@ public:
         /* ctor */ //AudioRecInterface(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings) = 0;
         virtual ~AudioRecInterface(){};
         virtual void stopRecorder() = 0;
-        virtual void startRecorder() = 0;
+        virtual int startRecorder() = 0;
         virtual void resumeRecorder() = 0;
         virtual void pauseRecorder() = 0;
         virtual NSNumber* recorderProgress() = 0;
@@ -66,7 +66,7 @@ private:
 
 public:
         /* ctor */ AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, long bufferSize, bool enableVoiceProcessing, FlautoRecorder* owner);
-        virtual void startRecorder();
+        virtual int startRecorder();
         virtual void stopRecorder();
         virtual void pauseRecorder();
         NSNumber* recorderProgress();
@@ -89,7 +89,7 @@ private:
 public:
         /* ctor */avAudioRec( t_CODEC coder, NSString* path, NSMutableDictionary *audioSettings, FlautoRecorder* owner);
         /* dtor */virtual ~avAudioRec();
-        void startRecorder();
+        int startRecorder();
         void stopRecorder();
         void resumeRecorder();
         void pauseRecorder();
