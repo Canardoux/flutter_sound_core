@@ -52,8 +52,8 @@
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
         int channelCount = [inputFormat channelCount];
-        int samplerate = [inputFormat sampleRate];
-        bool interleaved = [inputFormat isInterleaved];
+        //int samplerate = [inputFormat sampleRate];
+        //bool interleaved = [inputFormat isInterleaved];
         AVAudioCommonFormat cf = [inputFormat commonFormat];
 
         NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -78,7 +78,7 @@
                 // __'__buf' contains captured audio from the node at time 'when'
                         int ln = [buf frameLength];
                         float* const* data = [buf floatChannelData];
-                        int stride = [buf stride];
+                        //int stride = [buf stride];
                         if (ln > 0)
                         {
                                 for (int channel = 0; channel < channelCount; ++channel)
