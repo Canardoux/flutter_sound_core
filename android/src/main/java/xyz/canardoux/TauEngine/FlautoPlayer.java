@@ -118,7 +118,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 	public void closePlayer() {
 		stop();
 		playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
-		m_callBack.closePlayerCompleted(true);
 	}
 
 	public t_PLAYER_STATE getPlayerState() {

@@ -147,7 +147,6 @@ public class FlautoRecorder
 	{
 		stop();
 		status = t_RECORDER_STATE.RECORDER_IS_STOPPED;
-		m_callBack.closeRecorderCompleted(true);
 	}
 
 
