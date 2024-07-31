@@ -98,7 +98,6 @@ static bool _isIosDecoderSupported [] =
         [self logDebug: @"IOS:--> releaseFlautoPlayer"];
 
         [ self stop];
-        [m_callBack closePlayerCompleted: YES];
         [self logDebug:  @"IOS:<-- releaseFlautoPlayer"];
 }
 

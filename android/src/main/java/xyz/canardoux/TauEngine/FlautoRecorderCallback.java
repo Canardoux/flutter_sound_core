@@ -20,16 +20,21 @@ package xyz.canardoux.TauEngine;
 
 import xyz.canardoux.TauEngine.Flauto.*;
 
-public interface FlautoRecorderCallback
-{
+public interface FlautoRecorderCallback {
         public abstract void openRecorderCompleted(boolean success);
-        public abstract void closeRecorderCompleted(boolean success);
+
         public abstract void startRecorderCompleted(boolean success);
+
         public abstract void stopRecorderCompleted(boolean success, String url);
+
         public abstract void pauseRecorderCompleted(boolean success);
+
         public abstract void resumeRecorderCompleted(boolean success);
+
         public abstract void updateRecorderProgressDbPeakLevel(double normalizedPeakLevel, long duration);
-        public abstract void recordingData ( byte[] data);
+
+        public abstract void recordingData(byte[] data);
+
         abstract public void log(t_LOG_LEVEL level, String msg);
 
 }

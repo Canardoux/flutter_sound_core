@@ -33,7 +33,6 @@
 
 @protocol FlautoRecorderCallback <NSObject>
 - (void)openRecorderCompleted: (bool)success;
-- (void)closeRecorderCompleted: (bool)success;
 - (void)startRecorderCompleted: (bool)success;
 - (void)stopRecorderCompleted: (NSString*)path success:(bool)success;
 - (void)resumeRecorderCompleted: (bool)success;

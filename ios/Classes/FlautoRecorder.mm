@@ -170,7 +170,6 @@ AudioRecInterface* audioRec;
         [self logDebug:  @"IOS:--> releaseFlautoRecorder"];
 
         [ self stop];
-        [m_callBack closeRecorderCompleted: true];
         [self logDebug:  @"IOS:<-- releaseFlautoRecorder"];
 
 }

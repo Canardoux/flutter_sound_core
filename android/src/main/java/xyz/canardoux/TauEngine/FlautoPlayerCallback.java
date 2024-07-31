@@ -23,8 +23,6 @@ import xyz.canardoux.TauEngine.Flauto.*;
 public interface FlautoPlayerCallback {
 	abstract public void openPlayerCompleted(boolean success);
 
-	abstract public void closePlayerCompleted(boolean success);
-
 	abstract public void stopPlayerCompleted(boolean success);
 
 	abstract public void pausePlayerCompleted(boolean success);
