@@ -350,7 +350,7 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			return false;
 		}
 		try {	
-			if (latentVolume >= 0 && latentPan >= -2) {
+			if (latentVolume >= 0 && latentPan >= -1) {
 				setVolumePan(latentVolume,latentPan);
 			} else if (latentVolume >= 0){
 				setVolume(latentVolume);
