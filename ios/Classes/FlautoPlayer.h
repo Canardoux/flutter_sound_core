@@ -75,6 +75,7 @@
 - (void)seekToPlayer: (long)time;
 - (void)setSubscriptionDuration: (long)call ;
 - (void)setVolume: (double)volume fadeDuration: (NSTimeInterval) fadeDuration;
+- (void)setPan: (double)pan ;
 - (void)setSpeed: (double)speed ;
 - (NSDictionary*)getProgress ;
 - (int)feed: (NSData*)data;

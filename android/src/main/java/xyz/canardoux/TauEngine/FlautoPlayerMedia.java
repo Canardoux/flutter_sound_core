@@ -62,12 +62,26 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		throw new Exception("Cannot feed a Media Player");
 	}
 
+
 	void _setVolume(double volume)
 	{
 		float v = (float)volume;
 		mediaPlayer.setVolume ( v, v );
 	}
+	void _setVolumePan(double volume, double pan) {
+		// Clamp volume to range [0.0, 1.0]
+		volume = Math.max(0.0, Math.min(volume, 1.0));
 
+		// Clamp pan to range [-1.0, 1.0]
+		pan = Math.max(-1.0, Math.min(pan, 1.0));
+
+		// Calculate left and right volumes based on pan
+		float leftVolume = (float) (volume * (pan <= 0.0 ? 1.0 : 1.0 - pan));
+		float rightVolume = (float) (volume * (pan >= 0.0 ? 1.0 : 1.0 + pan));
+
+		// Apply the calculated volumes to the MediaPlayer
+		mediaPlayer.setVolume(leftVolume, rightVolume);
+	}
 	void _setSpeed(double speed)
 	{
 		float v = (float)speed;
