@@ -179,16 +179,16 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 
         if (pan < 0.0f) {
             // Panning to the left
-            leftVolume = 1.0f;
-            rightVolume = 1.0f + (float)pan;  // pan is negative, so this reduces the right volume
+            leftVolume = volume * 1.0f;
+            rightVolume = volume * (1.0f + (float)pan);  // pan is negative, so this reduces the right volume
         } else if (pan > 0.0f) {
             // Panning to the right
-            leftVolume = 1.0f - (float)pan;  // pan is positive, so this reduces the left volume
-            rightVolume = 1.0f;
+            leftVolume = volume * (1.0f - (float)pan);  // pan is positive, so this reduces the left volume
+            rightVolume = volume * 1.0f;
         } else {
             // Center
-            leftVolume = 1.0f;
-            rightVolume = 1.0f;
+            leftVolume = volume * 1.0f;
+            rightVolume = volume * 1.0f;
         }
 
         // Set the stereo volume
