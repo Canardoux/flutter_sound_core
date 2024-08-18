@@ -60,6 +60,7 @@ static bool _isIosDecoderSupported [] =
         double subscriptionDuration;
         double latentVolume;
         double latentSpeed;
+        double latentPan;
         long latentSeek;
  
 }
@@ -433,6 +434,19 @@ static bool _isIosDecoderSupported [] =
         {
         }
         [self logDebug: @"IOS:<-- setVolume"];
+}
+
+- (void)setPan:(double) pan // speed is between 0.0 and 1.0 to slow and 1.0 to n to accelearate
+{
+        [self logDebug:  @"IOS:--> setPan"];
+        latentPan = pan;
+        if (m_playerEngine )
+        {
+                [m_playerEngine setPan: pan ];
+        } else
+        {
+        }
+        [self logDebug: @"IOS:<-- setPan"];
 }
 
 

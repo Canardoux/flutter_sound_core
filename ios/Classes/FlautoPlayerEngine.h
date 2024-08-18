@@ -107,6 +107,7 @@
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
+       - (void) setPan: (double) pan ;       
        - (bool) setSpeed: (double) speed;
        - (bool) seek: (double) pos;
        - (int) getStatus;

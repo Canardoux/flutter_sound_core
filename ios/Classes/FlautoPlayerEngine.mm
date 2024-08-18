@@ -114,6 +114,11 @@
                return true;
        }
 
+       -(bool)  setPan: (double) pan
+       {
+                [self getAudioPlayer].pan=pan;
+       }
+
 
         -(bool)  setSpeed: (double) speed // speed is between 0.0 and 1.0 to go slower
         {

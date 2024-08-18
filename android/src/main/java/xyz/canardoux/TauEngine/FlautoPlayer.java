@@ -86,6 +86,7 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 	FlautoPlayerCallback m_callBack;
 	public t_PLAYER_STATE playerState = t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	private double latentVolume = -1.0;
+	private double latentPan = -2.0;
 	private double latentSpeed = -1.0;
 	private long latentSeek = -1;
 	static int currentPlayerID = 0;
@@ -348,10 +349,13 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		if (player == null) {
 			return false;
 		}
-		try {
-			if (latentVolume >= 0) {
+		try {	
+			if (latentVolume >= 0 && latentPan >= -1) {
+				setVolumePan(latentVolume,latentPan);
+			} else if (latentVolume >= 0){
 				setVolume(latentVolume);
 			}
+
 			if (latentSpeed >= 0) {
 				setSpeed(latentSpeed);
 			}
@@ -426,8 +430,8 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 	public boolean setVolume(double volume) {
 		try {
-
 			latentVolume = volume;
+
 			if (player == null) {
 				// logError( "setVolume(): player is null" );
 				return false;
@@ -435,6 +439,24 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 			// float mVolume = (float) volume;
 			player._setVolume(volume);
+			return true;
+		} catch (Exception e) {
+			logError("setVolume: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean setVolumePan(double volume, double pan) {
+		try {
+			latentVolume = volume;
+			latentPan = pan;
+			if (player == null) {
+				// logError( "setVolume(): player is null" );
+				return false;
+			}
+
+			// float mVolume = (float) volume;
+			player._setVolumePan(volume,pan);
 			return true;
 		} catch (Exception e) {
 			logError("setVolume: " + e.getMessage());

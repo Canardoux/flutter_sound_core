@@ -313,6 +313,10 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		mSession.logError("setVolume: not implemented" );
 	}
 
+	void _setVolumePan(double volume, double pan)  throws Exception
+	{
+		mSession.logError("setVolumePan: not implemented" );
+	}
 
 	void _setSpeed(double speed)  throws Exception
 	{
