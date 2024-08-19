@@ -117,6 +117,7 @@
        -(bool)  setPan: (double) pan
        {
                 [self getAudioPlayer].pan=pan;
+                return  true;
        }
 
 
@@ -383,6 +384,15 @@
         return true;
 }
 
+-(bool)  setPan: (double) pan
+{
+        if (playerNode == nil || playerNode ==  (id)[NSNull null]) return false;
+
+        //TODO
+        return true;
+}
+
+
 -(bool)  setSpeed: (double) rate // range: 1/32 -> 32
 {
          if (timePitchUnit == nil || timePitchUnit ==  (id)[NSNull null]) return false;
@@ -548,6 +558,11 @@
 
 
         -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval) fadeDuration // TODO
+        {
+                return true; // TODO
+        }
+
+        -(bool)  setPan: (double) pan // TODO
         {
                 return true; // TODO
         }

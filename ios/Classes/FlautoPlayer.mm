@@ -69,6 +69,7 @@ static bool _isIosDecoderSupported [] =
 {
         m_callBack = callback;
         latentVolume = -1.0;
+        latentPan = -2.0;
         latentSpeed = -1.0;
         latentSeek = -1;
         subscriptionDuration = 0;
@@ -264,6 +265,9 @@ static bool _isIosDecoderSupported [] =
 
 - (bool) play
 {
+        if (latentPan>=-1){
+                [self setPan: latentPan];
+        }
         if (latentVolume >= 0)
                 [self setVolume: latentVolume fadeDuration: 0];
         if (latentSpeed >= 0)

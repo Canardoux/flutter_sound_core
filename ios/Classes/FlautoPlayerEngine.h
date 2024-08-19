@@ -44,6 +44,7 @@
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration; // Volume is between 0.0 and 1.0
+       - (bool) setPan: (double) pan; // Pan is between -1.0 and 1.0
        - (bool) setSpeed: (double) speed ; // Speed is between 0.0 and 1.0 to go slower
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
@@ -63,6 +64,7 @@
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume fadeDuration: (NSTimeInterval)duration ;// Volume is between 0.0 and 1.0
+       - (bool) setPan: (double) pan; // Pan is between -1.0 and 1.0
        - (bool) setSpeed: (double) speed ;// Volume is between 0.0 and 1.0
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
@@ -86,6 +88,7 @@
        - (bool) resume;
        - (bool) pause;
        - (bool) setVolume: (double) volume  fadeDuration:(NSTimeInterval)duration ;
+       - (bool) setPan: (double) pan;
        - (bool) setSpeed: (double) speed ;
        - (bool) seek: (double) pos;
        - (int)  getStatus;
