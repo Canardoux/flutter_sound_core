@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
    }
 }
@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 19120
-        versionName '9.12.0'
+        versionCode 19121
+        versionName '9.12.1'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -98,7 +98,7 @@ ext {
 // ==========================================================================================================================================================
 
 task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from android.sourceSets.main.java.source
 }
 
@@ -121,7 +121,7 @@ task javadoc(type: Javadoc) {
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-   classifier = 'javadoc'
+   archiveClassifier = 'javadoc'
    from javadoc.destinationDir
 }
 
@@ -134,7 +134,7 @@ afterEvaluate {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
-                from components.release
+                from components.findByName('release')
                 groupId = PUBLISH_GROUP_ID
                 artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
@@ -143,7 +143,7 @@ afterEvaluate {
                         // Creates a Maven publication called “debug”.
             debug(MavenPublication) {
                 // Applies the component for the debug build variant.
-                from components.debug
+                from components.findByName('debug')
 
                 groupId = PUBLISH_GROUP_ID
                 artifactId = 'flutter_sound_core'

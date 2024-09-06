@@ -425,6 +425,7 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		logDebug("seekTo: " + millis);
 		latentSeek = -1;
 		player._seekTo(millis);
+		_toto_position = 0;
 		return true;
 	}
 
