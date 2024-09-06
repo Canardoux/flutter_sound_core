@@ -220,8 +220,8 @@ public class FlautoRecorderEngine
 			int bufLn = Math.max(minBufferSize, bufferSize);
 
 		recorder = new AudioRecord( 	audioSource,
-						sampleRate,
-						channelConfig,
+										sampleRate,
+										channelConfig,
 		                            	audioFormat,
 		                            	bufLn
 					);

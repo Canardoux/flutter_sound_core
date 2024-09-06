@@ -265,11 +265,11 @@ public class FlautoRecorder
 		m_path = null;
 		if (_isAudioRecorder[codec.ordinal()])
 		{
-				if (numChannels != 1)
-				{
-						logError (  "The number of channels supported is actually only 1" );
-						return false;
-				}
+				//if (numChannels != 1)
+				//{
+						//logError (  "The number of channels supported is actually only 1" );
+						///return false;
+				//}
 				recorder = new FlautoRecorderEngine();
 		} else
 		{
