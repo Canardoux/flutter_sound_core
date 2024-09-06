@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.10.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
    }
 }
@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 19123
-        versionName '9.12.3'
+        versionCode 19124
+        versionName '9.12.4'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
