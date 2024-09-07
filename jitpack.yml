@@ -1,0 +1,5 @@
+jdk:
+  - openjdk23
+before_install:
+   - sdk install java 23.ea.29-open
+   - sdk use java 23.ea.29-open
