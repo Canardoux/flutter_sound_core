@@ -60,8 +60,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 191225
-        versionName '9.12.25'
+        versionCode 191226
+        versionName '9.12.26'
         namespace("com.example.app")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
