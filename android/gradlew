@@ -63,6 +63,7 @@
 #       You can find Gradle at https://github.com/gradle/gradle/.
 #
 ##############################################################################
+echo '************************* TOTO ********************************'
 
 # Attempt to set APP_HOME
 
