@@ -55,13 +55,13 @@ group='com.github.canardoux'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "34.0.0"
 
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 191236
-        versionName '9.12.36'
+        versionCode 191237
+        versionName '9.12.37'
         namespace("com.example.app")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -75,10 +75,10 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_22
+//        targetCompatibility JavaVersion.VERSION_22
+///   }
 
 }
 
