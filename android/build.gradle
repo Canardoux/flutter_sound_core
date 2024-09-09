@@ -4,8 +4,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
-
     }
 
     dependencies {
@@ -19,7 +17,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -60,8 +57,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 191244
-        versionName '9.12.44'
+        versionCode 191245
+        versionName '9.12.45'
         namespace("com.example.app")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
