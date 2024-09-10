@@ -3,10 +3,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.0'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
    }
 }
@@ -18,6 +19,13 @@ rootProject.allprojects {
         mavenCentral()
     }
 }
+
+//plugins {
+//    id 'com.android.library'
+//    id 'maven-publish'
+//}
+
+
 
 //def properties = new Properties()
 //properties.load(new FileInputStream("local2.properties"))
@@ -56,10 +64,10 @@ android {
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 30
-        versionCode 191252
-        versionName '9.12.52'
-        namespace("com.example.app")
+        targetSdkVersion 35
+        versionCode 191553
+        versionName '9.15.53'
+        namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -87,6 +95,7 @@ dependencies {
     implementation 'androidx.core:core:1.3.2'
     implementation 'androidx.media:media:1.4.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    //classpath "com.android.tools.build:gradle:8.0.0"
 }
 ext {
     PUBLISH_GROUP_ID = 'com.github.canardoux'
@@ -137,6 +146,9 @@ publishing {
                 groupId = PUBLISH_GROUP_ID
                 artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
+                //afterEvaluate {
+                //    from components.release
+                //}            
         }
     }
 }
@@ -150,6 +162,9 @@ afterEvaluate {
                 groupId = PUBLISH_GROUP_ID
                 artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
+                //afterEvaluate {
+                //    from components.release
+                //}            
             }
         }
     }
