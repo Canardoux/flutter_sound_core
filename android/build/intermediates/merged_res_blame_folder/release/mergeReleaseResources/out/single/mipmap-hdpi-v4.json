@@ -1,6 +1,6 @@
 [
     {
-        "merged": "com.example.app-release-8:/mipmap-hdpi-v4/ic_launcher.png",
-        "source": "com.example.app-main-9:/mipmap-hdpi/ic_launcher.png"
+        "merged": "com.github.canardoux-release-8:/mipmap-hdpi-v4/ic_launcher.png",
+        "source": "com.github.canardoux-main-9:/mipmap-hdpi/ic_launcher.png"
     }
 ]

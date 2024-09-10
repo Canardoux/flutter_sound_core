@@ -1,4 +1,4 @@
-com.example.app
+com.github.canardoux
 color colorAccent
 color colorPrimary
 color colorPrimaryDark

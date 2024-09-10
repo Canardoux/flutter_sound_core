@@ -1,8 +1,8 @@
 <variant
     name="debug"
-    package="com.example.app"
+    package="com.github.canardoux"
     minSdkVersion="18"
-    targetSdkVersion="30"
+    targetSdkVersion="35"
     debuggable="true"
     mergedManifest="build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml"
     manifestMergeReport="build/outputs/logs/manifest-merger-debug-report.txt"

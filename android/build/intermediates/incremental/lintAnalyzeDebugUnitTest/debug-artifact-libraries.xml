@@ -1,9 +1,9 @@
 <libraries>
   <library
       name=":@@:::debug"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/b9d661cce8ea559b8ae8b91f845ab733/transformed/out/jars/classes.jar:/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/b9d661cce8ea559b8ae8b91f845ab733/transformed/out/jars/libs/R.jar"
-      resolved="com.github.canardoux:flutter_sound_core:9.12.52"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/b9d661cce8ea559b8ae8b91f845ab733/transformed/out"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out/jars/classes.jar:/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out/jars/libs/R.jar"
+      resolved="com.github.canardoux:flutter_sound_core:9.15.53"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -14,9 +14,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.media:media:1.4.1@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/eca59538c27c44e8cad4cfbb6824f401/transformed/media-1.4.1/jars/classes.jar"
       resolved="androidx.media:media:1.4.1"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/eca59538c27c44e8cad4cfbb6824f401/transformed/media-1.4.1"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -27,9 +27,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.appcompat:appcompat:1.2.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0/jars/classes.jar"
       resolved="androidx.appcompat:appcompat:1.2.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -40,9 +40,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.fragment:fragment:1.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/e7595826d799a7a3acf46051d202eee0/transformed/fragment-1.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/da84092d09e08bd6a8dc7e2d16f46823/transformed/fragment-1.1.0/jars/classes.jar"
       resolved="androidx.fragment:fragment:1.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/e7595826d799a7a3acf46051d202eee0/transformed/fragment-1.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/da84092d09e08bd6a8dc7e2d16f46823/transformed/fragment-1.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -53,9 +53,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.appcompat:appcompat-resources:1.2.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/0b88983ff5f8d570ee5f73ef5cdfc460/transformed/jetified-appcompat-resources-1.2.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/038aba48ffb5967d00ae8a941b90ef1e/transformed/jetified-appcompat-resources-1.2.0/jars/classes.jar"
       resolved="androidx.appcompat:appcompat-resources:1.2.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/0b88983ff5f8d570ee5f73ef5cdfc460/transformed/jetified-appcompat-resources-1.2.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/038aba48ffb5967d00ae8a941b90ef1e/transformed/jetified-appcompat-resources-1.2.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -66,9 +66,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.drawerlayout:drawerlayout:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/933da27ca1771d97f8d74fa60390b221/transformed/drawerlayout-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/be5f93615a8e25a1b46ecb54174b13ed/transformed/drawerlayout-1.0.0/jars/classes.jar"
       resolved="androidx.drawerlayout:drawerlayout:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/933da27ca1771d97f8d74fa60390b221/transformed/drawerlayout-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/be5f93615a8e25a1b46ecb54174b13ed/transformed/drawerlayout-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -79,9 +79,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.viewpager:viewpager:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/222c72e212d5729ff03789f4388e2f3f/transformed/viewpager-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0f270b08ed5e12af7a73a624e745e1ea/transformed/viewpager-1.0.0/jars/classes.jar"
       resolved="androidx.viewpager:viewpager:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/222c72e212d5729ff03789f4388e2f3f/transformed/viewpager-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0f270b08ed5e12af7a73a624e745e1ea/transformed/viewpager-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -92,9 +92,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.loader:loader:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f5b3bdd0ab3fb98d6fd125a88fb00bfb/transformed/loader-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/320aad2e2f3345467cac91679591be73/transformed/loader-1.0.0/jars/classes.jar"
       resolved="androidx.loader:loader:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f5b3bdd0ab3fb98d6fd125a88fb00bfb/transformed/loader-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/320aad2e2f3345467cac91679591be73/transformed/loader-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -105,9 +105,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.activity:activity:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/a6225b1f71bd328ab88d5fed9466c7a8/transformed/jetified-activity-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1d9fae2b0fd53adfbd226858a48b2c99/transformed/jetified-activity-1.0.0/jars/classes.jar"
       resolved="androidx.activity:activity:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/a6225b1f71bd328ab88d5fed9466c7a8/transformed/jetified-activity-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1d9fae2b0fd53adfbd226858a48b2c99/transformed/jetified-activity-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -118,9 +118,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.vectordrawable:vectordrawable-animated:1.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/71279c4c8d599a66bb960dbece1cad70/transformed/vectordrawable-animated-1.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e98a51c4ae5c5244669e157a715edef2/transformed/vectordrawable-animated-1.1.0/jars/classes.jar"
       resolved="androidx.vectordrawable:vectordrawable-animated:1.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/71279c4c8d599a66bb960dbece1cad70/transformed/vectordrawable-animated-1.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e98a51c4ae5c5244669e157a715edef2/transformed/vectordrawable-animated-1.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -131,9 +131,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.vectordrawable:vectordrawable:1.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f9dc5a64f63dc8965d7facbf2f7271af/transformed/vectordrawable-1.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1235a8dfb59e85a2ad6ed28c24377d8f/transformed/vectordrawable-1.1.0/jars/classes.jar"
       resolved="androidx.vectordrawable:vectordrawable:1.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f9dc5a64f63dc8965d7facbf2f7271af/transformed/vectordrawable-1.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1235a8dfb59e85a2ad6ed28c24377d8f/transformed/vectordrawable-1.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -144,9 +144,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.customview:customview:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/8f068e20d85221d92ed3084532933fdf/transformed/customview-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/05bd8536a2cbe8444672cc5ea136019c/transformed/customview-1.0.0/jars/classes.jar"
       resolved="androidx.customview:customview:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/8f068e20d85221d92ed3084532933fdf/transformed/customview-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/05bd8536a2cbe8444672cc5ea136019c/transformed/customview-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -157,9 +157,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.core:core:1.6.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/d0065c79a68a4d9ecf88879275e3696a/transformed/core-1.6.0/jars/classes.jar"
       resolved="androidx.core:core:1.6.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/d0065c79a68a4d9ecf88879275e3696a/transformed/core-1.6.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -170,9 +170,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.lifecycle:lifecycle-runtime:2.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/5570194833ca53ba6688f73f4a800a52/transformed/lifecycle-runtime-2.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0eda21860dde4cdb6330850ff6bc4f8d/transformed/lifecycle-runtime-2.1.0/jars/classes.jar"
       resolved="androidx.lifecycle:lifecycle-runtime:2.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/5570194833ca53ba6688f73f4a800a52/transformed/lifecycle-runtime-2.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0eda21860dde4cdb6330850ff6bc4f8d/transformed/lifecycle-runtime-2.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -183,9 +183,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.versionedparcelable:versionedparcelable:1.1.1@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/21cb03e30eaf1a0850942b79bbccec54/transformed/versionedparcelable-1.1.1/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/b97253fcf2e2a9602555f1141c4c519b/transformed/versionedparcelable-1.1.1/jars/classes.jar"
       resolved="androidx.versionedparcelable:versionedparcelable:1.1.1"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/21cb03e30eaf1a0850942b79bbccec54/transformed/versionedparcelable-1.1.1"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/b97253fcf2e2a9602555f1141c4c519b/transformed/versionedparcelable-1.1.1"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -196,9 +196,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.cursoradapter:cursoradapter:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/505e73c4bb2bd8eed7be930a6969a00b/transformed/cursoradapter-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1d28aa215cf1689e95c87ae4920a182d/transformed/cursoradapter-1.0.0/jars/classes.jar"
       resolved="androidx.cursoradapter:cursoradapter:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/505e73c4bb2bd8eed7be930a6969a00b/transformed/cursoradapter-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/1d28aa215cf1689e95c87ae4920a182d/transformed/cursoradapter-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -209,9 +209,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.savedstate:savedstate:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/1c072b834e515de3707792e1e4dd6cbf/transformed/jetified-savedstate-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/f8e728f2eb1c2f8f5b7d953be35581ea/transformed/jetified-savedstate-1.0.0/jars/classes.jar"
       resolved="androidx.savedstate:savedstate:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/1c072b834e515de3707792e1e4dd6cbf/transformed/jetified-savedstate-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/f8e728f2eb1c2f8f5b7d953be35581ea/transformed/jetified-savedstate-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -222,9 +222,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.lifecycle:lifecycle-livedata:2.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/57695355c66e1d6aeafd250b3beea4c4/transformed/lifecycle-livedata-2.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/90d56c3101a4518ffa64374ff63252c0/transformed/lifecycle-livedata-2.0.0/jars/classes.jar"
       resolved="androidx.lifecycle:lifecycle-livedata:2.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/57695355c66e1d6aeafd250b3beea4c4/transformed/lifecycle-livedata-2.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/90d56c3101a4518ffa64374ff63252c0/transformed/lifecycle-livedata-2.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -235,9 +235,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.lifecycle:lifecycle-livedata-core:2.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/c9ac9f16448037a6ef91da5a18a2a3f9/transformed/lifecycle-livedata-core-2.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/c0a332b8462c64d2328f3c4f197831e0/transformed/lifecycle-livedata-core-2.0.0/jars/classes.jar"
       resolved="androidx.lifecycle:lifecycle-livedata-core:2.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/c9ac9f16448037a6ef91da5a18a2a3f9/transformed/lifecycle-livedata-core-2.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/c0a332b8462c64d2328f3c4f197831e0/transformed/lifecycle-livedata-core-2.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -252,9 +252,9 @@
       resolved="androidx.lifecycle:lifecycle-common:2.1.0"/>
   <library
       name="androidx.arch.core:core-runtime:2.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/5d8b37964a61e72f29b056a11a7eff00/transformed/core-runtime-2.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/9ed7f999c5e97457f82dc71407117d7b/transformed/core-runtime-2.0.0/jars/classes.jar"
       resolved="androidx.arch.core:core-runtime:2.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/5d8b37964a61e72f29b056a11a7eff00/transformed/core-runtime-2.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/9ed7f999c5e97457f82dc71407117d7b/transformed/core-runtime-2.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -273,9 +273,9 @@
       resolved="androidx.collection:collection:1.1.0"/>
   <library
       name="androidx.lifecycle:lifecycle-viewmodel:2.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/4584d2625e4ab9a6394b9cafa96a03d8/transformed/lifecycle-viewmodel-2.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/3e5f42ada5f2010f8960006f4271df75/transformed/lifecycle-viewmodel-2.1.0/jars/classes.jar"
       resolved="androidx.lifecycle:lifecycle-viewmodel:2.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/4584d2625e4ab9a6394b9cafa96a03d8/transformed/lifecycle-viewmodel-2.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/3e5f42ada5f2010f8960006f4271df75/transformed/lifecycle-viewmodel-2.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -286,9 +286,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="androidx.interpolator:interpolator:1.0.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/1363d407d009beb32dd4ea42c17736aa/transformed/interpolator-1.0.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0c402e59669948ac08fb8e222d13e4b3/transformed/interpolator-1.0.0/jars/classes.jar"
       resolved="androidx.interpolator:interpolator:1.0.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/1363d407d009beb32dd4ea42c17736aa/transformed/interpolator-1.0.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/0c402e59669948ac08fb8e222d13e4b3/transformed/interpolator-1.0.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -303,9 +303,9 @@
       resolved="androidx.annotation:annotation:1.2.0"/>
   <library
       name="androidx.annotation:annotation-experimental:1.1.0@aar"
-      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/50e34d19e945e791f1e194c9251136b2/transformed/jetified-annotation-experimental-1.1.0/jars/classes.jar"
+      jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/664cadd6c6a5e5cb52e95fd223a9e6d3/transformed/jetified-annotation-experimental-1.1.0/jars/classes.jar"
       resolved="androidx.annotation:annotation-experimental:1.1.0"
-      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/50e34d19e945e791f1e194c9251136b2/transformed/jetified-annotation-experimental-1.1.0"
+      folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/664cadd6c6a5e5cb52e95fd223a9e6d3/transformed/jetified-annotation-experimental-1.1.0"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"

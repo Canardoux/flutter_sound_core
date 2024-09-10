@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.app-release-8:/values-w820dp-v13/values-w820dp-v13.xml",
+            "outputFile": "com.github.canardoux-release-8:/values-w820dp-v13/values-w820dp-v13.xml",
             "map": [
                 {
                     "source": "/Volumes/mac-H/larpoux/proj/tau/flutter_sound/flutter_sound_core/android/src/main/res/values-w820dp/dimens.xml",
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "outputFile": "com.example.app-mergeReleaseResources-6:/values-w820dp-v13/values-w820dp-v13.xml",
+            "outputFile": "com.github.canardoux-mergeReleaseResources-6:/values-w820dp-v13/values-w820dp-v13.xml",
             "map": [
                 {
                     "source": "/Volumes/mac-H/larpoux/proj/tau/flutter_sound/flutter_sound_core/android/src/main/res/values-w820dp/dimens.xml",

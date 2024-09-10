@@ -1,10 +1,20 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.app-mergeReleaseResources-6:/values-v24/values-v24.xml",
+            "outputFile": "com.github.canardoux-release-8:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                },
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/eca59538c27c44e8cad4cfbb6824f401/transformed/media-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -18,25 +28,25 @@
                         "startOffsets": "347,413,474,540",
                         "endColumns": "65,60,65,66",
                         "endOffsets": "408,469,535,602"
-                    }
-                },
-                {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,212",
-                        "endColumns": "156,134",
-                        "endOffsets": "207,342"
                     }
                 }
             ]
         },
         {
-            "outputFile": "com.example.app-release-8:/values-v24/values-v24.xml",
+            "outputFile": "com.github.canardoux-mergeReleaseResources-6:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                },
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/eca59538c27c44e8cad4cfbb6824f401/transformed/media-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -50,16 +60,6 @@
                         "startOffsets": "347,413,474,540",
                         "endColumns": "65,60,65,66",
                         "endOffsets": "408,469,535,602"
-                    }
-                },
-                {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,212",
-                        "endColumns": "156,134",
-                        "endOffsets": "207,342"
                     }
                 }
             ]

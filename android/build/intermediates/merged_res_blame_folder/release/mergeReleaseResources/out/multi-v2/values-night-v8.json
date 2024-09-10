@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.app-release-8:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.github.canardoux-release-8:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -16,10 +16,10 @@
             ]
         },
         {
-            "outputFile": "com.example.app-mergeReleaseResources-6:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.github.canardoux-mergeReleaseResources-6:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/e34bf0b02e7800ed7d60b7969be7b1c2/transformed/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

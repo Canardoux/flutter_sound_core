@@ -1,12 +1,12 @@
 <variant
     name="debug"
-    package="com.example.app"
+    package="com.github.canardoux"
     minSdkVersion="18"
-    targetSdkVersion="30"
+    targetSdkVersion="35"
     debuggable="true"
     mergedManifest="build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml"
     partialResultsDir="build/intermediates/unit_test_lint_partial_results/debug/lintAnalyzeDebugUnitTest/out"
-    desugaredMethodsFiles="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/e8095616af7a9e4d2e608b80765e1497/transformed/D8BackportedDesugaredMethods.txt">
+    desugaredMethodsFiles="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/d85df6bd19e89105d1e8c5e5b1d10190/transformed/D8BackportedDesugaredMethods.txt">
   <buildFeatures
       namespacing="REQUIRED"/>
   <sourceProviders>
