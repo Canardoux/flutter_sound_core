@@ -20,6 +20,18 @@ rootProject.allprojects {
     }
 }
 
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
+  archiveClassifier = "sources"
+}
+
+
 //plugins {
 //    id 'com.android.library'
 //    id 'maven-publish'
@@ -65,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191253
-        versionName '9.12.53'
+        versionCode 191254
+        versionName '9.12.54'
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -141,8 +153,11 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 publishing {
     publications {
         pluginMaven(MavenPublication) {
-//            artifact sourcesJar
+            artifact sourcesJar
                 //from components.findByName('release')
+                from components.java
+                artifact sourceJar
+
                 groupId = PUBLISH_GROUP_ID
                 artifactId = 'flutter_sound_core'
                 version = PUBLISH_VERSION
@@ -153,22 +168,22 @@ publishing {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            pluginMaven(MavenPublication) {
-                //from components.findByName('release')
-                groupId = PUBLISH_GROUP_ID
-                artifactId = 'flutter_sound_core'
-                version = PUBLISH_VERSION
-                //afterEvaluate {
-                //    from components.release
-                //}            
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            // Creates a Maven publication called "release".
+//            pluginMaven(MavenPublication) {
+//                //from components.findByName('release')
+//                groupId = PUBLISH_GROUP_ID
+//                artifactId = 'flutter_sound_core'
+//                version = PUBLISH_VERSION
+//                //afterEvaluate {
+//                //    from components.release
+//                //}            
+//            }
+//        }
+//    }
+//}
 
 
 
