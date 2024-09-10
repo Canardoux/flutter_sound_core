@@ -1,4 +1,4 @@
-## 9.12.49
+## 9.12.50
 
 - ## The [CHANGELOG file is here](https://flutter-sound.canardoux.xyz/changelog.html)
 
