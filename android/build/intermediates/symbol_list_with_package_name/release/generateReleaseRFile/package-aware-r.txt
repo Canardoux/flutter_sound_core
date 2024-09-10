@@ -1,0 +1,18 @@
+com.example.app
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+dimen activity_horizontal_margin
+dimen activity_vertical_margin
+drawable ic_pause
+drawable ic_play_arrow
+drawable ic_skip_next_off
+drawable ic_skip_next_on
+drawable ic_skip_prev_off
+drawable ic_skip_prev_on
+id button
+id progress
+layout activity_main
+mipmap ic_launcher
+string app_name
+style AppTheme

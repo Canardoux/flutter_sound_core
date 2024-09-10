@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.6.0" type="incidents">
+
+    <incident
+        id="StaticFieldLeak"
+        severity="warning"
+        message="Do not place Android context classes in static fields; this is a memory leak">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/Flauto.java"
+            line="110"
+            column="9"
+            startOffset="1972"
+            endLine="110"
+            endColumn="15"
+            endOffset="1978"/>
+    </incident>
+
+    <incident
+        id="StaticFieldLeak"
+        severity="warning"
+        message="Do not place Android context classes in static fields; this is a memory leak">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/Flauto.java"
+            line="111"
+            column="9"
+            startOffset="2013"
+            endLine="111"
+            endColumn="15"
+            endOffset="2019"/>
+    </incident>
+
+    <incident
+        id="SuspiciousIndentation"
+        severity="warning"
+        message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/FlautoMediaPlayer.java"
+            line="35"
+            column="1"
+            startOffset="1247"
+            endLine="35"
+            endColumn="3"
+            endOffset="1249"/>
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/FlautoMediaPlayer.java"
+            line="34"
+            column="1"
+            startOffset="1211"
+            endLine="34"
+            endColumn="3"
+            endOffset="1213"
+            message="Previous line indentation here"/>
+    </incident>
+
+    <incident
+        id="SuspiciousIndentation"
+        severity="warning"
+        message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/FlautoPlayerMedia.java"
+            line="43"
+            column="1"
+            startOffset="1465"
+            endLine="43"
+            endColumn="3"
+            endOffset="1467"/>
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/FlautoPlayerMedia.java"
+            line="42"
+            column="1"
+            startOffset="1429"
+            endLine="42"
+            endColumn="3"
+            endOffset="1431"
+            message="Previous line indentation here"/>
+    </incident>
+
+    <incident
+        id="DefaultLocale"
+        severity="warning"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/xyz/canardoux/TauEngine/FlautoWaveHeader.java"
+            line="256"
+            column="10"
+            startOffset="7643"
+            endLine="258"
+            endColumn="66"
+            endOffset="7808"/>
+    </incident>
+
+</incidents>

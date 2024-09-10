@@ -28,8 +28,10 @@ import android.media.AudioTrack;
 import android.os.Build;
 import android.os.SystemClock;
 import android.media.MediaRecorder;
-
+import androidx.core.content.ContextCompat;
+import static android.Manifest.permission.RECORD_AUDIO;
 import java.lang.Thread;
+import android.content.pm.PackageManager;
 
 import xyz.canardoux.TauEngine.Flauto.*;
 
@@ -192,6 +194,13 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		audioTrack.play();
 	}
 
+	public boolean CheckPermissions()
+	{
+		int result1 = ContextCompat.checkSelfPermission(Flauto.androidContext, RECORD_AUDIO);
+		return result1 == PackageManager.PERMISSION_GRANTED;
+	}
+
+
 	public void startRecorderSide
 		(
 			t_CODEC codec,
@@ -201,6 +210,10 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			Boolean voiceAudioProcessing // Not used on Android
 		) throws Exception
 	{
+		if ( ! CheckPermissions() )
+		{
+			throw new Exception("Permission not granted");
+		}
 		if ( Build.VERSION.SDK_INT < 21)
 			throw new Exception ("Need at least SDK 21");
 		int channelConfig = (numChannels == 1) ? AudioFormat.CHANNEL_IN_MONO : AudioFormat.CHANNEL_IN_STEREO;

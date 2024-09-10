@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.example.app-release-8:/layout-v16/notification_template_custom_big.xml",
+        "source": "com.example.app-core-1.6.0-1:/layout-v16/notification_template_custom_big.xml"
+    }
+]

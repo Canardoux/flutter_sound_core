@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.app-mergeReleaseResources-6:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.example.app-release-8:/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

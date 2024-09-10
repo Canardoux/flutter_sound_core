@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.6.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.6.0)" variant="all" version="8.6.0">
+
+    <issue
+        id="MissingPermission"
+        message="Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with `checkPermission`) or explicitly handle a potential `SecurityException`"
+        errorLine1="  recorder = new AudioRecord("
+        errorLine2="             ^">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoPlayerEngineFromMic.java"
+            line="216"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="MissingPermission"
+        message="Call requires permission which may be rejected by user: code should explicitly check to see if permission is available (with `checkPermission`) or explicitly handle a potential `SecurityException`"
+        errorLine1="  recorder = new AudioRecord(  audioSource,"
+        errorLine2="             ^">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderEngine.java"
+            line="222"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="DefaultLocale"
+        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
+        errorLine1="  return String.format("
+        errorLine2="         ^">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoWaveHeader.java"
+            line="256"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 28 (current min is 18): `android.media.AudioFormat#ENCODING_AAC_LC`"
+        errorLine1="   AudioFormat.ENCODING_AAC_LC, // aacADTS"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoPlayerEngineFromMic.java"
+            line="48"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 28 (current min is 18): `android.media.AudioFormat#ENCODING_MP3`"
+        errorLine1="   AudioFormat.ENCODING_MP3, // MP3 // Not used"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoPlayerEngineFromMic.java"
+            line="51"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 19 (current min is 18): `android.media.MediaRecorder.AudioSource#REMOTE_SUBMIX`"
+        errorLine1="  MediaRecorder.AudioSource.REMOTE_SUBMIX,"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorder.java"
+            line="92"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 24 (current min is 18): `android.media.MediaRecorder.AudioSource#UNPROCESSED`"
+        errorLine1="  MediaRecorder.AudioSource.UNPROCESSED,"
+        errorLine2="  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorder.java"
+            line="93"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 28 (current min is 18): `android.media.AudioFormat#ENCODING_AAC_LC`"
+        errorLine1="   AudioFormat.ENCODING_AAC_LC, // aacADTS"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderEngine.java"
+            line="119"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 28 (current min is 18): `android.media.AudioFormat#ENCODING_MP3`"
+        errorLine1="   AudioFormat.ENCODING_MP3, // MP3 // Not used"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderEngine.java"
+            line="122"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 18): `android.media.MediaRecorder.AudioEncoder#OPUS`"
+        errorLine1="   MediaRecorder.AudioEncoder.OPUS,"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="40"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 21 (current min is 18): `android.media.MediaRecorder.AudioEncoder#VORBIS`"
+        errorLine1="   MediaRecorder.AudioEncoder.VORBIS,"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="43"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 18): `android.media.MediaRecorder.AudioEncoder#OPUS`"
+        errorLine1="   MediaRecorder.AudioEncoder.OPUS, // opusWebM"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="55"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 21 (current min is 18): `android.media.MediaRecorder.AudioEncoder#VORBIS`"
+        errorLine1="   MediaRecorder.AudioEncoder.VORBIS, // vorbisWebM"
+        errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="56"
+            column="4"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 18): `android.media.MediaRecorder.OutputFormat#OGG`"
+        errorLine1="   , MediaRecorder.OutputFormat.OGG // CODEC_OPUS"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="65"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 29 (current min is 18): `android.media.MediaRecorder.OutputFormat#OGG`"
+        errorLine1="   , MediaRecorder.OutputFormat.OGG // CODEC_VORBIS"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="68"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 21 (current min is 18): `android.media.MediaRecorder.OutputFormat#WEBM`"
+        errorLine1="   , MediaRecorder.OutputFormat.WEBM // pcmWebM"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="79"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 21 (current min is 18): `android.media.MediaRecorder.OutputFormat#WEBM`"
+        errorLine1="   , MediaRecorder.OutputFormat.WEBM // opusWebM"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="80"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="InlinedApi"
+        message="Field requires API level 21 (current min is 18): `android.media.MediaRecorder.OutputFormat#WEBM`"
+        errorLine1="   , MediaRecorder.OutputFormat.WEBM // vorbisWebM"
+        errorLine2="     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoRecorderMedia.java"
+            line="81"
+            column="6"/>
+    </issue>
+
+    <issue
+        id="SuspiciousIndentation"
+        message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)"
+        errorLine1="  if (path == null)"
+        errorLine2="~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoMediaPlayer.java"
+            line="35"
+            column="1"/>
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoMediaPlayer.java"
+            line="34"
+            column="1"
+            message="Previous line indentation here"/>
+    </issue>
+
+    <issue
+        id="SuspiciousIndentation"
+        message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)"
+        errorLine1="  if (path == null)"
+        errorLine2="~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoPlayerMedia.java"
+            line="43"
+            column="1"/>
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/FlautoPlayerMedia.java"
+            line="42"
+            column="1"
+            message="Previous line indentation here"/>
+    </issue>
+
+    <issue
+        id="StaticFieldLeak"
+        message="Do not place Android context classes in static fields; this is a memory leak"
+        errorLine1=" public static Activity androidActivity;"
+        errorLine2="        ~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/Flauto.java"
+            line="110"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="StaticFieldLeak"
+        message="Do not place Android context classes in static fields; this is a memory leak"
+        errorLine1=" public static Context androidContext;"
+        errorLine2="        ~~~~~~">
+        <location
+            file="src/main/java/xyz/canardoux/TauEngine/Flauto.java"
+            line="111"
+            column="9"/>
+    </issue>
+
+</issues>

@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.example.app-release-8:/layout-v26/abc_screen_toolbar.xml",
+        "source": "com.example.app-appcompat-1.2.0-3:/layout-v26/abc_screen_toolbar.xml"
+    }
+]

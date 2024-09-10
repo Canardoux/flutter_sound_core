@@ -1,5 +1,4 @@
 
-
 buildscript {
     repositories {
         google()
@@ -51,14 +50,15 @@ apply plugin: 'com.android.library'
 group='com.github.canardoux'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "34.0.0"
+    compileSdkVersion 35
+    compileSdk = 35
+    buildToolsVersion "35.0.0"
 
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 191244
-        versionName '9.12.44'
+        versionCode 191247
+        versionName '9.12.47'
         namespace("com.example.app")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -75,7 +75,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_22
         targetCompatibility JavaVersion.VERSION_22
-   }
+    }
+    
+    lint {
+          baseline = file("lint-baseline.xml")
+      }
 
 }
 

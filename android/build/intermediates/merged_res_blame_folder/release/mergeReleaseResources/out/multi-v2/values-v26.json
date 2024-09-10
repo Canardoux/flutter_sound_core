@@ -1,0 +1,52 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.app-mergeReleaseResources-6:/values-v26/values-v26.xml",
+            "map": [
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v26/values-v26.xml",
+                    "from": {
+                        "startLines": "2,3,4,8,12,16",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,431,657,896",
+                        "endLines": "2,3,7,11,15,16",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,426,652,891,984"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,8,12,16",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,381,557,796",
+                        "endLines": "2,3,7,11,15,16",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,376,552,791,884"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.example.app-release-8:/values-v26/values-v26.xml",
+            "map": [
+                {
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v26/values-v26.xml",
+                    "from": {
+                        "startLines": "2,3,4,8,12,16",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,431,657,896",
+                        "endLines": "2,3,7,11,15,16",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,426,652,891,984"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,8,12,16",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,381,557,796",
+                        "endLines": "2,3,7,11,15,16",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,376,552,791,884"
+                    }
+                }
+            ]
+        }
+    ]
+}
