@@ -102,8 +102,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191260
-        versionName '9.12.60'
+        versionCode 191261
+        versionName '9.12.61'
         compileSdkVersion = 35
         namespace("com.github.canardoux")
 
@@ -198,7 +198,7 @@ afterEvaluate {
 // =========================================================================================================================================================
 publishing {
     publications {
-            maven(MavenPublication) {
+            maven2(MavenPublication) {
                 ///from components.release
                 version = PUBLISH_VERSION
                 artifactId = "flutter_sound_core"
