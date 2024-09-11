@@ -77,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191257
-        versionName '9.12.57'
+        versionCode 191258
+        versionName '9.12.58'
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
