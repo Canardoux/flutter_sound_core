@@ -77,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191256
-        versionName '9.12.56'
+        versionCode 191257
+        versionName '9.12.57'
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -130,14 +130,14 @@ ext {
 
 // ==========================================================================================================================================================
 
-task androidSourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from android.sourceSets.main.java.source
-}
+//task androidSourcesJar(type: Jar) {
+//    archiveClassifier = 'sources'
+//    from android.sourceSets.main.java.source
+//}
 
-artifacts {
-    archives androidSourcesJar
-}
+//artifacts {
+//    archives androidSourcesJar
+//}
 
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
@@ -146,17 +146,17 @@ group = PUBLISH_GROUP_ID
 version = PUBLISH_VERSION
 
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    destinationDir = file("../javadoc/")
-    failOnError false
-}
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    destinationDir = file("../javadoc/")
+//    failOnError false
+//}
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-   archiveClassifier = 'javadoc'
-   from javadoc.destinationDir
-}
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//   archiveClassifier = 'javadoc'
+//   from javadoc.destinationDir
+//}
 
 afterEvaluate {
     publishing {
@@ -166,7 +166,7 @@ afterEvaluate {
                 groupId PUBLISH_GROUP_ID
                 artifactId 'flutter_sound_core'
                 version '1.0.0'
-                artifact("$buildDir/outputs/aar/bar-release.aar")
+                artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
 
             }
         }
@@ -185,7 +185,7 @@ publishing {
             groupId = PUBLISH_GROUP_ID
             artifactId = 'flutter_sound_core'
             version = PUBLISH_VERSION
-            artifact("$buildDir/outputs/aar/bar-release.aar")
+            artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
                //afterEvaluate {
                 //    from components.release
                 //}            

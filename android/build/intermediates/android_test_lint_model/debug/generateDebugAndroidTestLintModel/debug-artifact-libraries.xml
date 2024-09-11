@@ -2,7 +2,7 @@
   <library
       name=":@@:::debug"
       jars="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out/jars/classes.jar:/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out/jars/libs/R.jar"
-      resolved="com.github.canardoux:flutter_sound_core:9.12.55"
+      resolved="com.github.canardoux:flutter_sound_core:9.12.56"
       folder="/Volumes/mac-H/larpoux/.gradle/caches/8.10/transforms/69c929cc24d93794ed15ee29eada4c16/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
