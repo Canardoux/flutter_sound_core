@@ -24,6 +24,24 @@ rootProject.allprojects {
 }
 
 
+android.libraryVariants.all {
+    def aptOutputDir = new File(buildDir, "generated/source/apt/${it.unitTestVariant.dirName}")
+    it.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
+}
+
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from android.sourceSets.main.java.sourceFiles
+}
+
+//task sourceJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    //classifier "sources"
+//}
+
+
+
 //plugins {
 //    id 'java'
 //    id 'maven-publish'
@@ -55,6 +73,9 @@ signing {
     //sign publishing.publications.main
 }
 
+//task publishMavenPublicationToMavenLocal {
+    //inputFile.from(jar)
+//}
 
 //signing {
 //    def signingKey =  properties.getProperty("signing.keyId")
@@ -75,13 +96,15 @@ group='com.github.canardoux'
 android {
     compileSdkVersion 35
     compileSdk = 35
+    compileSdkVersion = 35
     buildToolsVersion "35.0.0"
 
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191259
-        versionName '9.12.59'
+        versionCode 191260
+        versionName '9.12.60'
+        compileSdkVersion = 35
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -125,27 +148,6 @@ ext {
 }
 
 
-android.libraryVariants.all {
-    def aptOutputDir = new File(buildDir, "generated/source/apt/${it.unitTestVariant.dirName}")
-    it.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
-}
-
-
-//task sourceJar(type: Jar) {
-//    from android.sourceSets.main.jniLibs.srcDirs
-//    archiveClassifier = "sources"
-//}
-
-//task androidSourcesJar(type: Jar) {
-//    archiveClassifier.set("sources")
-//    from android.sourceSets.main.java.sourceFiles
-//}
-
-//task sourceJar(type: Jar) {
-//    from android.sourceSets.main.java.srcDirs
-//    //classifier "sources"
-//}
-
 
 // ==========================================================================================================================================================
 
@@ -181,12 +183,12 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                //from components.release
+                from components.release
                 groupId PUBLISH_GROUP_ID
                 artifactId 'flutter_sound_core'
                 version PUBLISH_VERSION
                 //artifact(sourceJar)
-                artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
+                //artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
 
             }
         }
@@ -203,8 +205,11 @@ publishing {
                 groupId = PUBLISH_GROUP_ID
                 //artifact(sourceJar)
                 artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
+                afterEvaluate {
+                    from components.release
+                }
             }
-
+    
         //flutter_sound_core(MavenPublication) {
         //    //artifact sourcesJar
         //        //from components.findByName('release')
