@@ -12,6 +12,9 @@ buildscript {
    }
 }
 
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
 
 rootProject.allprojects {
     repositories {
@@ -77,8 +80,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191258
-        versionName '9.12.58'
+        versionCode 191259
+        versionName '9.12.59'
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -102,7 +105,7 @@ android {
     }
     publishing {
       singleVariant("release") {
-        //withSourcesJar()
+      withSourcesJar()
     }
   }
 
@@ -121,6 +124,22 @@ ext {
     PUBLISH_VERSION = android.defaultConfig.versionName // '0.0.2' // project.getProperty(“libraryVersion”)
 }
 
+
+android.libraryVariants.all {
+    def aptOutputDir = new File(buildDir, "generated/source/apt/${it.unitTestVariant.dirName}")
+    it.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
+}
+
+
+//task sourceJar(type: Jar) {
+//    from android.sourceSets.main.jniLibs.srcDirs
+//    archiveClassifier = "sources"
+//}
+
+//task androidSourcesJar(type: Jar) {
+//    archiveClassifier.set("sources")
+//    from android.sourceSets.main.java.sourceFiles
+//}
 
 //task sourceJar(type: Jar) {
 //    from android.sourceSets.main.java.srcDirs
@@ -165,7 +184,8 @@ afterEvaluate {
                 //from components.release
                 groupId PUBLISH_GROUP_ID
                 artifactId 'flutter_sound_core'
-                version '1.0.0'
+                version PUBLISH_VERSION
+                //artifact(sourceJar)
                 artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
 
             }
@@ -176,20 +196,29 @@ afterEvaluate {
 // =========================================================================================================================================================
 publishing {
     publications {
-        flutter_sound_core(MavenPublication) {
-            //artifact sourcesJar
-                //from components.findByName('release')
-                //from components.java
-                //artifact sourceJar
+            maven(MavenPublication) {
+                ///from components.release
+                version = PUBLISH_VERSION
+                artifactId = "flutter_sound_core"
+                groupId = PUBLISH_GROUP_ID
+                //artifact(sourceJar)
+                artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
+            }
 
-            groupId = PUBLISH_GROUP_ID
-            artifactId = 'flutter_sound_core'
-            version = PUBLISH_VERSION
-            artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
-               //afterEvaluate {
-                //    from components.release
-                //}            
-        }
+        //flutter_sound_core(MavenPublication) {
+        //    //artifact sourcesJar
+        //        //from components.findByName('release')
+        //        //from components.java
+        //        //artifact sourceJar
+
+        //    groupId = PUBLISH_GROUP_ID
+        //    artifactId = 'flutter_sound_core'
+        //    version = PUBLISH_VERSION
+        //    artifact("$buildDir/outputs/aar/flutter_sound_core-release.aar")
+        //       //afterEvaluate {
+        //        //    from components.release
+        //        //}            
+        //}
     }
 }
 
