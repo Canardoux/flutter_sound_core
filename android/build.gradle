@@ -77,8 +77,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191255
-        versionName '9.12.55'
+        versionCode 191256
+        versionName '9.12.56'
         namespace("com.github.canardoux")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -122,6 +122,10 @@ ext {
 }
 
 
+//task sourceJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    //classifier "sources"
+//}
 
 
 // ==========================================================================================================================================================
@@ -158,33 +162,36 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
+                //from components.release
                 groupId PUBLISH_GROUP_ID
                 artifactId 'flutter_sound_core'
                 version '1.0.0'
+                artifact("$buildDir/outputs/aar/bar-release.aar")
+
             }
         }
     }
 }
 
 // =========================================================================================================================================================
-//publishing {
-//    publications {
-//        pluginMaven(MavenPublication) {
-//            artifact sourcesJar
-//                //from components.findByName('release')
-//                from components.java
-//                //artifact sourceJar
-//
-//                groupId = PUBLISH_GROUP_ID
-//                artifactId = 'flutter_sound_core'
-//                version = PUBLISH_VERSION
-//                //afterEvaluate {
-//                //    from components.release
-//                //}            
-//        }
-//    }
-//}
+publishing {
+    publications {
+        flutter_sound_core(MavenPublication) {
+            //artifact sourcesJar
+                //from components.findByName('release')
+                //from components.java
+                //artifact sourceJar
+
+            groupId = PUBLISH_GROUP_ID
+            artifactId = 'flutter_sound_core'
+            version = PUBLISH_VERSION
+            artifact("$buildDir/outputs/aar/bar-release.aar")
+               //afterEvaluate {
+                //    from components.release
+                //}            
+        }
+    }
+}
 
 //afterEvaluate {
 //    publishing {
