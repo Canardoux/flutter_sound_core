@@ -21,7 +21,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/notification_bg_low.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable/notification_bg_low.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable/notification_bg_low.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/abc_tab_indicator_material.xml",
@@ -73,7 +73,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/notification_bg.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable/notification_bg.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable/notification_bg.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/btn_radio_on_mtrl.xml",
@@ -109,7 +109,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/notification_icon_background.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable/notification_icon_background.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable/notification_icon_background.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/abc_ic_arrow_drop_right_black_24dp.xml",
@@ -173,7 +173,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/notification_tile_bg.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable/notification_tile_bg.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable/notification_tile_bg.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable/btn_checkbox_checked_mtrl.xml",

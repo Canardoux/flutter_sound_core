@@ -29,7 +29,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/notification_bg_normal.9.png",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-mdpi-v4/notification_bg_normal.9.png"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-mdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/ic_skip_prev_on.png",
@@ -57,7 +57,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/notification_bg_low_normal.9.png",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-mdpi-v4/notification_bg_low_normal.9.png"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-mdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
@@ -121,7 +121,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/ic_launcher.png",
-        "source": "com.github.canardoux-jetified-android-example-1.0.1-4:/drawable-mdpi-v4/ic_launcher.png"
+        "source": "com.github.canardoux-jetified-android-example-1.0.1-5:/drawable-mdpi-v4/ic_launcher.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/abc_ab_share_pack_mtrl_alpha.9.png",
@@ -177,7 +177,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/notification_bg_low_pressed.9.png",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/abc_btn_radio_to_on_mtrl_000.png",
@@ -217,11 +217,11 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/notification_bg_normal_pressed.9.png",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/notify_panel_notification_icon_bg.png",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-mdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",

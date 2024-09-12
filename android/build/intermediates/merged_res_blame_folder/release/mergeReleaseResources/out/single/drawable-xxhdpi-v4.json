@@ -121,7 +121,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-xxhdpi-v4/ic_launcher.png",
-        "source": "com.github.canardoux-jetified-android-example-1.0.1-4:/drawable-xxhdpi-v4/ic_launcher.png"
+        "source": "com.github.canardoux-jetified-android-example-1.0.1-5:/drawable-xxhdpi-v4/ic_launcher.png"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-xxhdpi-v4/abc_ic_star_half_black_48dp.png",

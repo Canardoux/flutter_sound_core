@@ -1,7 +1,7 @@
 [
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/notification_action_background.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/drawable-v21/notification_action_background.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/drawable-v21/notification_action_background.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_dialog_material_background.xml",

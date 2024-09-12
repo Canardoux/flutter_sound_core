@@ -1,7 +1,7 @@
 [
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_action.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/notification_action.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/notification_action.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_expanded_menu_layout.xml",
@@ -9,11 +9,11 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_part_time.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/notification_template_part_time.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/notification_template_part_time.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_media_action.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_media_action.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_media_action.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/activity_main.xml",
@@ -37,7 +37,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_big_media_narrow_custom.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_big_media_narrow_custom.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_big_media_narrow_custom.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_alert_dialog_title_material.xml",
@@ -49,7 +49,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_big_media_custom.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_big_media_custom.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_big_media_custom.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_alert_dialog_material.xml",
@@ -89,7 +89,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_part_chronometer.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/notification_template_part_chronometer.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/notification_template_part_chronometer.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_popup_menu_header_item_layout.xml",
@@ -121,7 +121,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/custom_dialog.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/custom_dialog.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/custom_dialog.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_list_menu_item_icon.xml",
@@ -133,15 +133,15 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_media.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_media.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_media.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_media_custom.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_media_custom.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_media_custom.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_media_cancel_action.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_media_cancel_action.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_media_cancel_action.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_screen_simple_overlay_action_mode.xml",
@@ -149,11 +149,11 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_big_media_narrow.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_big_media_narrow.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_big_media_narrow.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_icon_group.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/notification_template_icon_group.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/notification_template_icon_group.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_cascading_menu_item_layout.xml",
@@ -161,7 +161,7 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_lines_media.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_lines_media.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_lines_media.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/abc_activity_chooser_view.xml",
@@ -173,11 +173,11 @@
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_action_tombstone.xml",
-        "source": "com.github.canardoux-core-1.6.0-1:/layout/notification_action_tombstone.xml"
+        "source": "com.github.canardoux-core-1.6.0-2:/layout/notification_action_tombstone.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/notification_template_big_media.xml",
-        "source": "com.github.canardoux-media-1.4.1-5:/layout/notification_template_big_media.xml"
+        "source": "com.github.canardoux-media-1.4.1-4:/layout/notification_template_big_media.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout/support_simple_spinner_dropdown_item.xml",
