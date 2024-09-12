@@ -1,26 +1,26 @@
 [
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/notification_action_background.xml",
-        "source": "com.github.canardoux-core-1.6.0-2:/drawable-v21/notification_action_background.xml"
+        "source": "com.github.canardoux-core-1.6.0-0:/drawable-v21/notification_action_background.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_dialog_material_background.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/drawable-v21/abc_dialog_material_background.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/drawable-v21/abc_dialog_material_background.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_list_divider_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/drawable-v21/abc_list_divider_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/drawable-v21/abc_list_divider_material.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_edit_text_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/drawable-v21/abc_edit_text_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/drawable-v21/abc_edit_text_material.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_action_bar_item_background_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/drawable-v21/abc_action_bar_item_background_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/drawable-v21/abc_action_bar_item_background_material.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/drawable-v21/abc_btn_colored_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/drawable-v21/abc_btn_colored_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/drawable-v21/abc_btn_colored_material.xml"
     }
 ]

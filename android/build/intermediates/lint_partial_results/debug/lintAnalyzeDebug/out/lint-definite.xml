@@ -101,12 +101,12 @@
             priority="0"/>
         <location
             file="${:*projectDir}/build.gradle"
-            line="140"
+            line="147"
             column="20"
-            startOffset="2988"
-            endLine="140"
+            startOffset="3145"
+            endLine="147"
             endColumn="46"
-            endOffset="3014"/>
+            endOffset="3171"/>
     </incident>
 
     <incident
@@ -121,12 +121,12 @@
             priority="0"/>
         <location
             file="${:*projectDir}/build.gradle"
-            line="141"
+            line="148"
             column="20"
-            startOffset="3034"
-            endLine="141"
+            startOffset="3191"
+            endLine="148"
             endColumn="48"
-            endOffset="3062"/>
+            endOffset="3219"/>
     </incident>
 
     <incident
@@ -141,12 +141,12 @@
             priority="0"/>
         <location
             file="${:*projectDir}/build.gradle"
-            line="142"
+            line="149"
             column="20"
-            startOffset="3082"
-            endLine="142"
+            startOffset="3239"
+            endLine="149"
             endColumn="56"
-            endOffset="3118"/>
+            endOffset="3275"/>
     </incident>
 
 </incidents>

@@ -1,10 +1,10 @@
 [
     {
         "merged": "com.github.canardoux-release-9:/layout-watch-v20/abc_alert_dialog_title_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/layout-watch-v20/abc_alert_dialog_title_material.xml"
     },
     {
         "merged": "com.github.canardoux-release-9:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
-        "source": "com.github.canardoux-appcompat-1.2.0-3:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+        "source": "com.github.canardoux-appcompat-1.2.0-5:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
     }
 ]

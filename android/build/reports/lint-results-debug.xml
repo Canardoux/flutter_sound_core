@@ -25,7 +25,7 @@
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/Volumes/mac-H/larpoux/proj/tau/flutter_sound/flutter_sound_core/android/build.gradle"
-            line="140"
+            line="147"
             column="20"/>
     </issue>
 
@@ -41,7 +41,7 @@
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/Volumes/mac-H/larpoux/proj/tau/flutter_sound/flutter_sound_core/android/build.gradle"
-            line="141"
+            line="148"
             column="20"/>
     </issue>
 
@@ -57,7 +57,7 @@
         errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/Volumes/mac-H/larpoux/proj/tau/flutter_sound/flutter_sound_core/android/build.gradle"
-            line="142"
+            line="149"
             column="20"/>
     </issue>
 
