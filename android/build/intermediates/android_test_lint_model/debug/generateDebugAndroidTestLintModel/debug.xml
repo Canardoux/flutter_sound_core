@@ -25,6 +25,6 @@
       type="INSTRUMENTATION_TEST"
       applicationId="com.github.canardoux.test"
       generatedResourceFolders="build/generated/res/resValues/androidTest/debug"
-      desugaredMethodsFiles="/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/8cdef9acea174d7f34e955c53dc513c4/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/e8095616af7a9e4d2e608b80765e1497/transformed/D8BackportedDesugaredMethods.txt">
   </artifact>
 </variant>

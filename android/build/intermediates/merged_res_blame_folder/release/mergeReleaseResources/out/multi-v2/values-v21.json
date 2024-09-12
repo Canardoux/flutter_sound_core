@@ -4,7 +4,7 @@
             "outputFile": "com.github.canardoux-release-9:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/081b4d8c46f1793ea063a164490d8e79/transformed/core-1.6.0/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/b6d27aeccb26f5c166888a039c20393e/transformed/media-1.4.1/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
@@ -42,7 +42,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,19,20,21,22,24,26,27,28,29,30,32,34,36,38,40,42,43,48,50,52,53,54,56,58,59,60,61,62,63,106,109,152,155,158,160,162,164,167,171,174,175,176,179,180,181,182,183,184,187,188,190,192,194,196,200,202,203,204,205,207,211,213,215,216,217,218,219,220,222,223,224,234,235,236,248",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -61,7 +61,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/a8a23e06319a4045cd15ac785f3ae39c/transformed/jetified-android-example-1.0.1/res/values-v21/values.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/c08c01a3ca0866f5d73f12068c2b030a/transformed/jetified-android-example-1.0.1/res/values-v21/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "4",
@@ -85,7 +85,7 @@
             "outputFile": "com.github.canardoux-mergeReleaseResources-7:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/081b4d8c46f1793ea063a164490d8e79/transformed/core-1.6.0/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",
@@ -104,7 +104,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/b6d27aeccb26f5c166888a039c20393e/transformed/media-1.4.1/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,5,8,11",
                         "startColumns": "4,4,4,4",
@@ -123,7 +123,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-v21/values-v21.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v21/values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,19,20,21,22,24,26,27,28,29,30,32,34,36,38,40,42,43,48,50,52,53,54,56,58,59,60,61,62,63,106,109,152,155,158,160,162,164,167,171,174,175,176,179,180,181,182,183,184,187,188,190,192,194,196,200,202,203,204,205,207,211,213,215,216,217,218,219,220,222,223,224,234,235,236,248",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -142,7 +142,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/a8a23e06319a4045cd15ac785f3ae39c/transformed/jetified-android-example-1.0.1/res/values-v21/values.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/c08c01a3ca0866f5d73f12068c2b030a/transformed/jetified-android-example-1.0.1/res/values-v21/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "4",

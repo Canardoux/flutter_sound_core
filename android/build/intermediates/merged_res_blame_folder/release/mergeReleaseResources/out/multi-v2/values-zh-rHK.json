@@ -4,7 +4,7 @@
             "outputFile": "com.github.canardoux-mergeReleaseResources-7:/values-zh-rHK/values-zh-rHK.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/081b4d8c46f1793ea063a164490d8e79/transformed/core-1.6.0/res/values-zh-rHK/values-zh-rHK.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0/res/values-zh-rHK/values-zh-rHK.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-zh-rHK/values-zh-rHK.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-zh-rHK/values-zh-rHK.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -36,7 +36,7 @@
             "outputFile": "com.github.canardoux-release-9:/values-zh-rHK/values-zh-rHK.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/081b4d8c46f1793ea063a164490d8e79/transformed/core-1.6.0/res/values-zh-rHK/values-zh-rHK.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/2849868780106557675c174c8f06446f/transformed/core-1.6.0/res/values-zh-rHK/values-zh-rHK.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -53,7 +53,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-zh-rHK/values-zh-rHK.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-zh-rHK/values-zh-rHK.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

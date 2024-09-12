@@ -4,7 +4,7 @@
             "outputFile": "com.github.canardoux-release-9:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/b6d27aeccb26f5c166888a039c20393e/transformed/media-1.4.1/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -36,7 +36,7 @@
             "outputFile": "com.github.canardoux-mergeReleaseResources-7:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/b6d27aeccb26f5c166888a039c20393e/transformed/media-1.4.1/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/f28e1403f1cee85fc248a4ac4eafa734/transformed/media-1.4.1/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
@@ -53,7 +53,7 @@
                     }
                 },
                 {
-                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/transforms-4/fe7012776dd663025e579f64e010a1a9/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "source": "/Volumes/mac-H/larpoux/.gradle/caches/8.8/transforms/9d0ca897c19a869c25bbeaeb29812110/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
