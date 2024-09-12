@@ -14,6 +14,8 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
+apply plugin: 'com.android.library'
+//apply plugin: 'maven'
 
 
 rootProject.allprojects {
@@ -86,9 +88,6 @@ signing {
 //    //sign stuffZip
 //}
 
-apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
-//apply plugin: 'maven'
 //group = 'com.github.canardoux'
 
 //apply plugin: 'com.github.dcendents.android-maven'
@@ -96,7 +95,7 @@ group='com.github.canardoux'
 
   tasks.withType(JavaCompile).configureEach {
     javaCompiler = javaToolchains.compilerFor {
-      languageVersion = JavaLanguageVersion.of(23)
+      languageVersion = JavaLanguageVersion.of(17)
     }
   }
 
@@ -110,8 +109,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191559
-        versionName '9.15.59'
+        versionCode 191560
+        versionName '9.15.60'
         compileSdkVersion = 35
         namespace("com.github.canardoux")
 
