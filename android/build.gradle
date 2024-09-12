@@ -94,6 +94,13 @@ apply plugin: 'maven-publish'
 //apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.canardoux'
 
+  tasks.withType(JavaCompile).configureEach {
+    javaCompiler = javaToolchains.compilerFor {
+      languageVersion = JavaLanguageVersion.of(23)
+    }
+  }
+
+
 android {
     compileSdkVersion 35
     compileSdk = 35
@@ -103,8 +110,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 191558
-        versionName '9.15.58'
+        versionCode 191557
+        versionName '9.15.57'
         compileSdkVersion = 35
         namespace("com.github.canardoux")
 
@@ -120,8 +127,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_22
-        targetCompatibility JavaVersion.VERSION_22
+        sourceCompatibility JavaVersion.VERSION_23
+        targetCompatibility JavaVersion.VERSION_23
     }
 
     lint {
