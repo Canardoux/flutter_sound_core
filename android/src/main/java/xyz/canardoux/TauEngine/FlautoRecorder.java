@@ -262,7 +262,8 @@ public class FlautoRecorder
 		mPauseTime = 0;
 		mStartPauseTime = -1;
 		stop(); // To start a new clean record
-		m_path = null;
+		path = Flauto.getPath(path);
+		m_path = path;
 		if (_isAudioRecorder[codec.ordinal()])
 		{
 				//if (numChannels != 1)
@@ -273,8 +274,6 @@ public class FlautoRecorder
 				recorder = new FlautoRecorderEngine();
 		} else
 		{
-				path = Flauto.getPath(path);
-				m_path = path;
 				recorder = new FlautoRecorderMedia(m_callBack);
 		}
 		try
