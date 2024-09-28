@@ -156,7 +156,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			// boolean enableVoiceProcessing, // Not used on Android
 			int bufferSize) {
 		stop(); // To start a new clean playback
-		_toto_position = 0;
 		if (dataBuffer != null) {
 			try {
 				String fileName = getTempFileName();
@@ -265,7 +264,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		mTimer = null;
 	}
 
-	long _toto_position = 0;
 
 	void setTimer(long duration) {
 		cancelTimer();
@@ -285,17 +283,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 									long position = player._getCurrentPosition();
 									long duration = player._getDuration();
-									// assert(_toto_position <= position);
-									if (position < _toto_position) {
-										// throw new Exception("position <
-										// _toto_position");
-										// System.out.println("_toto_position >
-										// position");
-										logDebug("Position is decreasing on FlautoPlayer::setTimer::TimerTask");
-										position = _toto_position;
-
-									}
-									_toto_position = position;
 									if (position > duration) {
 										position = duration;
 									}
@@ -425,7 +412,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		logDebug("seekTo: " + millis);
 		latentSeek = -1;
 		player._seekTo(millis);
-		_toto_position = 0;
 		return true;
 	}
 
