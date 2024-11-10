@@ -107,7 +107,7 @@ public class Flauto
 
 
 
-	public static Activity androidActivity;
+	//public static Activity androidActivity;
 	public static Context androidContext;
 
 	public static String temporayFile(String radical)
