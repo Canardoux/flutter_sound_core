@@ -109,8 +109,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 35
-        versionCode 19173
-        versionName '9.17.3'
+        versionCode 19174
+        versionName '9.17.4'
         compileSdkVersion = 35
         namespace("com.github.canardoux")
 
