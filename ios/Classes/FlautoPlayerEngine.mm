@@ -184,7 +184,11 @@
                 [timePitchUnit setRate:1];
            
                 
-                outputFormat = [outputNode inputFormatForBus: 0];
+                AVAudioFormat* format = [outputNode inputFormatForBus: 0];
+                int channelCount = [format channelCount];
+                outputFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
+                                        sampleRate: 48000 // Must be fixed because of iOS bug !
+                                                                          channels: channelCount interleaved: false];
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
                 [engine attachNode: playerNode];

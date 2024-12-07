@@ -52,7 +52,8 @@
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
         int channelCount = [inputFormat channelCount];
-        //int samplerate = [inputFormat sampleRate];
+        int inputSampleRate = [inputFormat sampleRate];
+        AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
         //bool interleaved = [inputFormat isInterleaved];
         AVAudioCommonFormat cf = [inputFormat commonFormat];
 
@@ -102,12 +103,16 @@
                 return;
          } 
 
+         AVAudioFormat* inpFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
+                                      sampleRate: 48000 // Must be fixed because of iOS bug !
+                                                                        channels: channelCount interleaved: false];
+
          AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: YES];
-         AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: recordingFormat];
-        
+         AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inpFormat toFormat: recordingFormat];
+         //AVAudioFormat *format = [inputNode outputFormatForBus: 0];
+
          [inputNode installTapOnBus: 0 bufferSize: (int)bufferSize format: nil block:
-          
-         ^(AVAudioPCMBuffer * _Nonnull buffer, AVAudioTime * _Nonnull when)
+         ^(AVAudioPCMBuffer* _Nonnull buffer, AVAudioTime* _Nonnull when)
          {
                          inputStatus = AVAudioConverterInputStatus_HaveData ;
                          AVAudioPCMBuffer* convertedBuffer = [[AVAudioPCMBuffer alloc]initWithPCMFormat: recordingFormat frameCapacity: [buffer frameCapacity]];
