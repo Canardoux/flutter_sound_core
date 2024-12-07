@@ -52,8 +52,8 @@
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
         int channelCount = [inputFormat channelCount];
-        int inputSampleRate = [inputFormat sampleRate];
-        AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
+        //int inputSampleRate = [inputFormat sampleRate];
+        //AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
         //bool interleaved = [inputFormat isInterleaved];
         AVAudioCommonFormat cf = [inputFormat commonFormat];
 
