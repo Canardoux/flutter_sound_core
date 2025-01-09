@@ -13,7 +13,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-TauEngine is available through [CocoaPods](https://cocoapods.org). To install
+Flutter Sound is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
@@ -26,4 +26,4 @@ Larpoux, larpoux@canardoux.xyz
 
 ## License
 
-TauEngine is available under the LGPL-V3 license. See the LICENSE file for more info.
+TauEngine is available under the MPL2 license. See the LICENSE file for more info.

@@ -4,7 +4,7 @@
  * This file is part of Flutter-Sound.
  *
  * Flutter-Sound is free software: you can redistribute it and/or modify
- * it under the terms of the Mozilla Public License version 2 (MPL2.0),
+ * it under the terms of the Mozilla Public License version 2 (MPL-2.0),
  * as published by the Mozilla organization.
  *
  * Flutter-Sound is distributed in the hope that it will be useful,
