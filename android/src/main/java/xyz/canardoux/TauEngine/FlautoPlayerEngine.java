@@ -50,7 +50,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 			int ln = mData.length;
 			int total = 0;
 			int written = 0;
-			while (audioTrack != null && ln > 0) { // Loop as long as there is data to push to the device
+  			while (audioTrack != null && ln > 0) { // Loop as long as there is data to push to the device
 				try {
 					if (Build.VERSION.SDK_INT >= 23) {
 						written = audioTrack.write(mData, 0, ln, AudioTrack.WRITE_BLOCKING);
