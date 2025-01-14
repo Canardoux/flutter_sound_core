@@ -35,18 +35,18 @@
 
 static bool _isIosEncoderSupported [] =
 {
-     		true, // DEFAULT
-		true, // aacADTS
-		false, // opusOGG
-		true, // opusCAF
-		false, // MP3
-		false, // vorbisOGG
-		true, // pcm16
-		true, // pcm16WAV
-		false, // pcm16AIFF
-		true, // pcm16CAF
-		true, // flac
-		true, // aacMP4
+                true, // DEFAULT
+                true, // aacADTS
+                false, // opusOGG
+                true, // opusCAF
+                false, // MP3
+                false, // vorbisOGG
+                true, // pcm16
+                true, // pcm16WAV
+                false, // pcm16AIFF
+                true, // pcm16CAF
+                true, // flac
+                true, // aacMP4
                 false, // amrNB
                 false, // amrWB
                 
@@ -146,6 +146,12 @@ AudioRecInterface* audioRec;
 }
 
 
+- (void)recordingDataFloat32: (NSMutableArray*)data
+{
+        [m_callBack recordingDataFloat32: data ];
+}
+
+
 - (FlautoRecorder*)init: (NSObject<FlautoRecorderCallback>*) callback
 {
         m_callBack = callback;
@@ -222,7 +228,17 @@ AudioRecInterface* audioRec;
 
         if(codec == pcm16 || codec == pcmFloat32)
         {
+            try
+            {
                 audioRec = new AudioRecorderEngine(codec, path, audioSettings, bufferSize, enableVoiceProcessing, self );
+            } catch ( NSException* e)
+            {
+                return false;
+            }
+            if (audioRec == nil)
+            {
+                return false;
+            }
         } else
         {
                 audioRec = new avAudioRec(codec, path, audioSettings, self);
@@ -243,7 +259,8 @@ AudioRecInterface* audioRec;
           {
                 try {
                         audioRec -> stopRecorder();
-                } catch ( NSException* e) {
+                } catch ( NSException* e)
+                {
                 }
                 delete audioRec;
                 audioRec = nil;

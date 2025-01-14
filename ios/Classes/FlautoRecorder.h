@@ -39,6 +39,7 @@
 - (void)pauseRecorderCompleted: (bool)success;
 - (void)updateRecorderProgressDbPeakLevel: normalizedPeakLevel duration: duration;
 - (void)recordingData: (NSData*)data;
+- (void)recordingDataFloat32: (NSArray*)data;
 - (void)log: (t_LOG_LEVEL)level msg: (NSString*)msg;
 @end
 
@@ -67,6 +68,7 @@
 - (bool)deleteRecord: (NSString*)path;
 - (NSString*)getRecordURL: (NSString*)path;
 - (void)recordingData: (NSData*)data;
+- (void)recordingDataFloat32: (NSArray*)data;
 - (int)getStatus;
 - (void)logDebug: (NSString*)msg;
 

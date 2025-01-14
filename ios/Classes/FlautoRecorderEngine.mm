@@ -61,6 +61,11 @@
         NSURL* fileURL = nil;
         if (path != nil && path != (id)[NSNull null])
         {
+                if (channelCount > 1)
+                {
+                    [flautoRecorder logDebug: @"Invalid channelCount >1 not yet supported"];
+                    [NSException raise: @"Invalid channelCount" format:@"channelCount == %d is invalid", channelCount];
+                }
                 [fileManager removeItemAtPath:path error:nil];
                 [fileManager createFileAtPath: path contents:nil attributes:nil];
                 fileURL = [[NSURL alloc] initFileURLWithPath: path];
@@ -79,24 +84,31 @@
                 // __'__buf' contains captured audio from the node at time 'when'
                         int ln = [buf frameLength];
                         float* const* data = [buf floatChannelData];
-                        //int stride = [buf stride];
                         if (ln > 0)
                         {
+                            if (fileHandle != nil)
+                            {
+                                    NSData* b = [[NSData alloc] initWithBytes: data[0] length: ln * 4 ];
+                                    [fileHandle writeData: b];
+                            } else
+                            {
+                                NSMutableArray* d = [NSMutableArray array];
                                 for (int channel = 0; channel < channelCount; ++channel)
                                 {
-                                        NSData* b = [[NSData alloc] initWithBytes: data[channel] length: ln * 4 ];
-                                        if (fileHandle != nil)
-                                        {
-                                                [fileHandle writeData: b];
-                                        } else
-                                        {
-                                                dispatch_async(dispatch_get_main_queue(),
-                                               ^{
-                                                        [flautoRecorder  recordingData: b];
-                                                });
-                                        }
+                                        NSData const* b = [[NSData alloc] initWithBytes: data[channel] length: ln * 4 ];
+                                        [d addObject: b];
                                 }
+                                dispatch_async(dispatch_get_main_queue(),
+                               ^{
+                                    if (flautoRecorder == nil || getStatus() == 0) // something bad. Ignore.
+                                    {
+                                            return;
+                                    }
+                                    [flautoRecorder  recordingDataFloat32: d];
+                                });
 
+                            }
+ 
                         }
                         
                 }];
