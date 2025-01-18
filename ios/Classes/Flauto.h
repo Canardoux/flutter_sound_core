@@ -89,6 +89,8 @@ typedef enum
           /// Vorbis with a WebM format
           vorbisWebM,
   
+          /// Linear PCM32 PCM, which is a Wave file.
+          pcmFloat32WAV,
 } t_CODEC;
 
 

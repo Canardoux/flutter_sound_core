@@ -55,6 +55,7 @@ static bool _isIosEncoderSupported [] =
                 false, // pcmWebM
                 false, // opusWebM
                 false, // vorbisWebM
+                true, // pcmFloat32WAV
 
 };
 
@@ -79,6 +80,7 @@ static NSString* defaultExtensions [] =
           @"sound.webm", // pcmWebM
           @"sound_opus.webm", // opusWebM
           @"sound_vorbis.webm", // vorbisWebM
+          @"sound.wav", // pcmFloat32WAV
 
           
 
@@ -105,6 +107,7 @@ static AudioFormatID formats [] =
         , 0                             // pcmWebM
         , 0                             // opusWebM
         , 0                             // vorbisWebM
+        , kAudioFormatLinearPCM         // pcmFloat32WAV
 };
 
 
@@ -219,9 +222,26 @@ AudioRecInterface* audioRec;
         // If bitrate is defined, we use it, otherwise use the OS default
         if(bitRate > 0)
         {
-                [audioSettings setValue:[NSNumber numberWithLong: bitRate]
-                    forKey:AVEncoderBitRateKey];
+                [audioSettings setValue: [NSNumber numberWithLong: bitRate]
+                    forKey: AVEncoderBitRateKey];
         }
+    
+        if(codec == pcmFloat32WAV || codec == pcmFloat32)
+        {
+                [audioSettings setValue: [NSNumber numberWithInt: 32]
+                    forKey: AVLinearPCMBitDepthKey];
+                [audioSettings setValue: [NSNumber numberWithBool: @(YES)]
+                    forKey: AVLinearPCMIsFloatKey];
+       }
+    
+        if(codec == pcm16WAV || codec == pcm16)
+        {
+                [audioSettings setValue: [NSNumber numberWithInt: 16]
+                    forKey: AVLinearPCMBitDepthKey];
+                [audioSettings setValue: [NSNumber numberWithBool: @(NO)]
+                    forKey: AVLinearPCMIsFloatKey];
+       }
+
  
         path = [self getpath: path];
         m_path = path;

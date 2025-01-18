@@ -46,7 +46,9 @@ public:
         virtual NSNumber* dbPeakProgress() = 0;
         virtual int getStatus() = 0;
 
-        int16_t maxAmplitude = 0;
+        int maxAmplitude = 0;
+        int nbrSamples = 0;
+        int previousAmplitude;
         FlautoRecorder* flautoRecorder; // Owner
 
 };
@@ -63,6 +65,8 @@ private:
         long dateCumul = 0;
         long previousTS;
         int status;
+        void computePeakLevelForFloat32Blk(float* pt, int ln);
+        void computePeakLevelForInt16Blk(int16_t* pt, int ln);
 
 public:
         /* ctor */ AudioRecorderEngine(t_CODEC coder, NSString* path, NSMutableDictionary* audioSettings, long bufferSize, bool enableVoiceProcessing, FlautoRecorder* owner);

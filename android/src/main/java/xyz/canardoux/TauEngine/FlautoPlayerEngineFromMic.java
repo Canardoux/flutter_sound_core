@@ -60,6 +60,24 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 			0, // aacMP4
 			0, // amrNB
 			0, // amrWB
+
+			/// Raw PCM Linear 8
+			0,
+
+			/// Raw PCM with 32 bits Floating Points
+			0,
+			
+			/// pcm with a WebM format
+			0,
+			
+			/// Opus with a WebM format
+			0,
+			
+			/// Vorbis with a WebM format
+			0,
+		
+			/// Linear PCM32 PCM, which is a Wave file.
+			ENCODING_PCM_32BIT,
 		};
 
 

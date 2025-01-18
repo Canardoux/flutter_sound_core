@@ -81,6 +81,8 @@ public class FlautoRecorder
 		false, // pcmWebM
 		false, // opusWebM
 		false, // vorbisWebM
+		true, // pcmFloat32WAV
+		true, // pcmFloat32WAV
 	};
 
 	int[] tabAudioSource =

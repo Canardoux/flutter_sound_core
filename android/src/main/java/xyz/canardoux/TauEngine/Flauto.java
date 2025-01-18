@@ -50,6 +50,7 @@ public class Flauto
 		pcmWebM,
 		opusWebM,
 		vorbisWebM,
+		pcmFloat32WAV,
 	}
 
 

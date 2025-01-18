@@ -58,23 +58,34 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			false, // pcmWebM
 			true, // opusWebM
 			true, // vorbisWebM
+
+			/// Linear PCM32 PCM, which is a Wave file.
+			true,
 	};
 
 	String extentionArray[] = {
 			".aac" // DEFAULT
 			, ".aac" // CODEC_AAC
-			, ".opus" // CODEC_OPUS
+			, ".opus" // opusOGG
 			, "_opus.caf" // CODEC_CAF_OPUS (this is apple specific)
 			, ".mp3" // CODEC_MP3
 			, ".ogg" // CODEC_VORBIS
 			, ".pcm" // CODEC_PCM
-			, ".wav", ".aiff", "._pcm.caf", ".flac", ".mp4", ".amr" // amrNB
+			, ".wav"
+			, ".aiff"
+			, "._pcm.caf"
+			, ".flac"
+			, ".mp4"
+			, ".amr" // amrNB
 			, ".amr" // amrWB
 			, ".pcm" // pcm8
 			, ".pcm" // pcmFloat323
 			, ".webm" // pcmWebM
 			, ".opus" // opusWebM
 			, ".vorbis" // vorbisWebM
+
+			/// Linear PCM32 PCM, which is a Wave file.
+			, ".wav"
 	};
 
 	final static String TAG = "FlautoPlayer";
