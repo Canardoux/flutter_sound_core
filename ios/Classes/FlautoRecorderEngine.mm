@@ -51,7 +51,7 @@
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
         NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
-        int inputChannelCount = [inputFormat channelCount];
+        int channelCount = [inputFormat channelCount];
         int inputSampleRrate = [inputFormat sampleRate];
         //int inputSampleRate = [inputFormat sampleRate];
         //AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
@@ -122,6 +122,7 @@
          }
      */
 
+              
          //AVAudioFormat* inpFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
                                       //sampleRate: 48000 // Must be fixed because of iOS bug !
     
@@ -135,6 +136,7 @@
          AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: recordingFormat];
          //AVAudioFormat *format = [inputNode outputFormatForBus: 0];
 
+ 
          [inputNode installTapOnBus: 0 bufferSize: (int)bufferSize format: nil block:
          ^(AVAudioPCMBuffer* _Nonnull buffer, AVAudioTime* _Nonnull when)
          {
@@ -153,31 +155,32 @@
                          if (!r)
                          {
                          }
+             
                          NSUInteger interleaved = [convertedBuffer stride]; // Should be 1 or 2 depending of the number of channels
                          assert (interleaved == (unsigned int)(nbChannels.unsignedIntegerValue));
-                         int n = [convertedBuffer frameLength];
-                         NSData* b;
+                         int frameLength = [convertedBuffer frameLength];
+                         NSData* data;
                          if (coder == pcmFloat32)
                          {
                              float *const  bb = [convertedBuffer floatChannelData][0];
-                             this ->computePeakLevelForFloat32Blk(bb, n * (unsigned int)(nbChannels.unsignedIntegerValue));
-                             b = [[NSData alloc] initWithBytes: bb length: n * 2 * interleaved];
+                             this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                             data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * interleaved];
                         } else
                          if (coder == pcm16)
                          {
                              int16_t *const  bb = [convertedBuffer int16ChannelData][0];
-                             this ->computePeakLevelForInt16Blk(bb, n * (unsigned int)(nbChannels.unsignedIntegerValue));
-                             b = [[NSData alloc] initWithBytes: bb length: n * 4 * interleaved];
+                             this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                             data = [[NSData alloc] initWithBytes: bb length:frameLength *2 * interleaved];
                          } else
                          {
-                             [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];;
+                             [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];
                          }
-                        if (n > 0)
+ 
+                         if (frameLength > 0)
                          {
-                                 
                                  if (fileHandle != nil)
                                  {
-                                         [fileHandle writeData: b];
+                                         [fileHandle writeData: data];
                                  } else
                                  {
                                          dispatch_async(dispatch_get_main_queue(),
@@ -186,11 +189,10 @@
                                                  {
                                                          return;
                                                  }
-                                                 [flautoRecorder  recordingData: b];
+                                                 [flautoRecorder  recordingData: data];
                                          });
                                  }
-                                 
-                         }
+                          }
          }];
      
 }

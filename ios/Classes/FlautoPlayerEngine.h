@@ -79,7 +79,11 @@
 {
         // TODO FlutterSoundPlayer* flutterSoundPlayer; // Owner
 }
-       - (AudioEngine*) init: (NSObject*)owner; // FlutterSoundPlayer*
+       - (AudioEngine*) init: (NSObject*)owner
+                        codec: (t_CODEC)codec 
+                        channels: (int)numChannels
+                        sampleRate: (long)sampleRate;
+                        ; 
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
        - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize;

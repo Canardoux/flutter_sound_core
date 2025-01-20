@@ -177,8 +177,8 @@ static bool _isIosDecoderSupported [] =
         bool b = FALSE;
         [self stop]; // To start a fresh new playback
 
-        if ( (path == nil ||  [path class] == [NSNull class] ) && codec == pcm16)
-                m_playerEngine = [[AudioEngine alloc] init: self ];
+    if ( (path == nil ||  [path class] == [NSNull class] ) && (codec == pcm16 || codec == pcmFloat32) ) // Play From Stream
+        m_playerEngine = [[AudioEngine alloc] init: self codec: codec channels: numChannels sampleRate: sampleRate];
         else
                 m_playerEngine = [[AudioPlayerFlauto alloc]init: self];
         

@@ -166,15 +166,20 @@
         AVAudioOutputNode* outputNode;
         AVAudioConverter* converter;
         CFTimeInterval mStartPauseTime ; // The time when playback was paused
-	CFTimeInterval systemTime ; //The time when  StartPlayer() ;
+        CFTimeInterval systemTime ; //The time when  StartPlayer() ;
         double mPauseTime ; // The number of seconds during the total Pause mode
         NSData* waitingBlock;
         long m_sampleRate ;
         int  m_numChannels;
         long m_bufferSize;
+        t_CODEC m_codec;
 }
 
        - (AudioEngine*)init: (FlautoPlayer*)owner
+                    codec: (t_CODEC)codec
+                    channels: (int)numChannels
+                    sampleRate: (long)sampleRate
+ 
        {
                 flutterSoundPlayer = owner;
                 waitingBlock = nil;
@@ -185,10 +190,12 @@
            
                 
                 AVAudioFormat* format = [outputNode inputFormatForBus: 0];
-                int channelCount = [format channelCount];
+                int outputChannelCount = [format channelCount];
+                int outputSampleRate = [format sampleRate];
                 outputFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
-                                        sampleRate: 48000 // Must be fixed because of iOS bug !
-                                                                          channels: channelCount interleaved: false];
+                                          sampleRate: outputSampleRate
+                                          channels: outputChannelCount
+                                          interleaved: false];
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
                 [engine attachNode: playerNode];
@@ -204,8 +211,8 @@
                 }
 
                 mPauseTime = 0.0; // Total number of seconds in pause mode
-		mStartPauseTime = -1; // Not in paused mode
-		systemTime = CACurrentMediaTime(); // The time when started
+                mStartPauseTime = -1; // Not in paused mode
+                systemTime = CACurrentMediaTime(); // The time when started
                 return [super init];
        }
 
@@ -221,6 +228,7 @@
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
                 m_bufferSize = bufferSize;
+                m_codec = codec;
                 ready = 0;
        }
 
@@ -312,15 +320,38 @@
         {
                 if (ready < NB_BUFFERS )
                 {
-                        int ln = (int)[data length];
-                        int frameLn = ln/2;
-                        int frameLength =  8*frameLn;// Two octets for a frame (Monophony, INT Linear 16)
-                        frameLength = MAX(frameLength, (int)m_bufferSize);
-
-                        playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatInt16 sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
+                        int ln = (int)[data length]; // number of bytes to feed
+                        int frameLn;// The total number of samples
+                        if (m_codec == pcm16)
+                        {
+                            frameLn = ln / 2; // Two bytes for each
+                        } else
+                        if (m_codec == pcmFloat32)
+                        {
+                            frameLn = ln / 4; /// Four bytes fo each samples
+                        } else
+                        {
+                            assert(false);
+                        }
+                        
+                        //frameLength = MAX(frameLength, (int)m_bufferSize);
+                        AVAudioCommonFormat commonFormat = (m_codec == pcmFloat32) ? AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;
+                        playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
 
                         AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: playerFormat frameCapacity: frameLn];
-                        memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln);
+                        if (m_codec == pcm16)
+                        {
+                            memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln);
+                        } else
+                        if (m_codec == pcmFloat32)
+                        {
+                            memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[0]), [data bytes], ln);
+                        } else
+                        {
+                            assert(false);
+                        }
+                        
+
                         thePCMInputBuffer.frameLength = frameLn;
                         static bool hasData = true;
                         hasData = true;
@@ -330,8 +361,9 @@
                                 hasData = false;
                                 return thePCMInputBuffer;
                         };
-
-                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: frameLength];
+                        int output_channels = [outputFormat channelCount];
+                        int frameCapacity =  4 * output_channels * frameLn;// each frame is 8 bytes (float32, stereo)
+                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: frameCapacity];
                         thePCMOutputBuffer.frameLength = 0;
 
                         if (converter == nil) 
