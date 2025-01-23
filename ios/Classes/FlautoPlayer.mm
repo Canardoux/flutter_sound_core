@@ -170,6 +170,7 @@ static bool _isIosDecoderSupported [] =
         fromURI: (NSString*)path
         fromDataBuffer: (NSData*)dataBuffer
         channels: (int)numChannels
+        interleaved: (BOOL)interleaved
         sampleRate: (long)sampleRate
         bufferSize: (long)bufferSize
 {
@@ -178,7 +179,7 @@ static bool _isIosDecoderSupported [] =
         [self stop]; // To start a fresh new playback
 
     if ( (path == nil ||  [path class] == [NSNull class] ) && (codec == pcm16 || codec == pcmFloat32) ) // Play From Stream
-        m_playerEngine = [[AudioEngine alloc] init: self codec: codec channels: numChannels sampleRate: sampleRate];
+        m_playerEngine = [[AudioEngine alloc] init: self codec: codec channels: numChannels interleaved: interleaved sampleRate: sampleRate];
         else
                 m_playerEngine = [[AudioPlayerFlauto alloc]init: self];
         
@@ -204,7 +205,7 @@ static bool _isIosDecoderSupported [] =
         path = [self getpath: path];
         bool isRemote = false;
 
-        if (path != (id)[NSNull null])
+        if (path != (id)[NSNull null] && path != nil)
         {
                 NSURL* remoteUrl = [NSURL URLWithString: path];
                 NSURL* audioFileURL = [NSURL URLWithString:path];
@@ -246,11 +247,11 @@ static bool _isIosDecoderSupported [] =
 
                 } else
                 {
-                        [m_playerEngine startPlayerFromURL: audioFileURL codec: codec channels: numChannels sampleRate: sampleRate bufferSize: (long)bufferSize];
+                        [m_playerEngine startPlayerFromURL: audioFileURL codec: codec          channels: numChannels      interleaved: interleaved       sampleRate: sampleRate       bufferSize: (long)bufferSize];
                 }
         } else
         {
-                [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels sampleRate: sampleRate bufferSize: (long)bufferSize];
+                [m_playerEngine startPlayerFromURL: nil codec: codec channels: numChannels interleaved: interleaved sampleRate: sampleRate bufferSize: (long)bufferSize];
         }
         b = [self play];
 

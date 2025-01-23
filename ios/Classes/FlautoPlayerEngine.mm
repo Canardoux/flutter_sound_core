@@ -59,7 +59,7 @@
                 [self getAudioPlayer].delegate = flautoPlayer;
        }
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels  interleaved: (BOOL)interleaved sampleRate: (long)sampleRate bufferSize: (long)bufferSize
 
        {
                 [self setAudioPlayer: [[AVAudioPlayer alloc] initWithContentsOfURL: url error: nil] ];
@@ -160,7 +160,7 @@
         FlautoPlayer* flutterSoundPlayer; // Owner
         AVAudioEngine* engine;
         AVAudioPlayerNode* playerNode;
-        AVAudioFormat* playerFormat;
+        AVAudioFormat* inputFormat;
         AVAudioFormat* outputFormat;
         AVAudioUnitTimePitch* timePitchUnit;
         AVAudioOutputNode* outputNode;
@@ -172,15 +172,22 @@
         long m_sampleRate ;
         int  m_numChannels;
         long m_bufferSize;
+        BOOL m_interleaved;
         t_CODEC m_codec;
 }
 
        - (AudioEngine*)init: (FlautoPlayer*)owner
                     codec: (t_CODEC)codec
                     channels: (int)numChannels
+                    interleaved: (bool)interleaved
                     sampleRate: (long)sampleRate
  
        {
+                m_sampleRate = sampleRate;
+                m_numChannels= numChannels;
+                m_interleaved = interleaved;
+                m_codec = codec;
+
                 flutterSoundPlayer = owner;
                 waitingBlock = nil;
                 engine = [[AVAudioEngine alloc] init];
@@ -188,14 +195,24 @@
                 timePitchUnit = [[AVAudioUnitTimePitch alloc] init];
                 [timePitchUnit setRate:1];
            
-                
+                outputFormat = [outputNode inputFormatForBus: 0];
+
+                AVAudioCommonFormat commonFormat = (m_codec == pcmFloat32) ? AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;
+                inputFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: m_interleaved];
+                assert([inputFormat channelCount] == m_numChannels);
+                assert([inputFormat isInterleaved] == m_interleaved);
+
+           /*
                 AVAudioFormat* format = [outputNode inputFormatForBus: 0];
                 int outputChannelCount = [format channelCount];
                 int outputSampleRate = [format sampleRate];
-                outputFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
+                bool outputIsInterleaved = [format isInterleaved];
+                AVAudioCommonFormat outputCommonFormat = [format commonFormat];
+                outputFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: outputCommonFormat
                                           sampleRate: outputSampleRate
                                           channels: outputChannelCount
-                                          interleaved: false];
+                                          interleaved: outputIsInterleaved];
+            */
                 playerNode = [[AVAudioPlayerNode alloc] init];
 
                 [engine attachNode: playerNode];
@@ -222,12 +239,13 @@
        }
         static int ready = 0;
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels:  (int)numChannels  interleaved: (BOOL)interleaved  sampleRate: (long)sampleRate bufferSize: (long)bufferSize
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
                 m_sampleRate = sampleRate;
                 m_numChannels= numChannels;
                 m_bufferSize = bufferSize;
+                m_interleaved = interleaved;
                 m_codec = codec;
                 ready = 0;
        }
@@ -321,38 +339,38 @@
                 if (ready < NB_BUFFERS )
                 {
                         int ln = (int)[data length]; // number of bytes to feed
-                        int frameLn;// The total number of samples
+                    
+                        int frameSize; // The size in bytes of each frame.
+
                         if (m_codec == pcm16)
                         {
-                            frameLn = ln / 2; // Two bytes for each
+                            frameSize = 2 * m_numChannels;
                         } else
                         if (m_codec == pcmFloat32)
                         {
-                            frameLn = ln / 4; /// Four bytes fo each samples
+                            frameSize = 4 * m_numChannels;
                         } else
                         {
                             assert(false);
                         }
-                        
-                        //frameLength = MAX(frameLength, (int)m_bufferSize);
-                        AVAudioCommonFormat commonFormat = (m_codec == pcmFloat32) ? AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;
-                        playerFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: (double)m_sampleRate channels: m_numChannels interleaved: NO];
+                        int frameCount = ln / frameSize;
+                        int sampleCount = frameCount * m_numChannels;
 
-                        AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: playerFormat frameCapacity: frameLn];
+                        AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: inputFormat frameCapacity: frameCount];
+                        assert(m_numChannels == [thePCMInputBuffer stride]); // Here we suppose that the input data are interleaved
                         if (m_codec == pcm16)
                         {
-                            memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln);
+                            memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln); // Here we suppose that the input data are always interleaved
                         } else
                         if (m_codec == pcmFloat32)
                         {
-                            memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[0]), [data bytes], ln);
+                            memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[0]), [data bytes], ln); // Here we suppose that the input data are always interleaved
                         } else
                         {
                             assert(false);
                         }
-                        
-
-                        thePCMInputBuffer.frameLength = frameLn;
+                        thePCMInputBuffer.frameLength = frameCount;
+                    
                         static bool hasData = true;
                         hasData = true;
                         AVAudioConverterInputBlock inputBlock = ^AVAudioBuffer*(AVAudioPacketCount inNumberOfPackets, AVAudioConverterInputStatus* outStatus)
@@ -361,20 +379,22 @@
                                 hasData = false;
                                 return thePCMInputBuffer;
                         };
+                    
                         int output_channels = [outputFormat channelCount];
-                        int frameCapacity =  4 * output_channels * frameLn;// each frame is 8 bytes (float32, stereo)
-                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: frameCapacity];
+                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8
                         thePCMOutputBuffer.frameLength = 0;
 
                         if (converter == nil) 
                         {
-                                converter = [[AVAudioConverter alloc]initFromFormat: playerFormat toFormat: outputFormat];
+                                converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: outputFormat];
                         }
 
                         NSError* error;
                         [converter convertToBuffer: thePCMOutputBuffer error: &error withInputFromBlock: inputBlock];
                          // if (r == AVAudioConverterOutputStatus_HaveData || true)
                         {
+                                int numberOfConvertedFrames = thePCMOutputBuffer.frameLength;
+                            
                                 ++ready ; // The number of waiting packets to be sent by the Device
                                 [playerNode scheduleBuffer: thePCMOutputBuffer  completionHandler:
                                 ^(void)
@@ -411,6 +431,8 @@
                 }
          }
 
+
+   
 -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration
 {
         if (playerNode == nil || playerNode ==  (id)[NSNull null]) return false;
@@ -518,8 +540,8 @@
 // ================================
 
                AVAudioFormat* outputFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:
-                                                                         44000
-                                                                          channels: 1
+                                                                         48000
+                                                                          channels: 2
                                                                        ];
                /*
                AVAudioPCMBuffer* buffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat

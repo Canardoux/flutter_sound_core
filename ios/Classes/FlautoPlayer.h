@@ -65,6 +65,7 @@
         fromURI: (NSString*)path
         fromDataBuffer: (NSData*)dataBuffer
         channels: (int)numChannels
+        interleaved: (BOOL)interleaved
         sampleRate: (long)sampleRate
         bufferSize: (long)bufferSize
         ;

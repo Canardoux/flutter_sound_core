@@ -36,7 +36,7 @@
 @protocol FlautoPlayerEngineInterface <NSObject>
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize ;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels interleaved: (BOOL)interleaved sampleRate: (long)sampleRate bufferSize: (long)bufferSize ;
        - (long) getDuration;
        - (long) getPosition;
        - (void) stop;
@@ -55,10 +55,9 @@
 @interface AudioPlayerFlauto : NSObject  <FlautoPlayerEngineInterface>
 {
 }
-- (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
-
+       - (AudioPlayerFlauto*) init: (NSObject*)owner ;// FlutterSoundPlayer*
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels interleaved: (BOOL)interleaved sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
        - (void) stop;
        - (bool) play;
        - (bool) resume;
@@ -82,11 +81,12 @@
        - (AudioEngine*) init: (NSObject*)owner
                         codec: (t_CODEC)codec 
                         channels: (int)numChannels
+                        interleaved: (BOOL)interleaved 
                         sampleRate: (long)sampleRate;
                         ; 
 
        - (void) startPlayerFromBuffer:  (NSData*)data ;
-       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
+       - (void) startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels interleaved: (BOOL)interleaved sampleRate: (long)sampleRate bufferSize: (long)bufferSize;
        - (bool) play;
        - (void) stop;
        - (bool) resume;

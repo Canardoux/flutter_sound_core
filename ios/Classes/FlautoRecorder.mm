@@ -206,6 +206,7 @@ AudioRecInterface* audioRec;
 - (bool)startRecorderCodec: (t_CODEC)codec
                 toPath: (NSString*)path
                 channels: (int)numChannels
+                interleaved: (BOOL)interleaved
                 sampleRate: (long)sampleRate
                 bitRate: (long)bitRate
                 bufferSize: (long)bufferSize
