@@ -242,7 +242,14 @@ AudioRecInterface* audioRec;
                 [audioSettings setValue: [NSNumber numberWithBool: @(NO)]
                     forKey: AVLinearPCMIsFloatKey];
        }
+    
+        //if (!interleaved)
+        {
+            [audioSettings setValue: [NSNumber numberWithBool: !interleaved]
+                    forKey: AVLinearPCMIsNonInterleaved];
+        }
 
+    
  
         path = [self getpath: path];
         m_path = path;

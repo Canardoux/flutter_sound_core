@@ -57,6 +57,7 @@
         //AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
         //bool interleaved = [inputFormat isInterleaved];
         AVAudioCommonFormat cf = [inputFormat commonFormat];
+        bool interleaved = ![audioSettings [AVLinearPCMIsNonInterleaved] boolValue];
 
         NSFileManager* fileManager = [NSFileManager defaultManager];
         NSURL* fileURL = nil;
@@ -71,68 +72,11 @@
                 fileHandle = nil;
         }
 
-    /*
-        if (coder == pcmFloat32 && cf == AVAudioPCMFormatFloat32)
-        {
-                
-                if (inputChannelCount > 1)
-                {
-                    [flautoRecorder logDebug: @"Invalid channelCount >1 not yet supported"];
-                    [NSException raise: @"Invalid channelCount" format:@"channelCount == %d is invalid", inputChannelCount];
-                }
-                [inputNode installTapOnBus: 0 bufferSize: (int)bufferSize format: nil block:
-                ^(AVAudioPCMBuffer* buf, AVAudioTime* when)
-                {
-                // __'__buf' contains captured audio from the node at time 'when'
-                        int ln = [buf frameLength];
-                        NSUInteger interleaved = [buf stride]; // Should be 1
-                        assert (interleaved == 1);
-                        float* const* data = [buf floatChannelData];
-                        //float toto = data[0][1];
-                        if (ln > 0)
-                        {
-                            if (fileHandle != nil)
-                            {
-                                    assert(inputChannelCount == 1);
-                                    NSData* b = [[NSData alloc] initWithBytes: data[0] length: ln * 4 ];
-                                    [fileHandle writeData: b];
-                            } else
-                            {
-                                NSMutableArray* d = [NSMutableArray array];
-                                for (int channel = 0; channel < inputChannelCount; ++channel)
-                                {
-                                        NSData const* b = [[NSData alloc] initWithBytes: data[channel] length: ln * 4 ];
-                                        [d addObject: b];
-                                }
-                                dispatch_async(dispatch_get_main_queue(),
-                               ^{
-                                    if (flautoRecorder == nil || getStatus() == 0) // something bad. Ignore.
-                                    {
-                                            return;
-                                    }
-                                    [flautoRecorder  recordingDataFloat32: d];
-                                });
+     
+    
+         AVAudioCommonFormat commonFormat = (coder == pcmFloat32) ?  AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;
 
-                            }
- 
-                        }
-                        
-                }];
-                return;
-         }
-     */
-
-              
-         //AVAudioFormat* inpFormat =  [ [AVAudioFormat alloc] initWithCommonFormat: AVAudioPCMFormatFloat32
-                                      //sampleRate: 48000 // Must be fixed because of iOS bug !
-    
-    
-    
-                                                        // ******************** PCM with interleaved data ********************************
-    
-         AVAudioCommonFormat commonFormat = (coder == pcmFloat32) ?  AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;                                                    //channels: channelCount interleaved: false];
-
-         AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: YES];
+         AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: interleaved];
          AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: recordingFormat];
          //AVAudioFormat *format = [inputNode outputFormatForBus: 0];
 
@@ -151,48 +95,81 @@
                                  return buffer;
                          };
                          NSError* error;
-                         BOOL r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
-                         if (!r)
-                         {
-                         }
-             
-                         NSUInteger interleaved = [convertedBuffer stride]; // Should be 1 or 2 depending of the number of channels
-                         assert (interleaved == (unsigned int)(nbChannels.unsignedIntegerValue));
+                         AVAudioConverterOutputStatus r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
+            
+                         NSUInteger stride = [convertedBuffer stride]; // Should be 1 or 2 depending of the number of channels if interleaved. Should be 1 if not interleaved
                          int frameLength = [convertedBuffer frameLength];
-                         NSData* data;
-                         if (coder == pcmFloat32)
-                         {
-                             float *const  bb = [convertedBuffer floatChannelData][0];
-                             this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
-                             data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * interleaved];
-                        } else
-                         if (coder == pcm16)
-                         {
-                             int16_t *const  bb = [convertedBuffer int16ChannelData][0];
-                             this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
-                             data = [[NSData alloc] initWithBytes: bb length:frameLength *2 * interleaved];
-                         } else
-                         {
-                             [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];
-                         }
- 
                          if (frameLength > 0)
                          {
-                                 if (fileHandle != nil)
+                                 if (interleaved)
                                  {
+                                     assert (stride == (unsigned int)(nbChannels.unsignedIntegerValue));
+                                     NSData* data;
+                                     if (coder == pcmFloat32)
+                                     {
+                                         float *const  bb = [convertedBuffer floatChannelData][0];
+                                         this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * channelCount];
+                                     } else
+                                     if (coder == pcm16)
+                                     {
+                                         int16_t *const  bb = [convertedBuffer int16ChannelData][0];
+                                         this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 2 * channelCount];
+                                     } else
+                                     {
+                                         [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];
+                                     }
+                                     
+                                     if (fileHandle != nil)
+                                     {
                                          [fileHandle writeData: data];
-                                 } else
-                                 {
+                                     } else // Stream
+                                     {
                                          dispatch_async(dispatch_get_main_queue(),
                                         ^{
-                                                 if (flautoRecorder == nil || getStatus() == 0) // something bad
-                                                 {
-                                                         return;
-                                                 }
-                                                 [flautoRecorder  recordingData: data];
+                                             if (flautoRecorder == nil || getStatus() == 0) // something bad
+                                             {
+                                                 return;
+                                             }
+                                             [flautoRecorder  recordingData: data];
                                          });
-                                 }
-                          }
+                                     }
+                                     
+                                 } else // Not interleaved
+                                 {
+                                     assert (stride == 1);
+                                     NSMutableArray* recdata = [NSMutableArray arrayWithCapacity: channelCount];
+                                     for (int channel = 0; channel < channelCount; ++channel)
+                                     {
+                                         NSData* data;
+                                         if (coder == pcmFloat32)
+                                         {
+                                             float* const  bb = [convertedBuffer floatChannelData][channel];
+                                             this ->computePeakLevelForFloat32Blk(bb, frameLength );
+                                             data = [[NSData alloc] initWithBytes: bb length: frameLength * 4];
+                                         } else
+                                         if (coder == pcm16)
+                                         {
+                                             int16_t *const  bb = [convertedBuffer int16ChannelData][channel];
+                                             this ->computePeakLevelForInt16Blk(bb, frameLength );
+                                             data = [[NSData alloc] initWithBytes: bb length: frameLength * 2];
+                                         } else
+                                         {
+                                             [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];
+                                         }
+                                         [recdata addObject: data];
+                                     }
+                                     dispatch_async(dispatch_get_main_queue(),
+                                    ^{
+                                         if (flautoRecorder == nil || getStatus() == 0) // something bad
+                                         {
+                                             return;
+                                         }
+                                         [flautoRecorder  recordingDataFloat32: recdata];
+                                     });
+                              } // Not interleaved
+                         } // (frameLength > 0)
          }];
      
 }
@@ -200,12 +177,15 @@
 
 void AudioRecorderEngine::computePeakLevelForFloat32Blk(float* pt, int ln)
 {
-    //int16_t* pt = bb;
     for (int i = 0; i < ln; ++pt, ++i)
     {
-        short curSample = abs(*pt);
+        float curSample = abs(*pt);
         if ( curSample != 0 )
         {
+            if (curSample > 1.0 || curSample < -1.0)
+            {
+                curSample = 0;
+            }
             maxAmplitude = curSample;
         }
         
@@ -216,7 +196,6 @@ void AudioRecorderEngine::computePeakLevelForFloat32Blk(float* pt, int ln)
 
 void AudioRecorderEngine::computePeakLevelForInt16Blk(int16_t* pt, int ln)
 {
-    //int16_t* pt = bb;
     for (int i = 0; i < ln ; ++pt, ++i)
     {
         int curSample = abs(*pt);
