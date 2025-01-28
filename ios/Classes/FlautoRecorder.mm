@@ -237,7 +237,7 @@ AudioRecInterface* audioRec;
         {
                 [audioSettings setValue: [NSNumber numberWithInt: 32]
                     forKey: AVLinearPCMBitDepthKey];
-                [audioSettings setValue: [NSNumber numberWithBool: @(YES)]
+                [audioSettings setValue: [NSNumber numberWithBool: true]
                     forKey: AVLinearPCMIsFloatKey];
        }
     
@@ -245,7 +245,7 @@ AudioRecInterface* audioRec;
         {
                 [audioSettings setValue: [NSNumber numberWithInt: 16]
                     forKey: AVLinearPCMBitDepthKey];
-                [audioSettings setValue: [NSNumber numberWithBool: @(NO)]
+                [audioSettings setValue: [NSNumber numberWithBool: false]
                     forKey: AVLinearPCMIsFloatKey];
        }
     

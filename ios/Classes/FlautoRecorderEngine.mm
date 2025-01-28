@@ -51,11 +51,8 @@
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
         int outputChannelCount = [audioSettings [AVNumberOfChannelsKey]  intValue];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
-        int inputChannelCount = [inputFormat channelCount];
-        int inputSampleRrate = [inputFormat sampleRate];
-        //int inputSampleRate = [inputFormat sampleRate];
-        //AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
-        //bool interleaved = [inputFormat isInterleaved];
+        //int inputChannelCount = [inputFormat channelCount];
+        //int inputSampleRrate = [inputFormat sampleRate];
         AVAudioCommonFormat cf = [inputFormat commonFormat];
         bool interleaved = ![audioSettings [AVLinearPCMIsNonInterleaved] boolValue];
 
@@ -96,6 +93,9 @@
                          };
                          NSError* error;
                          AVAudioConverterOutputStatus r = [converter convertToBuffer: convertedBuffer error: &error withInputFromBlock: inputBlock];
+                         if (r == AVAudioConverterOutputStatus_Error)
+                         {
+                         }
             
                          NSUInteger stride = [convertedBuffer stride]; // Should be 1 or 2 depending of the number of channels if interleaved. Should be 1 if not interleaved
                          int frameLength = [convertedBuffer frameLength];

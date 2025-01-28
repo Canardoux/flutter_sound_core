@@ -388,11 +388,6 @@
                                 {
                                     assert(false);
                                 }
-                                float* toto = thePCMInputBuffer.floatChannelData[channel];
-                                for (int i = 0; i < 10; ++i, ++toto)
-                                {
-                                    float titi = *toto;
-                                }
                             }
                         }
                         thePCMInputBuffer.frameLength = frameCount;
