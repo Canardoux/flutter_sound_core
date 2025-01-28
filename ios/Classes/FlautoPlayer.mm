@@ -127,7 +127,7 @@ static bool _isIosDecoderSupported [] =
 
 }
 
-- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing
+- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels interleaved: (BOOL)interleaved bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing
 {
         [self logDebug:  @"IOS:--> startPlayerFromMicSampleRate"];
         [self stop]; // To start a fresh new playback
