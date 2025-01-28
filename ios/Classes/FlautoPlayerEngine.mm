@@ -235,7 +235,8 @@
 
        -(void) startPlayerFromBuffer: (NSData*) dataBuffer
        {
-                 [self feed: dataBuffer] ;
+           NSArray* d = @[dataBuffer];
+           [self feed: d interleaved: true] ;
        }
         static int ready = 0;
 
@@ -401,7 +402,7 @@
                                 return thePCMInputBuffer;
                         };
                     
-                        int output_channels = [outputFormat channelCount];
+                        //int output_channels = [outputFormat channelCount];
                         AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8 // !!!!!!!!!
                         thePCMOutputBuffer.frameLength = 0;
 
@@ -651,8 +652,7 @@
                 return true; // TODO
         }
 
-        - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
-
+        - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved
         {
                 return 0;
         }
