@@ -133,7 +133,7 @@ static bool _isIosDecoderSupported [] =
         [self stop]; // To start a fresh new playback
         AudioEngineFromMic* engine = [[AudioEngineFromMic alloc] init: self ];
         m_playerEngine = engine;
-        [engine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels sampleRate: sampleRate bufferSize: (long)bufferSize ];
+        [engine startPlayerFromURL: nil codec: (t_CODEC)0 channels: nbChannels interleaved: (BOOL)interleaved sampleRate: sampleRate bufferSize: (long)bufferSize ];
         bool b = [m_playerEngine play];
         if (b)
         {

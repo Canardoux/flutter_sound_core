@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'flutter_sound_core'
-  s.version          = '9.20.3'
+  s.version          = '9.20.4'
   s.summary          = 'Provides simple recorder and player functionalities for iOS platform.'
 
 # This description is used to generate tags and improve search results.

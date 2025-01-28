@@ -69,7 +69,7 @@
         sampleRate: (long)sampleRate
         bufferSize: (long)bufferSize
         ;
-- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing;
+- (bool)startPlayerFromMicSampleRate: (long)sampleRate nbChannels: (int)nbChannels interleaved: (BOOL)interleaved bufferSize: (long)bufferSize enableVoiceProcessing: (bool)enableVoiceProcessing;
 - (void)stopPlayer;
 - (bool)pausePlayer;
 - (bool)resumePlayer;
