@@ -526,7 +526,7 @@
 		return (long)(time * 1000);
        }
 
-       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels sampleRate: (long)sampleRate bufferSize: (long)bufferSize
+       -(void)  startPlayerFromURL: (NSURL*) url codec: (t_CODEC)codec channels: (int)numChannels interleaved: (BOOL)interleaved sampleRate: (long)sampleRate bufferSize: (long)bufferSize
        {
                 assert(url == nil || url ==  (id)[NSNull null]);
 
