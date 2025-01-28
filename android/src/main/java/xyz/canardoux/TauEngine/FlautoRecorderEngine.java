@@ -122,7 +122,7 @@ public class FlautoRecorderEngine
 			AudioFormat.ENCODING_MP3, // MP3 // Not used
 			0, // vorbisOGG
 			AudioFormat.ENCODING_PCM_16BIT, // pcm16
-			AudioFormat.ENCODING_PCM_32BIT, // pcm16WAV
+			AudioFormat.ENCODING_PCM_16BIT, // pcm16WAV
 			0, // pcm16AIFF
 			0, // pcm16CAF
 			0, // flac
@@ -134,7 +134,7 @@ public class FlautoRecorderEngine
 			0,
 
 			/// Raw PCM with 32 bits Floating Points
-			0,
+			AudioFormat.ENCODING_PCM_32BIT, 
 			
 			/// pcm with a WebM format
 			0,
@@ -146,7 +146,7 @@ public class FlautoRecorderEngine
 			0,
 		
 			/// Linear PCM32 PCM, which is a Wave file.
-			ENCODING_PCM_16BIT,
+			AudioFormat.ENCODING_PCM_32BIT,
 		};
 
 

@@ -396,19 +396,17 @@ static bool _isIosDecoderSupported [] =
 
 
 
-- (int)feed:(NSData*)data
+- (int)feed:(NSArray*)data interleaved: (BOOL)interleaved
 {
 		try
 		{
-                        int r = [m_playerEngine feed: data];
-			return r;
+            int r = [m_playerEngine feed: data interleaved: interleaved];
+            return r;
 		} catch (NSException* e)
 		{
-                        return -1;
+            return -1;
   		}
-
 }
-
 
 
 

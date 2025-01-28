@@ -79,7 +79,7 @@
 - (void)setPan: (double)pan ;
 - (void)setSpeed: (double)speed ;
 - (NSDictionary*)getProgress ;
-- (int)feed: (NSData*)data;
+- (int)feed: (NSArray*)data interleaved: (BOOL)interleaved;
 - (void)needSomeFood: (int) ln;
 - (void)audioPlayerDidFinishPlaying: (BOOL)flag;
 - (t_PLAYER_STATE)getStatus;

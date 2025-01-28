@@ -168,7 +168,7 @@
         CFTimeInterval mStartPauseTime ; // The time when playback was paused
         CFTimeInterval systemTime ; //The time when  StartPlayer() ;
         double mPauseTime ; // The number of seconds during the total Pause mode
-        NSData* waitingBlock;
+        NSArray<NSData*>* waitingBlock;
         long m_sampleRate ;
         int  m_numChannels;
         long m_bufferSize;
@@ -334,14 +334,13 @@
        }
 
         #define NB_BUFFERS 4
-        - (int) feed: (NSData*)data
+        - (int) feed: (NSArray*)data interleaved: (bool)interleaved
         {
-                if (ready < NB_BUFFERS )
-                {
-                        int ln = (int)[data length]; // number of bytes to feed
-                    
+                assert (data.count > 0); // Something wrong
+            if (ready < NB_BUFFERS  || !interleaved)
+            {
+                        int ln = (int)[data[0] length]; // number of bytes to feed
                         int frameSize; // The size in bytes of each frame.
-
                         if (m_codec == pcm16)
                         {
                             frameSize = 2 * m_numChannels;
@@ -354,20 +353,47 @@
                             assert(false);
                         }
                         int frameCount = ln / frameSize;
-                        int sampleCount = frameCount * m_numChannels;
+                        if (!interleaved)
+                        {
+                            frameCount = frameCount * m_numChannels; // WHY ???
+                        }
+                        //int sampleCount = interleaved ? frameCount * m_numChannels : frameCount;
 
-                        AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: inputFormat frameCapacity: frameCount];
-                        assert(m_numChannels == [thePCMInputBuffer stride]); // Here we suppose that the input data are interleaved
-                        if (m_codec == pcm16)
+                        AVAudioPCMBuffer* thePCMInputBuffer =  [[AVAudioPCMBuffer alloc] initWithPCMFormat: inputFormat frameCapacity: frameCount*2];// !!!!!
+                        if (interleaved)
                         {
-                            memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data bytes], ln); // Here we suppose that the input data are always interleaved
+                            if (m_codec == pcm16)
+                            {
+                                memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[0]), [data[0] bytes], ln); // Here we suppose that the input data are always interleaved
+                            } else
+                            if (m_codec == pcmFloat32)
+                            {
+                                memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[0]), [data[0] bytes], ln); // Here we suppose that the input data are always interleaved
+                            } else
+                            {
+                                assert(false);
+                            }
                         } else
-                        if (m_codec == pcmFloat32)
                         {
-                            memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[0]), [data bytes], ln); // Here we suppose that the input data are always interleaved
-                        } else
-                        {
-                            assert(false);
+                            for (int channel = 0; channel < m_numChannels; ++channel)
+                            {
+                                if (m_codec == pcm16)
+                                {
+                                    memcpy((unsigned char*)(thePCMInputBuffer.int16ChannelData[channel]), [data[channel] bytes], ln);
+                                } else
+                                if (m_codec == pcmFloat32)
+                                {
+                                    memcpy((unsigned char*)(thePCMInputBuffer.floatChannelData[channel]), [data[channel] bytes], ln);
+                                } else
+                                {
+                                    assert(false);
+                                }
+                                float* toto = thePCMInputBuffer.floatChannelData[channel];
+                                for (int i = 0; i < 10; ++i, ++toto)
+                                {
+                                    float titi = *toto;
+                                }
+                            }
                         }
                         thePCMInputBuffer.frameLength = frameCount;
                     
@@ -381,7 +407,7 @@
                         };
                     
                         int output_channels = [outputFormat channelCount];
-                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8
+                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8 // !!!!!!!!!
                         thePCMOutputBuffer.frameLength = 0;
 
                         if (converter == nil) 
@@ -391,45 +417,51 @@
 
                         NSError* error;
                         [converter convertToBuffer: thePCMOutputBuffer error: &error withInputFromBlock: inputBlock];
-                         // if (r == AVAudioConverterOutputStatus_HaveData || true)
+                        
+                        float* toto = thePCMOutputBuffer.floatChannelData[0];
+                        for (int i = 0; i < 10; ++i, ++toto)
                         {
-                                int numberOfConvertedFrames = thePCMOutputBuffer.frameLength;
-                            
-                                ++ready ; // The number of waiting packets to be sent by the Device
-                                [playerNode scheduleBuffer: thePCMOutputBuffer  completionHandler:
-                                ^(void)
-                                {
-                                        dispatch_async(dispatch_get_main_queue(),
-                                        ^{
-                                                --ready; // The Device has sent its packet. One less to send.
-                                                assert(ready < NB_BUFFERS);
-                                                if (self ->waitingBlock != nil)
-                                                {
-                                                        NSData* blk = self ->waitingBlock;
-                                                        self ->waitingBlock = nil;
-                                                        int ln = (int)[blk length];
-                                                        int l = [self feed: blk]; // Recursion here
-                                                        assert (l == ln);
-                                                        [self ->flutterSoundPlayer needSomeFood: ln];
-                                                }
-                                                if (ready == 0) // Nothing more to play. Send an indication to the App
-                                                {
-                                                        [self ->flutterSoundPlayer  audioPlayerDidFinishPlaying: true];
-
-                                                }
-                                        });
-
-                                }];
-                                return ln;
+                            float titi = *toto;
                         }
+
+                        int numberOfConvertedFrames = thePCMOutputBuffer.frameLength;
+                    
+                        ++ready ; // The number of waiting packets to be sent by the Device
+                        [playerNode scheduleBuffer: thePCMOutputBuffer  completionHandler:
+                        ^(void)
+                        {
+                                dispatch_async(dispatch_get_main_queue(),
+                                ^{
+                                        --ready; // The Device has sent its packet. One less to send.
+                                        assert(ready < NB_BUFFERS || !interleaved);
+                                        if (self ->waitingBlock != nil)
+                                        {
+                                                NSArray<NSData*>* blk = self ->waitingBlock;
+                                                self ->waitingBlock = nil;
+                                                int ln = (int)[blk[0] length];
+                                                int l = [self feed: blk interleaved: interleaved]; // Recursion here
+                                                assert (l == ln);
+                                                [self ->flutterSoundPlayer needSomeFood: ln];
+                                        }
+                                        if (ready == 0) // Nothing more to play. Send an indication to the App
+                                        {
+                                                [self ->flutterSoundPlayer  audioPlayerDidFinishPlaying: true];
+
+                                        }
+                                });
+
+                        }];
+                        return ln;
+                
                 } else
                 {
-                        assert (ready == NB_BUFFERS);
-                        assert(waitingBlock == nil);
+                        assert (ready == NB_BUFFERS || !interleaved);
+                        // !!! assert(waitingBlock == nil);
                         waitingBlock = data;
                         return 0;
                 }
          }
+
 
 
    

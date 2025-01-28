@@ -155,6 +155,12 @@ AudioRecInterface* audioRec;
 }
 
 
+- (void)recordingDataInt16: (NSMutableArray*)data
+{
+        [m_callBack recordingDataInt16: data ];
+}
+
+
 - (FlautoRecorder*)init: (NSObject<FlautoRecorderCallback>*) callback
 {
         m_callBack = callback;

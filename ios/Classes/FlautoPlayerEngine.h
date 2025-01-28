@@ -48,7 +48,7 @@
        - (bool) setSpeed: (double) speed ; // Speed is between 0.0 and 1.0 to go slower
        - (bool) seek: (double) pos;
        - (t_PLAYER_STATE) getStatus;
-       - (int) feed: (NSData*)data;
+       - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
 
 @end
 

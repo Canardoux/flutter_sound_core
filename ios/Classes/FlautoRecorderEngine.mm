@@ -49,9 +49,9 @@
         
         AVAudioInputNode* inputNode = [engine inputNode];
         AVAudioFormat* inputFormat = [inputNode outputFormatForBus: 0];
-        NSNumber* nbChannels = audioSettings [AVNumberOfChannelsKey];
+        int outputChannelCount = [audioSettings [AVNumberOfChannelsKey]  intValue];
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
-        int channelCount = [inputFormat channelCount];
+        int inputChannelCount = [inputFormat channelCount];
         int inputSampleRrate = [inputFormat sampleRate];
         //int inputSampleRate = [inputFormat sampleRate];
         //AVAudioCommonFormat inputCommonFormat = [inputFormat commonFormat];
@@ -76,7 +76,7 @@
     
          AVAudioCommonFormat commonFormat = (coder == pcmFloat32) ?  AVAudioPCMFormatFloat32 : AVAudioPCMFormatInt16;
 
-         AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: sampleRate.doubleValue channels: (unsigned int)(nbChannels.unsignedIntegerValue) interleaved: interleaved];
+         AVAudioFormat* recordingFormat = [[AVAudioFormat alloc] initWithCommonFormat: commonFormat sampleRate: sampleRate.doubleValue channels: outputChannelCount interleaved: interleaved];
          AVAudioConverter* converter = [[AVAudioConverter alloc]initFromFormat: inputFormat toFormat: recordingFormat];
          //AVAudioFormat *format = [inputNode outputFormatForBus: 0];
 
@@ -103,19 +103,18 @@
                          {
                                  if (interleaved)
                                  {
-                                     assert (stride == (unsigned int)(nbChannels.unsignedIntegerValue));
                                      NSData* data;
                                      if (coder == pcmFloat32)
                                      {
                                          float *const  bb = [convertedBuffer floatChannelData][0];
-                                         this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
-                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * channelCount];
+                                         //this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * outputChannelCount];
                                      } else
                                      if (coder == pcm16)
                                      {
                                          int16_t *const  bb = [convertedBuffer int16ChannelData][0];
-                                         this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
-                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 2 * channelCount];
+                                         //this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         data = [[NSData alloc] initWithBytes: bb length: frameLength * 2 * outputChannelCount];
                                      } else
                                      {
                                          [NSException raise: @"Invalid codec" format:@"codec == %d is invalid", coder];
@@ -139,14 +138,14 @@
                                  } else // Not interleaved
                                  {
                                      assert (stride == 1);
-                                     NSMutableArray* recdata = [NSMutableArray arrayWithCapacity: channelCount];
-                                     for (int channel = 0; channel < channelCount; ++channel)
+                                     NSMutableArray* recdata = [NSMutableArray arrayWithCapacity: outputChannelCount];
+                                     for (int channel = 0; channel < outputChannelCount; ++channel)
                                      {
                                          NSData* data;
                                          if (coder == pcmFloat32)
                                          {
                                              float* const  bb = [convertedBuffer floatChannelData][channel];
-                                             this ->computePeakLevelForFloat32Blk(bb, frameLength );
+                                             //this ->computePeakLevelForFloat32Blk(bb, frameLength );
                                              data = [[NSData alloc] initWithBytes: bb length: frameLength * 4];
                                          } else
                                          if (coder == pcm16)
@@ -166,7 +165,14 @@
                                          {
                                              return;
                                          }
-                                         [flautoRecorder  recordingDataFloat32: recdata];
+                                         if (coder == pcmFloat32)
+                                         {
+                                             [flautoRecorder  recordingDataFloat32: recdata];
+                                         } else
+                                         if (coder == pcm16)
+                                         {
+                                             [flautoRecorder  recordingDataInt16: recdata];
+                                         }
                                      });
                               } // Not interleaved
                          } // (frameLength > 0)
