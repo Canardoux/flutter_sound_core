@@ -69,7 +69,7 @@
        - (t_PLAYER_STATE) getStatus;
        - (AVAudioPlayer*) getAudioPlayer;
        - (void) setAudioPlayer: (AVAudioPlayer*)thePlayer;
-       - (int) feed: (NSData*)data;
+       - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
 
 @end
 
@@ -96,7 +96,7 @@
        - (bool) setSpeed: (double) speed ;
        - (bool) seek: (double) pos;
        - (int)  getStatus;
-       - (int) feed: (NSData*)data;
+       - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
 
 @end
 
@@ -118,7 +118,7 @@
        - (bool) setSpeed: (double) speed;
        - (bool) seek: (double) pos;
        - (int) getStatus;
-       - (int) feed: (NSData*)data;
+       - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
 
 @end
 

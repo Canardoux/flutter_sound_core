@@ -53,7 +53,7 @@
         NSNumber* sampleRate = audioSettings [AVSampleRateKey];
         //int inputChannelCount = [inputFormat channelCount];
         //int inputSampleRrate = [inputFormat sampleRate];
-        AVAudioCommonFormat cf = [inputFormat commonFormat];
+        //AVAudioCommonFormat cf = [inputFormat commonFormat];
         bool interleaved = ![audioSettings [AVLinearPCMIsNonInterleaved] boolValue];
 
         NSFileManager* fileManager = [NSFileManager defaultManager];

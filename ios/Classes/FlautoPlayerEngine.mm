@@ -144,7 +144,7 @@
        }
 
 
-        - (int) feed: (NSData*)data
+        - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
         {
                 return -1;
         }
@@ -413,13 +413,7 @@
                         NSError* error;
                         [converter convertToBuffer: thePCMOutputBuffer error: &error withInputFromBlock: inputBlock];
                         
-                        float* toto = thePCMOutputBuffer.floatChannelData[0];
-                        for (int i = 0; i < 10; ++i, ++toto)
-                        {
-                            float titi = *toto;
-                        }
-
-                        int numberOfConvertedFrames = thePCMOutputBuffer.frameLength;
+                        //int numberOfConvertedFrames = thePCMOutputBuffer.frameLength;
                     
                         ++ready ; // The number of waiting packets to be sent by the Device
                         [playerNode scheduleBuffer: thePCMOutputBuffer  completionHandler:
@@ -657,10 +651,11 @@
                 return true; // TODO
         }
 
-      - (int) feed: (NSData*)data
-       {
-        return 0;
-       }
+        - (int) feed: (NSArray*)data interleaved: (BOOL)interleaved;
+
+        {
+                return 0;
+        }
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
