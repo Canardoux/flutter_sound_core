@@ -54,6 +54,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 				try {
 					if (Build.VERSION.SDK_INT >= 23) {
 						written = audioTrack.write(mData, 0, ln, AudioTrack.WRITE_BLOCKING);
+						//written = ln;
 					} else {
 						written = audioTrack.write(mData, 0, mData.length);
 					}
@@ -245,11 +246,13 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 				// We must keep trying to know when the device can accept new data
 			if (blockThread != null) { // We already have a thread trying to feed the device
 				System.out.println("Audio packet Lost !");
+			} else
+			{
+				// busy = true;
+				blockThread = new WriteBlockThread(data); // We start a thread to try to send the data
+				// background
+				blockThread.start();
 			}
-			// busy = true;
-			blockThread = new WriteBlockThread(data); // We start a thread to try to send the data
-									// background
-			blockThread.start();
 		} else {
 			// if (busy)
 			// {

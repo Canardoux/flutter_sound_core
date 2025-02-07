@@ -28,7 +28,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
@@ -45,7 +47,10 @@ public class FlautoRecorderEngine
 		//private Thread recordingThread = null;
 		private boolean isRecording = false;
 		private double maxAmplitude = 0;
-		String filePath;
+		private double previousAmplitude = 0;
+		private int nbrSamples;
+
+	String filePath;
 		int totalBytes = 0;
 		t_CODEC codec;
 		Runnable p;
@@ -60,7 +65,7 @@ public class FlautoRecorderEngine
 		return (short)(argB1 | (argB2 << 8));
 	}
 
-	private void writeAudioDataToFile(t_CODEC codec, int sampleRate, String aFilePath) throws IOException
+	private void writeAudioDataToFile(t_CODEC codec, int sampleRate, int numChannels, String aFilePath) throws IOException
 	{
 			// Write the output audio in byte
 			System.out.println("---> writeAudioDataToFile");
@@ -75,10 +80,10 @@ public class FlautoRecorderEngine
 					FlautoWaveHeader header = new FlautoWaveHeader
 						(
 							FlautoWaveHeader.FORMAT_PCM,
-							(short) 1, // numChannels
+							(short) numChannels,
 							sampleRate,
 							(short) 16,
-							100000 // total number of bytes
+							100000 // total number of bytes // Will be orverwritten when stop()
 
 						);
 					header.write(outputStream);
@@ -134,7 +139,7 @@ public class FlautoRecorderEngine
 			0,
 
 			/// Raw PCM with 32 bits Floating Points
-			AudioFormat.ENCODING_PCM_32BIT, 
+			AudioFormat.ENCODING_PCM_FLOAT,
 			
 			/// pcm with a WebM format
 			0,
@@ -146,27 +151,38 @@ public class FlautoRecorderEngine
 			0,
 		
 			/// Linear PCM32 PCM, which is a Wave file.
-			AudioFormat.ENCODING_PCM_32BIT,
+			AudioFormat.ENCODING_PCM_FLOAT,
 		};
 
 
-	int writeData(int bufferSize)
+	int writeData(
+				  t_CODEC theCodec,
+				  Integer numChannels,
+				  Boolean interleaved,
+				  int bufferSize)
 	{
 		int n = 0;
 		int r = 0;
 		while (isRecording ) {
 			//ShortBuffer shortBuffer = ShortBuffer.allocate(bufferSize/2);
 			ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+			FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);;
 			try {
 				// gets the voice output from microphone to byte format
 				if ( Build.VERSION.SDK_INT >= 23 )
 				{
-						n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+						if (codec == t_CODEC.pcmFloat32) {
+
+							n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
+						} else {
+
+							n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+						}
 
 				}
 				else
 				{
-						n = recorder.read(byteBuffer.array(), 0, bufferSize);
+					throw new Exception("Android SDK must be >= 23");
 				}
 				final int ln = n;//2 * n;
 
@@ -176,20 +192,72 @@ public class FlautoRecorderEngine
 					if (outputStream != null) {
 						outputStream.write(byteBuffer.array(), 0, ln);
 					} else {
-						mainHandler.post(new Runnable() {
-							@Override
-							public void run() {
-
-								session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, ln));
+						if (codec == t_CODEC.pcmFloat32 && !interleaved)
+						{
+							ArrayList<float[]> data = new ArrayList();
+							for (int channel = 0; channel < numChannels; ++channel)
+							{
+								FloatBuffer buffer = FloatBuffer.allocate(n/numChannels);
+								for (int i = 0; i < n/numChannels; ++i)
+								{
+									buffer.put( floatBuffer.get(numChannels * i + channel));
+								}
+								data.add(buffer.array());
 							}
-						});
-					}
-					for (int i = 0; i < n / 2; ++i) {
-						short curSample = getShort(byteBuffer.array()[i * 2], byteBuffer.array()[i * 2 + 1]);
-						if (curSample > maxAmplitude) {
-							maxAmplitude = curSample;
+							mainHandler.post(new Runnable() {
+								@Override
+								public void run() {
+									session.recordingDataFloat32(data);
+								}
+							});
+						} else
+						{
+							mainHandler.post(new Runnable() {
+								@Override
+								public void run() {
+									session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, ln));
+								}
+							});
+
 						}
+
 					}
+
+					if (codec == t_CODEC.pcmFloat32 && interleaved)
+					{
+						float m = 0;
+						for (int i = 0; i < n / 4; ++i)
+						{
+							float curSample = floatBuffer.get(i);
+							if (curSample > m)
+							{
+								m = curSample;
+							}
+						}
+						m *= 0x7FFF;
+						if ( m > maxAmplitude )
+						{
+							maxAmplitude = m;
+						}
+
+						++ nbrSamples;
+
+					} else
+					if (codec == t_CODEC.pcm16 || codec == t_CODEC.pcm16WAV)
+					{
+						for (int i = 0; i < n / 2; ++i)
+						{
+							short curSample = getShort(byteBuffer.array()[i * 2], byteBuffer.array()[i * 2 + 1]);
+							if (curSample > maxAmplitude)
+							{
+								maxAmplitude = curSample;
+							}
+						}
+						++ nbrSamples;
+
+					}
+
+
 				} else
 				{
 					break;
@@ -212,6 +280,8 @@ public class FlautoRecorderEngine
 	public void _startRecorder
 		(
 			Integer numChannels,
+
+			Boolean interleaved,
 			Integer sampleRate,
 			Integer bitRate,
 			Integer bufferSize,
@@ -249,7 +319,7 @@ public class FlautoRecorderEngine
 			recorder.startRecording();
 			isRecording = true;
 			try {
-				writeAudioDataToFile(codec, sampleRate, path);
+				writeAudioDataToFile(codec, sampleRate, numChannels, path);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -258,7 +328,7 @@ public class FlautoRecorderEngine
 				public void run() {
 
 					if (isRecording) {
-						int n = writeData(bufLn);
+						int n = writeData( codec, numChannels, interleaved, bufLn);
 
 					}
 				}
@@ -322,9 +392,11 @@ public class FlautoRecorderEngine
 
 	public double getMaxAmplitude ()
 	{
-		double r = maxAmplitude;
-		maxAmplitude = 0;
-		return r;
+		if (nbrSamples > 0) {
+			previousAmplitude = maxAmplitude;
+			maxAmplitude = 0;
+			nbrSamples = 0;
+		}
+		return previousAmplitude;
 	}
-
 }

@@ -27,6 +27,8 @@ import android.os.SystemClock;
 
 import java.io.*;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import xyz.canardoux.TauEngine.Flauto.*;
@@ -54,10 +56,11 @@ public class FlautoRecorder
 		Build.VERSION.SDK_INT >= 23,  // amrWB
 
 		false, // pcm8
-		false, // pcmFloat32
+		true, // pcmFloat32
 		false, // pcmWebM
 		false, // opusWebM
 		false, // vorbisWebM
+		true, // pcmFloat32WAV
 	};
 
 
@@ -77,11 +80,10 @@ public class FlautoRecorder
 		false, // amrNB
 		false, // amrWB
 		false, // pcm8
-		false, // pcmFloat32
+		true, // pcmFloat32
 		false, // pcmWebM
 		false, // opusWebM
 		false, // vorbisWebM
-		true, // pcmFloat32WAV
 		true, // pcmFloat32WAV
 	};
 
@@ -250,11 +252,12 @@ public class FlautoRecorder
 
 	public boolean startRecorder
 	(
-		t_CODEC 						codec		    ,
+		t_CODEC 						codec		    	,
 		Integer                         sampleRate          ,
 		Integer                         numChannels         ,
+		Boolean							interleaved			,
 		Integer                         bitRate             ,
-		Integer 						bufferSize,
+		Integer 						bufferSize			,
 		String                     		path                ,
 		t_AUDIO_SOURCE                  _audioSource        ,
 		boolean 						toStream
@@ -280,7 +283,7 @@ public class FlautoRecorder
 		}
 		try
 		{
-				recorder._startRecorder( numChannels, sampleRate, bitRate, bufferSize, codec, path, audioSource, this );
+				recorder._startRecorder( numChannels, interleaved, sampleRate, bitRate, bufferSize, codec, path, audioSource, this );
 				if (subsDurationMillis > 0)
 						setTimer(subsDurationMillis);
 
@@ -297,6 +300,12 @@ public class FlautoRecorder
 	public void recordingData(byte[] data)
 	{
 		m_callBack.recordingData(data);
+	}
+
+
+	public void recordingDataFloat32(ArrayList<float[]> data)
+	{
+		m_callBack.recordingDataFloat32(data);
 	}
 
 	void stop()

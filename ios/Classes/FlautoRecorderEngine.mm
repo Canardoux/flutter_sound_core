@@ -107,13 +107,13 @@
                                      if (coder == pcmFloat32)
                                      {
                                          float *const  bb = [convertedBuffer floatChannelData][0];
-                                         //this ->computePeakLevelForFloat32Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         this ->computePeakLevelForFloat32Blk(bb, frameLength * outputChannelCount);
                                          data = [[NSData alloc] initWithBytes: bb length: frameLength * 4 * outputChannelCount];
                                      } else
                                      if (coder == pcm16)
                                      {
                                          int16_t *const  bb = [convertedBuffer int16ChannelData][0];
-                                         //this ->computePeakLevelForInt16Blk(bb, frameLength * (unsigned int)(nbChannels.unsignedIntegerValue));
+                                         this ->computePeakLevelForInt16Blk(bb, frameLength * outputChannelCount);
                                          data = [[NSData alloc] initWithBytes: bb length: frameLength * 2 * outputChannelCount];
                                      } else
                                      {
@@ -145,7 +145,7 @@
                                          if (coder == pcmFloat32)
                                          {
                                              float* const  bb = [convertedBuffer floatChannelData][channel];
-                                             //this ->computePeakLevelForFloat32Blk(bb, frameLength );
+                                             this ->computePeakLevelForFloat32Blk(bb, frameLength );
                                              data = [[NSData alloc] initWithBytes: bb length: frameLength * 4];
                                          } else
                                          if (coder == pcm16)
@@ -183,18 +183,26 @@
 
 void AudioRecorderEngine::computePeakLevelForFloat32Blk(float* pt, int ln)
 {
+    float m = 0.0;
     for (int i = 0; i < ln; ++pt, ++i)
     {
-        float curSample = abs(*pt);
-        if ( curSample != 0 )
-        {
+            float curSample = abs(*pt);
+        
             if (curSample > 1.0 || curSample < -1.0)
             {
                 curSample = 0;
             }
-            maxAmplitude = curSample;
-        }
+            if ( curSample > m )
+            {
+                m = curSample;
+            }
         
+        
+    }
+    m *= 0x7FFF;
+    if ( m > maxAmplitude )
+    {
+        maxAmplitude = m;
     }
     ++ nbrSamples;
 }
@@ -368,7 +376,10 @@ NSNumber* avAudioRec::recorderProgress()
 
 NSNumber* avAudioRec::dbPeakProgress()
 {
-        NSNumber* normalizedPeakLevel = [NSNumber numberWithDouble:MIN(pow(10.0, [audioRecorder peakPowerForChannel:0] / 20.0) * 160.0, 160.0)];
+    float peak = [audioRecorder peakPowerForChannel: 0];
+    //float toto = pow(10, (0.05 * peak));
+    //float titi = pow(10.0, peak / 20.0) * 160.0;
+        NSNumber* normalizedPeakLevel = [NSNumber numberWithDouble: pow(10.0, peak / 20.0) * 160.0];
         return normalizedPeakLevel;
 
 }

@@ -27,6 +27,7 @@ public interface FlautoRecorderInterface
 	public void _startRecorder
 		(
 			Integer numChannels,
+			Boolean interleaved,
 			Integer sampleRate,
 			Integer bitRate,
 			Integer bufferSize,

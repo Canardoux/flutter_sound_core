@@ -18,6 +18,9 @@ package xyz.canardoux.TauEngine;
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+
 import xyz.canardoux.TauEngine.Flauto.*;
 
 public interface FlautoRecorderCallback {
@@ -34,6 +37,8 @@ public interface FlautoRecorderCallback {
         public abstract void updateRecorderProgressDbPeakLevel(double normalizedPeakLevel, long duration);
 
         public abstract void recordingData(byte[] data);
+
+        public abstract void recordingDataFloat32(ArrayList<float[]> data);
 
         abstract public void log(t_LOG_LEVEL level, String msg);
 
