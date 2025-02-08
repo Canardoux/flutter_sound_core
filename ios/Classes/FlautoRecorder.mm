@@ -218,6 +218,18 @@ AudioRecInterface* audioRec;
                 bufferSize: (long)bufferSize
                 enableVoiceProcessing: (bool)enableVoiceProcessing
 {
+    AVAudioSession* audioSession = [AVAudioSession sharedInstance];
+    AVAudioSessionCategory category = [audioSession category];
+    if (category != AVAudioSessionCategoryPlayAndRecord)
+    {
+        NSError* outError;
+        if (! [audioSession setCategory: AVAudioSessionCategoryPlayAndRecord
+                       error: &outError])
+        {
+            return false;
+        }
+    }
+    
         NSMutableDictionary* audioSettings = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                  [NSNumber numberWithLong: sampleRate], AVSampleRateKey,
                                  [NSNumber numberWithInt: formats[codec] ], AVFormatIDKey,
