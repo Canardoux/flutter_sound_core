@@ -40,6 +40,7 @@
 - (void)updateRecorderProgressDbPeakLevel: normalizedPeakLevel duration: duration;
 - (void)interleavedRecordingData32: (NSData*)data;
 - (void)interleavedRecordingData16: (NSData*)data;
+- (void)recordingData: (NSData*)data;
 - (void)recordingDataFloat32: (NSArray*)data;
 - (void)recordingDataInt16: (NSArray*)data;
 - (void)log: (t_LOG_LEVEL)level msg: (NSString*)msg;
@@ -72,6 +73,7 @@
 - (NSString*)getRecordURL: (NSString*)path;
 - (void)interleavedRecordingData32: (NSData*)data;
 - (void)interleavedRecordingData16: (NSData*)data;
+- (void)recordingData: (NSData*)data;
 - (void)recordingDataFloat32: (NSArray*)data;
 - (void)recordingDataInt16: (NSArray*)data;
 - (int)getStatus;
