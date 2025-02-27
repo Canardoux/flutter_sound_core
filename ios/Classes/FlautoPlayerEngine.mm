@@ -337,9 +337,11 @@
         #define NB_BUFFERS 4
         - (int) feed: (NSArray*)data interleaved: (bool)interleaved
         {
-                assert (data.count > 0); // Something wrong
-            if (ready < NB_BUFFERS  || !interleaved)
-            {
+                //NSMutableArray* data = [[NSMutableArray alloc] init];
+                NSData* d = data[0];
+                //assert (audioData.count > 0); // Something wrong
+                if (ready < NB_BUFFERS  )
+                {
                         int ln = (int)[data[0] length]; // number of bytes to feed
                         int frameSize; // The size in bytes of each frame.
                         if (m_codec == pcm16)
