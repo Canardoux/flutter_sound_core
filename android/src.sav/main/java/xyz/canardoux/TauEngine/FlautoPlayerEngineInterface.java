@@ -18,11 +18,9 @@ package xyz.canardoux.TauEngine;
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import java.util.ArrayList;
-
 abstract class FlautoPlayerEngineInterface
 {
-	abstract void _startPlayer(Flauto.t_CODEC codec, String path, int sampleRate, int numChannels, boolean interleaved, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception;
+	abstract void _startPlayer(String path, int sampleRate, int numChannels, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception;
 	abstract void _stop();
 	abstract void _pausePlayer() throws Exception;
 	abstract void _resumePlayer() throws Exception;
@@ -34,6 +32,5 @@ abstract class FlautoPlayerEngineInterface
 	abstract long _getDuration();
 	abstract long _getCurrentPosition();
 	abstract int feed(byte[] data) throws Exception;
-	abstract int feed32(ArrayList<float[]> data) throws Exception;
 	abstract void _play();
 }

@@ -27,10 +27,6 @@ import android.media.PlaybackParams;
 import android.os.Build;
 import android.os.SystemClock;
 import java.lang.Thread;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
 
 //-------------------------------------------------------------------------------------------------------------
 
@@ -40,16 +36,13 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 	long mPauseTime = 0;
 	long mStartPauseTime = -1;
 	long systemTime = 0;
-	//WriteBlockThread blockThread = null;
+	WriteBlockThread blockThread = null;
 	FlautoPlayer mSession = null;
-	Flauto.t_CODEC mCodec = null;
-	boolean mInterleaved = true;
 
-	/*
 	class WriteBlockThread extends Thread {
 		byte[] mData = null;
 
-		/* ctor * / WriteBlockThread(byte[] data) {
+		/* ctor */ WriteBlockThread(byte[] data) {
 			mData = data;
 		}
 
@@ -58,24 +51,10 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 			int total = 0;
 			int written = 0;
   			while (audioTrack != null && ln > 0) { // Loop as long as there is data to push to the device
-			  	assert (blockThread != null);
 				try {
 					if (Build.VERSION.SDK_INT >= 23) {
-
-						if (mCodec == Flauto.t_CODEC.pcmFloat32)
-						{
-							ByteBuffer buf = ByteBuffer.wrap(mData);
-							buf.order(ByteOrder.nativeOrder());
-							FloatBuffer fbuf = buf.asFloatBuffer();
-							float[] ff = new float[mData.length/4];
-							fbuf.get(ff);
-							written = audioTrack.write(ff, 0, mData.length/4, AudioTrack.WRITE_BLOCKING);
-							written = 4 * written;
-						} else
-						{
-							written = audioTrack.write(mData, 0, ln, AudioTrack.WRITE_BLOCKING);
-
-						}
+						written = audioTrack.write(mData, 0, ln, AudioTrack.WRITE_BLOCKING);
+						//written = ln;
 					} else {
 						written = audioTrack.write(mData, 0, mData.length);
 					}
@@ -89,7 +68,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 				}
 				if (ln > 0) {
 					try {
-						this.sleep(10); // Wait because the device is slow to accept our data
+						this.sleep(100); // Wait because the device is slow to accept our data
 								// could be a this.yield()
 					} catch (InterruptedException e) {
 
@@ -106,7 +85,6 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 
 		}
 	}
-	*/
 
 	/* ctor */ FlautoPlayerEngine() throws Exception {
 		if (Build.VERSION.SDK_INT >= 21) {
@@ -120,40 +98,26 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 	}
 
 	void _startPlayer(
-			Flauto.t_CODEC codec,
 			String path,
 			int sampleRate,
 			int numChannels,
-			boolean interleaved,
 			int bufferSize,
 			boolean enableVoiceProcessing, // Not used on Android
 			FlautoPlayer theSession) throws Exception {
-		if (Build.VERSION.SDK_INT >= 31) {
-			mCodec = codec;
-			mInterleaved = interleaved;
+		if (Build.VERSION.SDK_INT >= 21) {
 			mSession = theSession;
 			AudioAttributes attributes = new AudioAttributes.Builder()
 					.setLegacyStreamType(AudioManager.STREAM_MUSIC)
 					.setUsage(AudioAttributes.USAGE_MEDIA)
 					.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
 					.build();
-			AudioFormat format;
-			if (codec == Flauto.t_CODEC.pcmFloat32)
-			{
-				 format = new AudioFormat.Builder()
-						.setEncoding(AudioFormat.ENCODING_PCM_FLOAT)
-						.setSampleRate(sampleRate)
-						.setChannelMask(numChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO
-								: AudioFormat.CHANNEL_OUT_STEREO)
-						.build();
-			} else {
-				format = new AudioFormat.Builder()
-						.setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-						.setSampleRate(sampleRate)
-						.setChannelMask(numChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO
-								: AudioFormat.CHANNEL_OUT_STEREO)
-						.build();
-			}
+
+			AudioFormat format = new AudioFormat.Builder()
+					.setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+					.setSampleRate(sampleRate)
+					.setChannelMask(numChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO
+							: AudioFormat.CHANNEL_OUT_STEREO)
+					.build();
 			audioTrack = new AudioTrack(attributes, format, bufferSize, AudioTrack.MODE_STREAM, sessionId);
 			mPauseTime = 0;
 			mStartPauseTime = -1;
@@ -161,7 +125,7 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 
 			theSession.onPrepared(); // Maybe too early ??? Should be after _play()
 		} else {
-			throw new Exception("Need SDK 31");
+			throw new Exception("Need SDK 21");
 		}
 	}
 
@@ -269,60 +233,20 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 		return time;
 	}
 
-	int feed32(ArrayList<float[]> data) throws Exception {
-		// TODO
-		/*
+	// boolean busy = false;
+	int feed(byte[] data) throws Exception {
 		int ln = 0; // The number of bytes accepted (and perhaps played) by the device
 		if (Build.VERSION.SDK_INT >= 23) {
-			if (blockThread != null)
-			{
-				mSession.m_callBack.log(Flauto.t_LOG_LEVEL.ERROR, "Audio device busy");
-			} else {
-				ln = audioTrack.write(data.get(0), 0, data.get(0).length, AudioTrack.WRITE_NON_BLOCKING);
-			}
+			ln = audioTrack.write(data, 0, data.length, AudioTrack.WRITE_NON_BLOCKING);
 		} else {
 			ln = 0;
 		}
 
-		return ln;
-
-		 */
-		return 0;
-	}
-
-		// boolean busy = false;
-	int feed(byte[] data) throws Exception {
-		int ln = 0; // The number of bytes accepted (and perhaps played) by the device
-		//if (Build.VERSION.SDK_INT >= 23) {
-			//if (blockThread != null)
-			//{
-			//	mSession.m_callBack.log(Flauto.t_LOG_LEVEL.ERROR, "Audio device busy");
-			//} else
-			{
-				if (mCodec == Flauto.t_CODEC.pcmFloat32)
-				{
-					ByteBuffer buf = ByteBuffer.wrap(data);
-					buf.order(ByteOrder.nativeOrder());
-					FloatBuffer fbuf = buf.asFloatBuffer();
-					float[] ff = new float[data.length/4];
-					fbuf.get(ff);
-					ln = audioTrack.write(ff, 0, data.length/4, AudioTrack.WRITE_BLOCKING);
-					ln = 4 * ln;
-				} else
-				{
-					ln = audioTrack.write(data, 0, data.length, AudioTrack.WRITE_BLOCKING);
-
-				}
-			}
-		//} else {
-			//ln = 0;
-		//}
-/*
 		if (ln == 0) { // The device did not accept anything
 				// We must keep trying to know when the device can accept new data
-			//if (blockThread != null) { // We already have a thread trying to feed the device
-			//	System.out.println("Audio packet Lost !");
-			//} else
+			if (blockThread != null) { // We already have a thread trying to feed the device
+				System.out.println("Audio packet Lost !");
+			} else
 			{
 				// busy = true;
 				blockThread = new WriteBlockThread(data); // We start a thread to try to send the data
@@ -339,9 +263,6 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 
 			// }
 		}
-
- */
-		//return ln;
-		return 1;
+		return ln;
 	}
 }

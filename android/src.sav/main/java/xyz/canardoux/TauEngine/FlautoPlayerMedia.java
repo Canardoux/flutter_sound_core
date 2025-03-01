@@ -22,7 +22,7 @@ import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.os.Build;
 import android.util.Log;
-import java.util.ArrayList;
+
 //-------------------------------------------------------------------------------------------------------------
 
 
@@ -36,7 +36,7 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		this.flautoPlayer = theSession;
 	}
 
-	void _startPlayer(Flauto.t_CODEC codec, String path, int sampleRate, int numChannels, boolean interleaved, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
+	void _startPlayer(String path,  int sampleRate, int numChannels, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
  	{
 		this.flautoPlayer = theSession;
  		mediaPlayer = new MediaPlayer();
@@ -58,12 +58,6 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 	}
 
 	int feed(byte[] data) throws Exception
-	{
-		throw new Exception("Cannot feed a Media Player");
-	}
-
-
-	int feed32(ArrayList<float[]> data) throws Exception
 	{
 		throw new Exception("Cannot feed a Media Player");
 	}

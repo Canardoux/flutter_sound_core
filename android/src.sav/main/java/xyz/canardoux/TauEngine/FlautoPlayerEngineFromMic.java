@@ -31,7 +31,6 @@ import android.media.MediaRecorder;
 import androidx.core.content.ContextCompat;
 import static android.Manifest.permission.RECORD_AUDIO;
 import java.lang.Thread;
-import java.util.ArrayList;
 import android.content.pm.PackageManager;
 
 import xyz.canardoux.TauEngine.Flauto.*;
@@ -166,7 +165,7 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 
 
-	/* ctor */ FlautoPlayerEngineFromMic( FlautoPlayer theSession) throws Exception
+	/* ctor */ FlautoPlayerEngineFromMic(FlautoPlayer theSession) throws Exception
 	{
 		mSession = theSession;
 		if ( Build.VERSION.SDK_INT >= 21 )
@@ -271,11 +270,9 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 
 	void _startPlayer
 		(
-				t_CODEC codec,
 			String path,
 			int sampleRate,
 			int numChannels,
-			boolean interleaved,
 			int bufferSize,
 			boolean enableVoiceProcessing, // not used on android
 			FlautoPlayer aPlayer
@@ -387,10 +384,4 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		return -1;
 	}
 
-
-	int feed32(ArrayList<float[]> data) throws Exception
-	{
-		mSession.logError("feed error: not implemented");
-		return -1;
-	}
 }

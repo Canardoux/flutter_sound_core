@@ -163,61 +163,51 @@ public class FlautoRecorderEngine
 	{
 		int n = 0;
 		int r = 0;
-		ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
-		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
-
 		while (isRecording ) {
 			//ShortBuffer shortBuffer = ShortBuffer.allocate(bufferSize/2);
+			ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+			FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);;
 			try {
 				// gets the voice output from microphone to byte format
 				if ( Build.VERSION.SDK_INT >= 23 )
 				{
-					n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
+						if (codec == t_CODEC.pcmFloat32) {
 
-					if (codec == t_CODEC.pcmFloat32 ) {
-							if (interleaved) {
-									byteBuffer.asFloatBuffer().put(floatBuffer);
-							}
-					} else {
+							n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
+						} else {
 
-								n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
-					}
+							n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+						}
 
 				}
 				else
 				{
 					throw new Exception("Android SDK must be >= 23");
 				}
-				final int elementCount = n;//2 * n;
+				final int ln = n;//2 * n;
 
 				if (n > 0) {
 					totalBytes += n;
 					r += n;
 					if (outputStream != null) {
-						outputStream.write(byteBuffer.array(), 0, elementCount);
+						outputStream.write(byteBuffer.array(), 0, ln);
 					} else {
-						if (codec == t_CODEC.pcmFloat32 )
+						if (codec == t_CODEC.pcmFloat32 && !interleaved)
 						{
-							if (!interleaved) {
-								ArrayList<float[]> data = new ArrayList();
-								for (int channel = 0; channel < numChannels; ++channel)
+							ArrayList<float[]> data = new ArrayList();
+							for (int channel = 0; channel < numChannels; ++channel)
+							{
+								FloatBuffer buffer = FloatBuffer.allocate(n/numChannels);
+								for (int i = 0; i < n/numChannels; ++i)
 								{
-									FloatBuffer buffer = FloatBuffer.allocate(n/numChannels);
-									for (int i = 0; i < n/numChannels; ++i)
-									{
-										buffer.put( floatBuffer.get(numChannels * i + channel));
-									}
-									data.add(buffer.array());
+									buffer.put( floatBuffer.get(numChannels * i + channel));
 								}
+								data.add(buffer.array());
 							}
-							ByteBuffer buf = ByteBuffer.allocate(bufferSize);
-							floatBuffer.rewind();
-							buf.rewind();
-							buf.asFloatBuffer().put(floatBuffer);
 							mainHandler.post(new Runnable() {
 								@Override
 								public void run() {
-									session.recordingData(Arrays.copyOfRange(buf.array(), 0, elementCount));
+									session.recordingDataFloat32(data);
 								}
 							});
 						} else
@@ -225,7 +215,7 @@ public class FlautoRecorderEngine
 							mainHandler.post(new Runnable() {
 								@Override
 								public void run() {
-									session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, elementCount));
+									session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, ln));
 								}
 							});
 

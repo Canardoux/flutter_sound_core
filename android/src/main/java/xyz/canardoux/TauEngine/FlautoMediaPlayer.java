@@ -19,6 +19,7 @@ package xyz.canardoux.TauEngine;
  */
 
 import android.media.MediaPlayer;
+import java.util.ArrayList;
 
 //-------------------------------------------------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 	MediaPlayer mediaPlayer = null;
 	FlautoPlayer flautoPlayer;
 
-	void _startPlayer(String path, int sampleRate, int numChannels, int blockSize,  boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
+	void _startPlayer(Flauto.t_CODEC codec, String path, int sampleRate, int numChannels, boolean interleaved, int blockSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
  	{
  		mediaPlayer = new MediaPlayer();
 		if (path == null)
@@ -54,6 +55,13 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 	{
 		throw new Exception("Cannot feed a Media Player");
 	}
+
+
+	int feed32(ArrayList<float[]> data) throws Exception
+	{
+		throw new Exception("Cannot feed a Media Player");
+	}
+
 
 	void _setVolume(double volume)
 	{

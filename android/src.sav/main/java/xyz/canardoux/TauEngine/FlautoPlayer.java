@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.lang.Thread;
-import java.util.ArrayList;
+
 import xyz.canardoux.TauEngine.Flauto.*;
 import xyz.canardoux.TauEngine.Flauto;
 
@@ -143,13 +143,13 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		return pauseMode ? t_PLAYER_STATE.PLAYER_IS_PAUSED : t_PLAYER_STATE.PLAYER_IS_STOPPED;
 	}
 
-	public boolean startPlayerFromMic(t_CODEC codec, int numChannels, boolean interleaved, int sampleRate, int bufferSize,
+	public boolean startPlayerFromMic(int numChannels, int sampleRate, int bufferSize,
 			boolean enableVoiceProcessing) {
 		stop(); // To start a new clean playback
 
 		try {
 			player = new FlautoPlayerEngineFromMic(this);
-			player._startPlayer(codec,null, sampleRate, numChannels, interleaved, bufferSize, enableVoiceProcessing, this);
+			player._startPlayer(null, sampleRate, numChannels, bufferSize, enableVoiceProcessing, this);
 			play();
 		} catch (Exception e) {
 			logError("startPlayer() exception");
@@ -163,7 +163,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			String fromURI,
 			byte[] dataBuffer,
 			int numChannels,
-			boolean interleaved,
 			int sampleRate,
 			// boolean enableVoiceProcessing, // Not used on Android
 			int bufferSize) {
@@ -182,14 +181,14 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		}
 
 		try {
-			if (fromURI == null && (codec == t_CODEC.pcm16 || codec == t_CODEC.pcmFloat32)) {
+			if (fromURI == null && codec == t_CODEC.pcm16) {
 				player = new FlautoPlayerEngine();
 			} else {
 				player = new FlautoPlayerMedia(this);
 			}
 			String path = Flauto.getPath(fromURI);
 
-			player._startPlayer(codec, path, sampleRate, numChannels, interleaved, bufferSize, false, this);
+			player._startPlayer(path, sampleRate, numChannels, bufferSize, false, this);
 			play();
 		} catch (Exception e) {
 			logError("startPlayer() exception");
@@ -205,22 +204,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 		try {
 			int ln = player.feed(data);
-			assert (ln >= 0);
-			return ln;
-		} catch (Exception e) {
-			logError("feed() exception");
-			throw e;
-		}
-	}
-
-
-	public int feed32(ArrayList<float[]> data) throws Exception {
-		if (player == null) {
-			throw new Exception("feed() : player is null");
-		}
-
-		try {
-			int ln = player.feed32(data);
 			assert (ln >= 0);
 			return ln;
 		} catch (Exception e) {

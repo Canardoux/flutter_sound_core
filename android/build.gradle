@@ -107,7 +107,7 @@ android {
     buildToolsVersion "35.0.0"
 
     defaultConfig {
-        minSdkVersion 18
+        minSdkVersion 24
         targetSdkVersion 35
         versionCode 19241
         versionName '9.24.1'

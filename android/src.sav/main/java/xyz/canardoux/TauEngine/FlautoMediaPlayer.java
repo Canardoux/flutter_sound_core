@@ -19,37 +19,30 @@ package xyz.canardoux.TauEngine;
  */
 
 import android.media.MediaPlayer;
-import android.media.PlaybackParams;
-import android.os.Build;
-import android.util.Log;
-import java.util.ArrayList;
+
 //-------------------------------------------------------------------------------------------------------------
 
 
-class FlautoPlayerMedia extends FlautoPlayerEngineInterface
+
+class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 {
 	MediaPlayer mediaPlayer = null;
 	FlautoPlayer flautoPlayer;
 
-	/* ctor */ FlautoPlayerMedia( FlautoPlayer theSession)
-	{
-		this.flautoPlayer = theSession;
-	}
-
-	void _startPlayer(Flauto.t_CODEC codec, String path, int sampleRate, int numChannels, boolean interleaved, int bufferSize, boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
+	void _startPlayer(String path, int sampleRate, int numChannels, int blockSize,  boolean enableVoiceProcessing, FlautoPlayer theSession) throws Exception
  	{
-		this.flautoPlayer = theSession;
  		mediaPlayer = new MediaPlayer();
 		if (path == null)
 		{
 			throw new Exception("path is NULL");
 		}
+		this.flautoPlayer = theSession;
 		mediaPlayer.setDataSource(path);
 		final String pathFile = path;
 		mediaPlayer.setOnPreparedListener(mp -> {flautoPlayer.play(); flautoPlayer.onPrepared();});
 		mediaPlayer.setOnCompletionListener(mp -> flautoPlayer.onCompletion());
 		mediaPlayer.setOnErrorListener(flautoPlayer);
-		mediaPlayer.prepare();
+		mediaPlayer.prepare(); // Maybe too early. Should be after start()
 	}
 
 	void _play()
@@ -62,47 +55,20 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		throw new Exception("Cannot feed a Media Player");
 	}
 
-
-	int feed32(ArrayList<float[]> data) throws Exception
-	{
-		throw new Exception("Cannot feed a Media Player");
-	}
-
-
 	void _setVolume(double volume)
 	{
 		float v = (float)volume;
 		mediaPlayer.setVolume ( v, v );
 	}
-	void _setVolumePan(double volume, double pan) {
-		// Clamp volume to range [0.0, 1.0]
-		volume = Math.max(0.0, Math.min(volume, 1.0));
 
-		// Clamp pan to range [-1.0, 1.0]
-		pan = Math.max(-1.0, Math.min(pan, 1.0));
-
-		// Calculate left and right volumes based on pan
-		float leftVolume = (float) (volume * (pan <= 0.0 ? 1.0 : 1.0 - pan));
-		float rightVolume = (float) (volume * (pan >= 0.0 ? 1.0 : 1.0 + pan));
-
-		// Apply the calculated volumes to the MediaPlayer
-		mediaPlayer.setVolume(leftVolume, rightVolume);
+	void _setVolumePan(double volume, double pan){
+		
 	}
+
 	void _setSpeed(double speed)
 	{
 		float v = (float)speed;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			try {
-				PlaybackParams params = mediaPlayer.getPlaybackParams();
-				params.setSpeed(v);
-				mediaPlayer.setPlaybackParams(params);
-			} catch (Exception e) {
-				Log.e("_setSpeed", "_setSpeed: ", e);
-			}
-		}
-
 	}
-
 
 	void _stop() {
 		if (mediaPlayer == null)
@@ -132,6 +98,9 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		}
 		mediaPlayer = null;
 
+	}
+
+	void _finish() { // NO-OP
 	}
 
 
@@ -175,3 +144,5 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		return mediaPlayer.getCurrentPosition();
 	}
 }
+
+//-------------------------------------------------------------------------------------------------------------
