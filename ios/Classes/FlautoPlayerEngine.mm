@@ -338,7 +338,7 @@
         - (int) feed: (NSArray*)data interleaved: (bool)interleaved
         {
                 //NSMutableArray* data = [[NSMutableArray alloc] init];
-                NSData* d = data[0];
+                //NSData* d = data[0];
                 //assert (audioData.count > 0); // Something wrong
                 if (ready < NB_BUFFERS  )
                 {

@@ -38,8 +38,6 @@
 - (void)resumeRecorderCompleted: (bool)success;
 - (void)pauseRecorderCompleted: (bool)success;
 - (void)updateRecorderProgressDbPeakLevel: normalizedPeakLevel duration: duration;
-- (void)interleavedRecordingData32: (NSData*)data;
-- (void)interleavedRecordingData16: (NSData*)data;
 - (void)recordingData: (NSData*)data;
 - (void)recordingDataFloat32: (NSArray*)data;
 - (void)recordingDataInt16: (NSArray*)data;
