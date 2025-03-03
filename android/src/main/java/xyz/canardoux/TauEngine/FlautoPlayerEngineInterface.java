@@ -34,6 +34,7 @@ abstract class FlautoPlayerEngineInterface
 	abstract long _getDuration();
 	abstract long _getCurrentPosition();
 	abstract int feed(byte[] data) throws Exception;
-	abstract int feed32(ArrayList<float[]> data) throws Exception;
+	abstract int feedInt16(ArrayList<byte[]> data) throws Exception;
+	abstract int feedFloat32(ArrayList<float[]> data) throws Exception;
 	abstract void _play();
 }

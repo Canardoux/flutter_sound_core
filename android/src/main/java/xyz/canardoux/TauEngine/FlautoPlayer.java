@@ -214,13 +214,13 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 	}
 
 
-	public int feed32(ArrayList<float[]> data) throws Exception {
+	public int feedInt16(ArrayList<byte[]> data) throws Exception {
 		if (player == null) {
 			throw new Exception("feed() : player is null");
 		}
 
 		try {
-			int ln = player.feed32(data);
+			int ln = player.feedInt16(data);
 			assert (ln >= 0);
 			return ln;
 		} catch (Exception e) {
@@ -228,6 +228,24 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			throw e;
 		}
 	}
+
+
+
+	public int feedFloat32(ArrayList<float[]> data) throws Exception {
+		if (player == null) {
+			throw new Exception("feed() : player is null");
+		}
+
+		try {
+			int ln = player.feedFloat32(data);
+			assert (ln >= 0);
+			return ln;
+		} catch (Exception e) {
+			logError("feed() exception");
+			throw e;
+		}
+	}
+
 
 	public void needSomeFood(int ln) {
 		if (ln < 0)

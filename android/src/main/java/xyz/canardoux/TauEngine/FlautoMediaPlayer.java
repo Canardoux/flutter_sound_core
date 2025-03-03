@@ -57,7 +57,14 @@ class FlautoMediaPlayer extends FlautoPlayerEngineInterface
 	}
 
 
-	int feed32(ArrayList<float[]> data) throws Exception
+
+	int feedInt16(ArrayList<byte[]> data) throws Exception
+	{
+		throw new Exception("Cannot feed a Media Player");
+	}
+
+
+	int feedFloat32(ArrayList<float[]> data) throws Exception
 	{
 		throw new Exception("Cannot feed a Media Player");
 	}

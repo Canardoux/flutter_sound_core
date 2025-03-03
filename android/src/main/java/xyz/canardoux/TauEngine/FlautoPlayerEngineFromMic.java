@@ -33,6 +33,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 import java.lang.Thread;
 import java.util.ArrayList;
 import android.content.pm.PackageManager;
+import java.util.ArrayList;
 
 import xyz.canardoux.TauEngine.Flauto.*;
 
@@ -387,8 +388,15 @@ class FlautoPlayerEngineFromMic extends FlautoPlayerEngineInterface
 		return -1;
 	}
 
+	int feedInt16(ArrayList<byte[]> data) throws Exception
+	{
+		mSession.logError("feedInt16error: not implemented");
+		return -1;
+	}
 
-	int feed32(ArrayList<float[]> data) throws Exception
+
+
+	int feedFloat32(ArrayList<float[]> data) throws Exception
 	{
 		mSession.logError("feed error: not implemented");
 		return -1;

@@ -269,36 +269,50 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 		return time;
 	}
 
-	int feed32(ArrayList<float[]> data) throws Exception {
+	int feedFloat32(ArrayList<float[]> data) throws Exception {
 		// TODO
-		/*
+		
 		int ln = 0; // The number of bytes accepted (and perhaps played) by the device
-		if (Build.VERSION.SDK_INT >= 23) {
-			if (blockThread != null)
+		int nbrOfChannels = data.size();
+		int frameSize = data.get(0).length;
+		float[] r = new float[nbrOfChannels * frameSize];
+		for (int channel = 0; channel < nbrOfChannels; ++channel)
+		{
+			float[] b = data.get(channel);
+			for (int i = 0; i < frameSize; ++i)
 			{
-				mSession.m_callBack.log(Flauto.t_LOG_LEVEL.ERROR, "Audio device busy");
-			} else {
-				ln = audioTrack.write(data.get(0), 0, data.get(0).length, AudioTrack.WRITE_NON_BLOCKING);
+				r[ i * nbrOfChannels + channel] = b[i];
 			}
-		} else {
-			ln = 0;
 		}
+				ln = audioTrack.write(r, 0, r.length, AudioTrack.WRITE_BLOCKING);
 
 		return ln;
 
-		 */
-		return 0;
 	}
 
-		// boolean busy = false;
-	int feed(byte[] data) throws Exception {
-		int ln = 0; // The number of bytes accepted (and perhaps played) by the device
-		//if (Build.VERSION.SDK_INT >= 23) {
-			//if (blockThread != null)
-			//{
-			//	mSession.m_callBack.log(Flauto.t_LOG_LEVEL.ERROR, "Audio device busy");
-			//} else
+	int feedInt16(ArrayList<byte[]> data) throws Exception {
+			int nbrChannels = data.size();
+			int frameSize = data.get(0).length;
+			int ln = nbrChannels * frameSize;
+			byte[] interleavedData = new byte[ln];
+			for (int channel = 0; channel < nbrChannels; ++channel )
 			{
+				byte[] b = data.get(channel);
+				if (b.length != frameSize) // Wrong size
+					return 0;
+				for (int i = 0; i < frameSize/2; ++i) {
+					int pos = 2 * (channel + i * nbrChannels);
+					interleavedData[pos] = b[2 * i]; // Little endian
+					interleavedData[pos + 1] = b[2 * i + 1];
+				}
+
+			}
+			int	r = audioTrack.write(interleavedData, 0, ln, AudioTrack.WRITE_BLOCKING);
+			return 1;
+	}
+
+	int feed(byte[] data) throws Exception {
+				int ln = 0; // The number of bytes accepted (and perhaps played) by the device
 				if (mCodec == Flauto.t_CODEC.pcmFloat32)
 				{
 					ByteBuffer buf = ByteBuffer.wrap(data);
@@ -311,37 +325,8 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 				} else
 				{
 					ln = audioTrack.write(data, 0, data.length, AudioTrack.WRITE_BLOCKING);
-
 				}
-			}
-		//} else {
-			//ln = 0;
-		//}
-/*
-		if (ln == 0) { // The device did not accept anything
-				// We must keep trying to know when the device can accept new data
-			//if (blockThread != null) { // We already have a thread trying to feed the device
-			//	System.out.println("Audio packet Lost !");
-			//} else
-			{
-				// busy = true;
-				blockThread = new WriteBlockThread(data); // We start a thread to try to send the data
-				// background
-				blockThread.start();
-			}
-		} else {
-			// if (busy)
-			// {
-			// busy = false;
-			// mSession.needSomeFood(ln);
-			// if (blockThread == null)
-			// mSession.onCompletion();
 
-			// }
-		}
-
- */
-		//return ln;
 		return 1;
 	}
 }

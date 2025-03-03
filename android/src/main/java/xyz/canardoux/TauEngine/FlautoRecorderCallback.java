@@ -40,6 +40,8 @@ public interface FlautoRecorderCallback {
 
         public abstract void recordingDataFloat32(ArrayList<float[]> data);
 
+        public abstract void recordingDataInt16(ArrayList<byte[]> data);
+
         abstract public void log(t_LOG_LEVEL level, String msg);
 
 }

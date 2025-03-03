@@ -308,6 +308,12 @@ public class FlautoRecorder
 		m_callBack.recordingDataFloat32(data);
 	}
 
+
+	public void recordingDataInt16(ArrayList<byte[]> data)
+	{
+		m_callBack.recordingDataInt16(data);
+	}
+
 	void stop()
 	{
 		try {

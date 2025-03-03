@@ -28,13 +28,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
-
+import java.lang.Math;
 import xyz.canardoux.TauEngine.Flauto.*;
 import xyz.canardoux.TauEngine.FlautoRecorderInterface;
 import xyz.canardoux.TauEngine.FlautoRecorder;
@@ -154,12 +155,114 @@ public class FlautoRecorderEngine
 			AudioFormat.ENCODING_PCM_FLOAT,
 		};
 
+/*
+	int data32Interleaved(Integer numChannels, int bufferSize)
+	{
+		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
+		int n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
+		return 0;
+	}
+
+	int data16Interleaved(Integer numChannels, int bufferSize)
+	{
+		ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+		int n = 0;
+		try
+		{
+			n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+			final int byteCount = n * 2;
+			if (n > 0)
+			{
+				if (outputStream != null)
+				{
+					outputStream.write(byteBuffer.array(), 0, n);
+					return n;
+				}
+				for (int i = 0; i < n / 2; ++i)
+				{
+					short curSample = getShort(byteBuffer.array()[i * 2], byteBuffer.array()[i * 2 + 1]);
+					if (curSample > maxAmplitude)
+					{
+						maxAmplitude = curSample;
+					}
+				}
+				++ nbrSamples;
+
+				mainHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, byteCount));
+					}
+				});
+				return n;
+			}
+			return 0;
+		} catch (Exception e)
+		{
+			return 0;
+		}
+
+	}
+
+	int data32PlanMode(Integer numChannels, int bufferSize)
+	{
+		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
+		int n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
+		return 0;
+	}
+
+	int data16PlanMode(Integer numChannels, int bufferSize)
+	{
+		ShortBuffer shortBuffer = ShortBuffer.allocate(bufferSize);
+		int n = recorder.read(shortBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+		return 0;
+	}
 
 	int writeData(
-				  t_CODEC theCodec,
-				  Integer numChannels,
-				  Boolean interleaved,
-				  int bufferSize)
+			t_CODEC theCodec,
+			Integer numChannels,
+			Boolean interleaved,
+			int bufferSize)
+	{
+		int r = 0;
+		while (isRecording )
+		{
+			try
+			{
+				if (interleaved)
+				{
+					if (codec == t_CODEC.pcmFloat32)
+						r = data32Interleaved(numChannels, bufferSize);
+					else
+						r = data16Interleaved(numChannels, bufferSize);
+				} else
+				{
+					if (codec == t_CODEC.pcmFloat32)
+						r = data32PlanMode(numChannels, bufferSize);
+					else
+						r = data16PlanMode(numChannels, bufferSize);
+				}
+
+			} catch (Exception e) {
+				System.out.println(e);
+				break;
+			}
+			if (isRecording)
+				mainHandler.post(p);
+		}
+
+		return r;
+	}
+
+*/
+
+	int writeData32Interleavedxxx(
+			t_CODEC theCodec,
+			Integer numChannels,
+			Boolean interleaved,
+			int bufferSize)
 	{
 		int n = 0;
 		int r = 0;
@@ -175,12 +278,12 @@ public class FlautoRecorderEngine
 					n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
 
 					if (codec == t_CODEC.pcmFloat32 ) {
-							if (interleaved) {
-									byteBuffer.asFloatBuffer().put(floatBuffer);
-							}
+						if (interleaved) {
+							byteBuffer.asFloatBuffer().put(floatBuffer);
+						}
 					} else {
 
-								n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+						n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
 					}
 
 				}
@@ -287,7 +390,249 @@ public class FlautoRecorderEngine
 	}
 
 
-	public void _startRecorder
+	void computeMaxAmplitude16(ByteBuffer byteBuffer)
+	{
+		byte[] array = byteBuffer.array();
+		int n = array.length;
+
+		for (int i = 0; i < n / 2; ++i)
+		{
+			short curSample = getShort(array[i * 2], array[i * 2 + 1]);
+			int m = Math.abs(curSample);
+			if (m > maxAmplitude)
+			{
+				maxAmplitude = m;
+			}
+		}
+		++ nbrSamples;
+	}
+
+	void computeMaxAmplitude32(float[] b)
+	{
+		int ln = b.length;
+		float m = 0;
+		for (int i = 0; i < ln / 2; ++i)
+		{
+			float sample = Math.abs(b[i]);
+			if (sample > m)
+				m = sample;
+		}
+		m *= 0x7FFF;
+		if ( m > maxAmplitude )
+		{
+			maxAmplitude = m;
+		}
+
+		++ nbrSamples;
+	}
+
+	ArrayList<byte[]> uninterleaved16(Integer numChannels, byte[] b)
+	{
+		ArrayList<byte[]> r = new ArrayList();
+		int ln = b.length;
+		for (int channel = 0; channel < numChannels; ++channel)
+		{
+			int xln = ln/numChannels;
+			byte[] x = new byte[xln];
+			for (int i = 0; i < xln/2; ++i)
+			{
+				int pos = 2 * (channel + i * numChannels );
+				if (pos >= ln)
+				{
+					pos = pos;
+				}
+				x[2*i] = b[pos]; // Little endian
+				x[2*i+1]= b[pos+1];
+			}
+			r.add(x);
+		}
+		return r;
+	}
+
+
+	int writeData32(
+			t_CODEC theCodec,
+			Integer numChannels,
+			Boolean interleaved,
+			int bufferSize) throws Exception {
+		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize / 4);
+
+		int n = recorder.read(floatBuffer.array(), 0, bufferSize / 4, AudioRecord.READ_NON_BLOCKING);
+
+		if (n > 0) {
+			totalBytes += n;
+			ArrayList<float[]> r = new ArrayList<float[]>();
+
+				for (int channel = 0; channel < numChannels; ++channel) {
+					int frameSize = n /  numChannels;
+					FloatBuffer fb = FloatBuffer.allocate(frameSize);
+					for (int i = 0; i < frameSize; ++i) {
+						int pos = channel + i * numChannels;
+						fb.array()[i ] = floatBuffer.array()[pos];
+					}
+					r.add(fb.array());
+				}
+
+			mainHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					session.recordingDataFloat32(r);
+				}
+			});
+			computeMaxAmplitude32(floatBuffer.array());
+
+
+		}
+		return n;
+	}
+
+
+		int writeData32Interleaved(
+			t_CODEC theCodec,
+			Integer numChannels,
+			Boolean interleaved,
+			int bufferSize) throws Exception
+
+	{
+			FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
+
+			int n = recorder.read(floatBuffer.array(), 0, bufferSize / 4, AudioRecord.READ_NON_BLOCKING);
+			n *= 4;
+
+			if (n > 0)
+			{
+				totalBytes += n;
+
+				//byte[] bytearray = buf.array();
+				//float toto = buf.getFloat(0);
+				//float toto1 = buf.getFloat(1);
+				//buf.rewind();
+
+				if (!interleaved)
+				{
+					FloatBuffer fb = FloatBuffer.allocate(bufferSize/4);
+					int lnx = n / numChannels;
+					for (int channel = 0; channel < numChannels; ++channel)
+					{
+						int frameSize =  n/(4 * numChannels);
+							for (int i = 0; i < frameSize; ++i)
+							{
+								int pos = channel + i * numChannels;
+								fb.array()[i + channel * frameSize] = floatBuffer.array()[pos ];
+							}
+					}
+					floatBuffer = fb;
+
+				}
+
+				ByteBuffer buf = ByteBuffer.allocate(bufferSize);
+				buf.rewind();
+
+				buf.order(ByteOrder.nativeOrder());
+				floatBuffer.rewind();
+				buf.rewind();
+				buf.asFloatBuffer().put(floatBuffer);
+
+
+					final int ln = n;
+					final byte[] b = Arrays.copyOfRange(buf.array(), 0, ln);
+					mainHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							session.recordingData(b);
+						}
+					});
+					computeMaxAmplitude32(floatBuffer.array());
+
+			}
+
+			return n;
+	}
+
+	int writeData16(
+				  t_CODEC theCodec,
+				  Integer numChannels,
+				  Boolean interleaved,
+				  int bufferSize)
+	{
+				int n = 0;
+				ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
+
+
+				n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
+				if (n == 0)
+					return 0;
+				final int elementCount = n;
+
+
+				if (interleaved) // pcmInt16 interleaved
+				{
+					final byte[] b = Arrays.copyOfRange(byteBuffer.array(), 0, elementCount);
+					mainHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							session.recordingData(b);
+						}
+					});
+				} else // pcmInt16 !interleaved
+				{
+					final byte[] b = Arrays.copyOfRange(byteBuffer.array(), 0, elementCount);
+					final ArrayList<byte[]> x = uninterleaved16(numChannels, b);
+					mainHandler.post(new Runnable() {
+						@Override
+						public void run()
+						{
+
+							session.recordingDataInt16(x);
+						}
+					});
+
+				}
+				computeMaxAmplitude16(byteBuffer);
+
+				return n;
+
+	}
+
+	int writeData(
+			t_CODEC codec,
+			Integer numChannels,
+			Boolean interleaved,
+			int bufferSize)
+	{
+		int n = 0;
+		while (isRecording ) {
+			try {
+
+				if (codec == t_CODEC.pcm16  || codec == t_CODEC.pcm16WAV ) {
+					 n = writeData16(codec, numChannels, interleaved
+							, bufferSize);
+				} else
+				if (interleaved) {
+					 n = writeData32Interleaved(codec, numChannels, interleaved
+							, bufferSize);
+				} else
+				{
+					n = writeData32(codec, numChannels, interleaved
+							, bufferSize);
+				}
+
+				if (isRecording)
+					mainHandler.post(p);
+				if (n == 0)
+					break;
+			} catch (Exception e) {
+				System.out.println(e);
+				break;
+			}
+		}
+		//if (isRecording)
+			//mainHandler.post(p);
+		return 1;
+	}
+
+
+		public void _startRecorder
 		(
 			Integer numChannels,
 
