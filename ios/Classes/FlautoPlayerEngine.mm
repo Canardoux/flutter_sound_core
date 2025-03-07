@@ -219,8 +219,9 @@
 
                 [engine attachNode: timePitchUnit];
 
-                [engine connect: playerNode to: timePitchUnit format: outputFormat];
-                [engine connect: timePitchUnit to: outputNode format: outputFormat];                
+                [engine connect: playerNode to: engine.mainMixerNode format: outputFormat];
+                [engine connect: engine.mainMixerNode to: timePitchUnit format: outputFormat];
+                [engine connect: timePitchUnit to: outputNode format: outputFormat];
                 bool b = [engine startAndReturnError: nil];
                 if (!b)
                 {
@@ -405,7 +406,7 @@
                         };
                     
                         //int output_channels = [outputFormat channelCount];
-                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8 // !!!!!!!!!
+                        AVAudioPCMBuffer* thePCMOutputBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat: outputFormat frameCapacity: 8*frameCount]; // I don't understand why multiplied by 8!
                         thePCMOutputBuffer.frameLength = 0;
 
                         if (converter == nil) 
@@ -537,7 +538,7 @@
                 m_numChannels= numChannels;
 
                waitingBlock = nil;
-               // so much* engine = [[AVAudioEngine alloc] init];
+               //AVAudioEngine* engine = [[AVAudioEngine alloc] init];
                engine = [[AVAudioEngine alloc] init];
                AVAudioInputNode* inputNode = [engine inputNode];
                AVAudioOutputNode* outputNode = [engine outputNode];
@@ -642,7 +643,7 @@
 
         -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval) fadeDuration // TODO
         {
-            return true; // TODO
+                return true; // TODO
         }
 
         -(bool)  setPan: (double) pan // TODO
