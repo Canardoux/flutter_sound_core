@@ -459,6 +459,7 @@
    
 -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval)fadeDuration
 {
+        engine.mainMixerNode.volume = volume;
         if (playerNode == nil || playerNode ==  (id)[NSNull null]) return false;
         [playerNode setVolume: volume];
 
@@ -641,7 +642,7 @@
 
         -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval) fadeDuration // TODO
         {
-            engine.mainMixerNode.outputVolume = volume;
+            return true; // TODO
         }
 
         -(bool)  setPan: (double) pan // TODO
