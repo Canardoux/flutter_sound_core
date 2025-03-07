@@ -536,7 +536,7 @@
                 m_numChannels= numChannels;
 
                waitingBlock = nil;
-               //AVAudioEngine* engine = [[AVAudioEngine alloc] init];
+               // so much* engine = [[AVAudioEngine alloc] init];
                engine = [[AVAudioEngine alloc] init];
                AVAudioInputNode* inputNode = [engine inputNode];
                AVAudioOutputNode* outputNode = [engine outputNode];
@@ -641,7 +641,7 @@
 
         -(bool)  setVolume: (double) volume fadeDuration: (NSTimeInterval) fadeDuration // TODO
         {
-                return true; // TODO
+            engine.mainMixerNode.outputVolume = volume;
         }
 
         -(bool)  setPan: (double) pan // TODO
