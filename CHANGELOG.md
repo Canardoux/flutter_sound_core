@@ -1,4 +1,4 @@
-## 9.25.9
+## 9.26.0
 
 - ## The [CHANGELOG file is here](https://flutter-sound.canardoux.xyz/changelog.html)
 
