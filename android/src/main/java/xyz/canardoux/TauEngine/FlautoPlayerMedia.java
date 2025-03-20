@@ -49,7 +49,7 @@ class FlautoPlayerMedia extends FlautoPlayerEngineInterface
 		mediaPlayer.setOnPreparedListener(mp -> {flautoPlayer.play(); flautoPlayer.onPrepared();});
 		mediaPlayer.setOnCompletionListener(mp -> flautoPlayer.onCompletion());
 		mediaPlayer.setOnErrorListener(flautoPlayer);
-		mediaPlayer.prepare();
+		mediaPlayer.prepareAsync();
 	}
 
 	void _play()
