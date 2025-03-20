@@ -252,6 +252,9 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 	}
 
 	boolean _isPlaying() {
+		if (audioTrack == null) {
+			return AudioTrack.PLAYER_IS_STOPPED;
+		}
 		return audioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING;
 	}
 
