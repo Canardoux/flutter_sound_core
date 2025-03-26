@@ -260,7 +260,9 @@ public class FlautoRecorder
 		Integer 						bufferSize			,
 		String                     		path                ,
 		t_AUDIO_SOURCE                  _audioSource        ,
-		boolean 						toStream
+		boolean 						toStream			,
+		boolean							noiseSuppression	,
+		boolean							echoCancellation
 	)
 	{
 		int  audioSource         = tabAudioSource[_audioSource.ordinal()];
@@ -283,7 +285,8 @@ public class FlautoRecorder
 		}
 		try
 		{
-				recorder._startRecorder( numChannels, interleaved, sampleRate, bitRate, bufferSize, codec, path, audioSource, this );
+				recorder._startRecorder( numChannels, interleaved, sampleRate, bitRate, bufferSize, codec, path, audioSource,
+						noiseSuppression, echoCancellation, this );
 				if (subsDurationMillis > 0)
 						setTimer(subsDurationMillis);
 

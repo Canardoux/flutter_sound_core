@@ -155,108 +155,7 @@ public class FlautoRecorderEngine
 			AudioFormat.ENCODING_PCM_FLOAT,
 		};
 
-/*
-	int data32Interleaved(Integer numChannels, int bufferSize)
-	{
-		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
-		int n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
-		return 0;
-	}
 
-	int data16Interleaved(Integer numChannels, int bufferSize)
-	{
-		ByteBuffer byteBuffer = ByteBuffer.allocate(bufferSize);
-		int n = 0;
-		try
-		{
-			n = recorder.read(byteBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
-			final int byteCount = n * 2;
-			if (n > 0)
-			{
-				if (outputStream != null)
-				{
-					outputStream.write(byteBuffer.array(), 0, n);
-					return n;
-				}
-				for (int i = 0; i < n / 2; ++i)
-				{
-					short curSample = getShort(byteBuffer.array()[i * 2], byteBuffer.array()[i * 2 + 1]);
-					if (curSample > maxAmplitude)
-					{
-						maxAmplitude = curSample;
-					}
-				}
-				++ nbrSamples;
-
-				mainHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						session.recordingData(Arrays.copyOfRange(byteBuffer.array(), 0, byteCount));
-					}
-				});
-				return n;
-			}
-			return 0;
-		} catch (Exception e)
-		{
-			return 0;
-		}
-
-	}
-
-	int data32PlanMode(Integer numChannels, int bufferSize)
-	{
-		FloatBuffer floatBuffer = FloatBuffer.allocate(bufferSize/4);
-		int n = recorder.read(floatBuffer.array(), 0, bufferSize/4, AudioRecord.READ_NON_BLOCKING);
-		return 0;
-	}
-
-	int data16PlanMode(Integer numChannels, int bufferSize)
-	{
-		ShortBuffer shortBuffer = ShortBuffer.allocate(bufferSize);
-		int n = recorder.read(shortBuffer.array(), 0, bufferSize, AudioRecord.READ_NON_BLOCKING);
-		return 0;
-	}
-
-	int writeData(
-			t_CODEC theCodec,
-			Integer numChannels,
-			Boolean interleaved,
-			int bufferSize)
-	{
-		int r = 0;
-		while (isRecording )
-		{
-			try
-			{
-				if (interleaved)
-				{
-					if (codec == t_CODEC.pcmFloat32)
-						r = data32Interleaved(numChannels, bufferSize);
-					else
-						r = data16Interleaved(numChannels, bufferSize);
-				} else
-				{
-					if (codec == t_CODEC.pcmFloat32)
-						r = data32PlanMode(numChannels, bufferSize);
-					else
-						r = data16PlanMode(numChannels, bufferSize);
-				}
-
-			} catch (Exception e) {
-				System.out.println(e);
-				break;
-			}
-			if (isRecording)
-				mainHandler.post(p);
-		}
-
-		return r;
-	}
-
-*/
 
 	int writeData32Interleavedxxx(
 			t_CODEC theCodec,
@@ -643,6 +542,9 @@ public class FlautoRecorderEngine
 			t_CODEC theCodec,
 			String path,
 			int audioSource,
+			boolean							noiseSuppression	,
+			boolean							echoCancellation	,
+
 			FlautoRecorder theSession
 
 		) throws Exception

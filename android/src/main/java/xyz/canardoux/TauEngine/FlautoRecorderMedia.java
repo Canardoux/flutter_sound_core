@@ -130,7 +130,10 @@ public class FlautoRecorderMedia
 			t_CODEC codec,
 			String path,
 			int audioSource,
+			boolean							noiseSuppression	,
+			boolean							echoCancellation,
 			FlautoRecorder session
+
 		)
 		throws
 		IOException, Exception
