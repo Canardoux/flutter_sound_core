@@ -182,7 +182,8 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		}
 
 		try {
-			if (fromURI == null && (codec == t_CODEC.pcm16 || codec == t_CODEC.pcmFloat32)) {
+			boolean useAudioTrackEngine = fromURI == null && (codec == t_CODEC.pcm16 || codec == t_CODEC.pcmFloat32);
+			if (useAudioTrackEngine) {
 				player = new FlautoPlayerEngine();
 			} else {
 				player = new FlautoPlayerMedia(this);
@@ -190,7 +191,11 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			String path = Flauto.getPath(fromURI);
 
 			player._startPlayer(codec, path, sampleRate, numChannels, interleaved, bufferSize, false, this);
-			play();
+			if (useAudioTrackEngine) {
+				play();
+			} else {
+				// FlautoPlayerMedia automatically calls `play()` once MediaPlayer is prepared
+			}
 		} catch (Exception e) {
 			logError("startPlayer() exception");
 			return false;
