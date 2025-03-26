@@ -198,6 +198,8 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 			}
 		} catch (Exception e) {
 			logError("startPlayer() exception");
+			logError(e.toString());
+			stop();
 			return false;
 		}
 		return true;
