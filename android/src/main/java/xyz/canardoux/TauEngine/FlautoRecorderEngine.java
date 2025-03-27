@@ -20,6 +20,8 @@ package xyz.canardoux.TauEngine;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -573,6 +575,12 @@ public class FlautoRecorderEngine
 
 		if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
 		{
+			if (noiseSuppression) {
+				NoiseSuppressor.create (recorder.getAudioSessionId ());
+			}
+			if (echoCancellation) {
+				AcousticEchoCanceler.create (recorder.getAudioSessionId ());
+			}
 			recorder.startRecording();
 			isRecording = true;
 			try {
