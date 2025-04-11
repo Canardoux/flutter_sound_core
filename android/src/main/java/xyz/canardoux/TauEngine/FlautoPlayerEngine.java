@@ -108,6 +108,86 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 	}
 	*/
 
+	class FeedThread extends Thread {
+		byte[] mData = null;
+
+		/* ctor */ FeedThread(byte[] data) {
+			mData = data;
+		}
+
+		public void run() {
+			int ln = 0; // The number of bytes accepted (and perhaps played) by the device
+			if (mCodec == Flauto.t_CODEC.pcmFloat32)
+			{
+				ByteBuffer buf = ByteBuffer.wrap(mData);
+				buf.order(ByteOrder.nativeOrder());
+				FloatBuffer fbuf = buf.asFloatBuffer();
+				float[] ff = new float[mData.length/4];
+				fbuf.get(ff);
+				ln = audioTrack.write(ff, 0, mData.length/4, AudioTrack.WRITE_BLOCKING);
+				ln = 4 * ln;
+			} else
+			{
+				ln = audioTrack.write(mData, 0, mData.length, AudioTrack.WRITE_BLOCKING);
+			}
+			mSession.needSomeFood(1);
+		}
+	}
+
+	class FeedInt16Thread extends Thread {
+		ArrayList<byte[]> mData = null;
+
+		/* ctor */ FeedInt16Thread(ArrayList<byte[]> data) {
+			mData = data;
+		}
+
+		public void run() {
+			int nbrChannels = mData.size();
+			int frameSize = mData.get(0).length;
+			int ln = nbrChannels * frameSize;
+			byte[] interleavedData = new byte[ln];
+			for (int channel = 0; channel < nbrChannels; ++channel )
+			{
+				byte[] b = mData.get(channel);
+				if (b.length != frameSize) // Wrong size
+					return;
+				for (int i = 0; i < frameSize/2; ++i) {
+					int pos = 2 * (channel + i * nbrChannels);
+					interleavedData[pos] = b[2 * i]; // Little endian
+					interleavedData[pos + 1] = b[2 * i + 1];
+				}
+
+			}
+			int	r = audioTrack.write(interleavedData, 0, ln, AudioTrack.WRITE_BLOCKING);
+			mSession.needSomeFood(1);
+		}
+	}
+
+	class FeedFloat32Thread extends Thread {
+		ArrayList<float[]> mData = null;
+
+		/* ctor */ FeedFloat32Thread(ArrayList<float[]> data) {
+			mData = data;
+		}
+
+		public void run() {
+			int ln = 0; // The number of bytes accepted (and perhaps played) by the device
+			int nbrOfChannels = mData.size();
+			int frameSize = mData.get(0).length;
+			float[] r = new float[nbrOfChannels * frameSize];
+			for (int channel = 0; channel < nbrOfChannels; ++channel)
+			{
+				float[] b = mData.get(channel);
+				for (int i = 0; i < frameSize; ++i)
+				{
+					r[ i * nbrOfChannels + channel] = b[i];
+				}
+			}
+			ln = audioTrack.write(r, 0, r.length, AudioTrack.WRITE_BLOCKING);
+			mSession.needSomeFood(1);
+		}
+	}
+
 	/* ctor */ FlautoPlayerEngine() throws Exception {
 		if (Build.VERSION.SDK_INT >= 21) {
 
@@ -273,63 +353,23 @@ class FlautoPlayerEngine extends FlautoPlayerEngineInterface {
 	}
 
 	int feedFloat32(ArrayList<float[]> data) throws Exception {
-		// TODO
-		
-		int ln = 0; // The number of bytes accepted (and perhaps played) by the device
-		int nbrOfChannels = data.size();
-		int frameSize = data.get(0).length;
-		float[] r = new float[nbrOfChannels * frameSize];
-		for (int channel = 0; channel < nbrOfChannels; ++channel)
-		{
-			float[] b = data.get(channel);
-			for (int i = 0; i < frameSize; ++i)
-			{
-				r[ i * nbrOfChannels + channel] = b[i];
-			}
-		}
-				ln = audioTrack.write(r, 0, r.length, AudioTrack.WRITE_BLOCKING);
 
-		return ln;
+		FeedFloat32Thread t = new FeedFloat32Thread(data);
+		t.start();
+
+		return 0;
 
 	}
 
 	int feedInt16(ArrayList<byte[]> data) throws Exception {
-			int nbrChannels = data.size();
-			int frameSize = data.get(0).length;
-			int ln = nbrChannels * frameSize;
-			byte[] interleavedData = new byte[ln];
-			for (int channel = 0; channel < nbrChannels; ++channel )
-			{
-				byte[] b = data.get(channel);
-				if (b.length != frameSize) // Wrong size
-					return 0;
-				for (int i = 0; i < frameSize/2; ++i) {
-					int pos = 2 * (channel + i * nbrChannels);
-					interleavedData[pos] = b[2 * i]; // Little endian
-					interleavedData[pos + 1] = b[2 * i + 1];
-				}
-
-			}
-			int	r = audioTrack.write(interleavedData, 0, ln, AudioTrack.WRITE_BLOCKING);
-			return 1;
+		FeedInt16Thread t = new FeedInt16Thread(data);
+		t.start();
+		return 0;
 	}
 
 	int feed(byte[] data) throws Exception {
-				int ln = 0; // The number of bytes accepted (and perhaps played) by the device
-				if (mCodec == Flauto.t_CODEC.pcmFloat32)
-				{
-					ByteBuffer buf = ByteBuffer.wrap(data);
-					buf.order(ByteOrder.nativeOrder());
-					FloatBuffer fbuf = buf.asFloatBuffer();
-					float[] ff = new float[data.length/4];
-					fbuf.get(ff);
-					ln = audioTrack.write(ff, 0, data.length/4, AudioTrack.WRITE_BLOCKING);
-					ln = 4 * ln;
-				} else
-				{
-					ln = audioTrack.write(data, 0, data.length, AudioTrack.WRITE_BLOCKING);
-				}
-
-		return 1;
+		FeedThread t = new FeedThread(data);
+		t.start();
+		return 0;
 	}
 }
