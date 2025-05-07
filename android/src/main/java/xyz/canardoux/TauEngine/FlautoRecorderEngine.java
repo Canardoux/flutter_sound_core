@@ -78,7 +78,7 @@ public class FlautoRecorderEngine
 			if (filePath != null)
 			{
 				outputStream = new FileOutputStream(filePath);
-
+/* LARPOUX 05/07/2025 : I don't understand this code
 				if (codec == t_CODEC.pcm16WAV) {
 					FlautoWaveHeader header = new FlautoWaveHeader
 						(
@@ -91,6 +91,7 @@ public class FlautoRecorderEngine
 						);
 					header.write(outputStream);
 				}
+ */
 			}
 			System.out.println("<--- writeAudioDataToFile");
 	}
@@ -100,6 +101,8 @@ public class FlautoRecorderEngine
 
 		if (outputStream != null) {
 			outputStream.close();
+/* LARPOUX 05/07/2025 : I don't understand this code
+
 			if (codec == t_CODEC.pcm16WAV) {
 				RandomAccessFile fh = new RandomAccessFile(filePath, "rw");
 				fh.seek(4);
@@ -117,6 +120,7 @@ public class FlautoRecorderEngine
 				fh.write(totalBytes >> 24);
 				fh.close();
 			}
+ */
 		}
 
 	}
@@ -130,7 +134,7 @@ public class FlautoRecorderEngine
 			AudioFormat.ENCODING_MP3, // MP3 // Not used
 			0, // vorbisOGG
 			AudioFormat.ENCODING_PCM_16BIT, // pcm16
-			AudioFormat.ENCODING_PCM_16BIT, // pcm16WAV
+			0, //AudioFormat.ENCODING_PCM_16BIT, // pcm16WAV
 			0, // pcm16AIFF
 			0, // pcm16CAF
 			0, // flac
@@ -257,7 +261,7 @@ public class FlautoRecorderEngine
 						++ nbrSamples;
 
 					} else
-					if (codec == t_CODEC.pcm16 || codec == t_CODEC.pcm16WAV)
+					if (codec == t_CODEC.pcm16 /*|| codec == t_CODEC.pcm16WAV */)
 					{
 						for (int i = 0; i < n / 2; ++i)
 						{
@@ -505,7 +509,7 @@ public class FlautoRecorderEngine
 		while (isRecording ) {
 			try {
 
-				if (codec == t_CODEC.pcm16  || codec == t_CODEC.pcm16WAV ) {
+				if (codec == t_CODEC.pcm16  /*|| codec == t_CODEC.pcm16WAV */ ) {
 					 n = writeData16(codec, numChannels, interleaved
 							, bufferSize);
 				} else
