@@ -72,7 +72,7 @@ public class FlautoRecorder
 		false , // MP3
 		false, // vorbisOGG
 		true, // pcm16
-		false, //true, // pcm16WAV
+		true, // pcm16WAV
 		false, // pcm16AIFF
 		false, // pcm16CAF
 		false, // flac
