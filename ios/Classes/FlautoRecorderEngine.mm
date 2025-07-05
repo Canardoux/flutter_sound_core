@@ -127,7 +127,7 @@
                                      {
                                          dispatch_async(dispatch_get_main_queue(),
                                         ^{
-                                             if (flautoRecorder == nil || getStatus() == 0) // something bad
+                                             if (flautoRecorder == nil || status == 0) // something bad in the recorder : skip the callback
                                              {
                                                  return;
                                              }
