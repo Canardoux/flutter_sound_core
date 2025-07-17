@@ -294,9 +294,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 
 									long position = player._getCurrentPosition();
 									long duration = player._getDuration();
-									if (position > duration) {
-										position = duration;
-									}
 									m_callBack.updateProgress(position, duration);
 								}
 							} catch (Exception e) {
@@ -490,9 +487,6 @@ public class FlautoPlayer implements MediaPlayer.OnErrorListener {
 		if (player != null) {
 			position = player._getCurrentPosition();
 			duration = player._getDuration();
-		}
-		if (position > duration) {
-			position = duration;
 		}
 
 		Map<String, Object> dic = new HashMap<String, Object>();
