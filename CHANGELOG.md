@@ -1,5 +1,5 @@
 ## 9.26.0
 
-- ## The [CHANGELOG file is here](https://taudio.canardoux.xyz/tau/changelog.html)
+- ## The [CHANGELOG file is here](https://flutter-sound.canardoux.xyz/tau/CHANGELOG.html)
 
 -----------------------------------------------------------------------------------------------------------------------------------
